@@ -11,6 +11,7 @@ body {
     color: $mainBlack;
     line-height: 35px;
     min-width: 300px;
+    background-color: $background;
 }
 body {
     * {
@@ -18,4 +19,70 @@ body {
         margin: 0;
         padding: 0;
     }
+}
+.main-area{
+    padding:30px 10px 0;
+}
+.first-page{
+    .greetings{
+        color: $secondaryColor;
+    }
+    .user-info{
+        font-size: 20px;
+    }
+    .greeting-messsage{
+        font-size: 35px;
+        margin: 30px 0;
+        text-align: center;
+        line-height: 50px;
+    }
+    .usersName-wrapper{
+        @include styler($background, $mainColor, 22px, 50px);
+        padding: 5px 10px;
+        margin: 0 5px;
+    }
+    .wallet-wrapper{
+        @include styler($background, $mainColor, 20px, 100px);
+        padding: 20px 20px;
+        @include flexMixin(row, space-between , center);
+    }
+    .wallet-title-wrapper{
+        .wallet-title{
+            font-size : 30px;
+        }
+    }
+    .wallet-info{
+        @include flexMixin(row, center, center);
+        font-size: 15px;
+        margin-top: 10px;
+    }
+    .sperator{
+        margin:0 5px;
+    }
+    .books-class-wrapper{
+        @include flexMixin(row,space-evenly,center);
+        margin-top: 50px;
+    }
+    .book-class-btns{
+        width: 150px;
+        height: 130px;
+        @include flexMixin(row,center,center);
+        @include styler ($mainColor,$background,25px,20px);
+        border: 2px solid $mainColor;
+    }
+}
+
+
+
+
+
+
+footer{
+    @include flexMixin(row,space-evenly,center);
+    height: 50px;
+    background-color: $mainColor;
+    position: fixed;
+    bottom: -1px;
+    width: 100%;
+    color: $background;
 }
