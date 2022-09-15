@@ -101,6 +101,12 @@ document.addEventListener("DOMContentLoaded", () => {
 footer_btn_home.addEventListener('click', () => {
     render_first_page();
 })
+footer_btn_cart.addEventListener('click', () => {
+    render_coming_soon_page();
+})
+footer_btn_checkout.addEventListener('click', () => {
+    render_coming_soon_page();
+})
 
 // functions
 
@@ -182,7 +188,7 @@ function render_first_page() {
     // adding event listener to increase btn
     increase_amount.addEventListener('click', () => {
         // some function 
-        alert();
+        render_coming_soon_page();
     });
 
 
@@ -198,7 +204,7 @@ function render_first_page() {
     // adding event listener to classes btn
     classes_btn.addEventListener('click', () => {
         // some function 
-        alert();
+        render_coming_soon_page();
     });
 }
 
@@ -266,26 +272,26 @@ function render_books() {
     //activating publishers filter
     book_publisher = document.querySelector('.fil-1');
     book_publisher.addEventListener("click", () => {
-        alert();
+        render_coming_soon_page();
     })
 
     //activating subjects filter
     book_subjects = document.querySelector('.fil-2');
     book_subjects.addEventListener("click", () => {
-        alert();
+        render_coming_soon_page();
     })
 
 
     //activating paye filter
     book_year_of_study = document.querySelector('.fil-3');
     book_year_of_study.addEventListener("click", () => {
-        alert();
+        render_coming_soon_page();
     })
 
     //activating sort by btn
     sort_by_btn = document.querySelector('.filter-opener');
     sort_by_btn.addEventListener('click', () => {
-        alert();
+        render_coming_soon_page();
     })
 
     books.forEach((book) => {
@@ -343,6 +349,15 @@ function map_handler(location) {
         prev_page = "home";
     }
 }
+
+// coming soon
+function render_coming_soon_page() {
+    const coming_soon_content = `
+        در حال ساختن این پارت می باشیم کمی صبور باشید ;)
+    `;
+    main_area.innerHTML = coming_soon_content;
+}
+
 
 
 // etc
