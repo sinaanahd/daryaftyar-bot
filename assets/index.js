@@ -1,11 +1,15 @@
 //temp
 
+
+// user needed data
 const user = {
     name: 'سینا اناهید',
     amount: 4000,
     days_left: 17,
 }
 
+
+// making sample book items
 const book1 = {
     name: "اسم کتاب درسی",
     quantity_in_cart: 2,
@@ -34,35 +38,74 @@ const book4 = {
     price: 240000,
     img_url: "./assets/images/book-img-2.jpg"
 }
+
+// an array filled with book 
+// the main use of this array for now is to render books in the book page
 const books = [book1, book2, book3, book4];
 
 // variables
 
+// the html element which all the datas are located
 const main_area = document.querySelector('.main-area');
+
+// footer menu for checkout btn
 const footer_btn_checkout = document.querySelector('.footer-menu.it-1');
+
+// footer menu for accssesing the home btn
 const footer_btn_home = document.querySelector('.footer-menu.it-2');
+
+// footer menu for cart btn
 const footer_btn_cart = document.querySelector('.footer-menu.it-3');
+
+// variable to know where where you lastly (probable delete)!
 let prev_page = "home";
+
+// the variable for accssesing the wallet amount increasing
 let increase_amount = [];
+
+// home page btn which leads to the books page
 let books_btn = [];
+
+// home page btn which leads to the classes page
 let classes_btn = [];
+
+// html element which contains the book-item and the main place for renderign books
 let books_wrapper = [];
+
+// the book page back btn (for now)
 let back_btn = [];
+
+// filter in book page about publishers
 let book_publisher = [];
+
+// filter in book page about subject of books
 let book_subjects = [];
+
+// filter in book page about paye
 let book_year_of_study = [];
+
+// btn in the book page for sorting 
 let sort_by_btn = [];
+
+
+
+
 // classes
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
     render_first_page();
-})
+});
+
+// rendring first page via menu btn
 footer_btn_home.addEventListener('click', () => {
     render_first_page();
 })
 
 // functions
+
+
+// function which clears the main area 
 function clearPage() {
     main_area.innerHTML = " ";
 }
@@ -281,6 +324,8 @@ function render_books() {
     });
 
 }
+
+// function for rendering the loading page
 function render_loading() {
     const loading_HTML = `
     <div class="loading">
@@ -290,6 +335,8 @@ function render_loading() {
     main_area.innerHTML = loading_HTML;
 }
 
+
+// function for redirecting the user to the required page
 function map_handler(location) {
     if ("book") {
         render_first_page();
