@@ -20,6 +20,26 @@ body {
         padding: 0;
     }
 }
+@keyframes spinMF {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+.loading{
+    width: 100vw;
+    height: 100vh;
+    @include flexMixin(row,center,center);
+    font-size: 100px;
+    color: $mainColor;
+    animation-name: spinMF;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+}
 .main-area{
     padding:30px 10px 0;
 }
