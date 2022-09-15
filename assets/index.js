@@ -25,32 +25,6 @@ footer_btn_home.addEventListener('click', () => {
     clearPage();
     render_first_page();
 
-    // fill the amount btn
-
-    increase_amount = document.querySelector('.increase-wallet-wrapper');
-    // adding event listener to increase btn
-    increase_amount.addEventListener('click', () => {
-        // some function 
-        alert();
-    });
-
-
-    // fill the books btn
-    books_btn = document.querySelector('.book-class-btns.books');
-    // adding event listener to books btn
-    books_btn.addEventListener('click', () => {
-        // some function 
-        alert();
-    });
-
-    // fill the books btn
-    classes_btn = document.querySelector('.book-class-btns.classes');
-    // adding event listener to classes btn
-    classes_btn.addEventListener('click', () => {
-        // some function 
-        alert();
-    });
-
 })
 
 // functions
@@ -122,6 +96,32 @@ function render_first_page() {
         </div>
         `;
     main_area.innerHTML = firstPageHTML;
+
+    // fill the amount btn
+
+    increase_amount = document.querySelector('.increase-wallet-wrapper');
+    // adding event listener to increase btn
+    increase_amount.addEventListener('click', () => {
+        // some function 
+        alert();
+    });
+
+
+    // fill the books btn
+    books_btn = document.querySelector('.book-class-btns.books');
+    // adding event listener to books btn
+    books_btn.addEventListener('click', () => {
+        // some function 
+        alert();
+    });
+
+    // fill the books btn
+    classes_btn = document.querySelector('.book-class-btns.classes');
+    // adding event listener to classes btn
+    classes_btn.addEventListener('click', () => {
+        // some function 
+        alert();
+    });
 }
 
 function render_loading() {
