@@ -9,6 +9,74 @@ const user = {
 }
 
 
+// making sample publishers
+
+const pub1 = {
+    name: "مبتکران",
+    id: 1
+}
+const pub2 = {
+    name: "گاج",
+    id: 2
+}
+const pub3 = {
+    name: "الگو",
+    id: 3
+}
+const pub4 = {
+    name: "قلم چی",
+    id: 4
+}
+const pub5 = {
+    name: "خیلی سبز",
+    id: 5
+}
+const pub6 = {
+    name: "مهر و ماه",
+    id: 6
+}
+
+
+// making a sample publisher array 
+
+const publishers = [pub1, pub2, pub3, pub4, pub5, pub6];
+
+const by1 = {
+    name: " دهم",
+    id: 1
+}
+const by2 = {
+    name: " یازدهم",
+    id: 2
+}
+const by3 = {
+    name: " دوازدهم",
+    id: 3
+}
+// making a sample book year array 
+const book_years = [by1, by2, by3];
+
+
+const sub1 = {
+    name: "ریاضی",
+    id: 1
+}
+const sub2 = {
+    name: "تجربی",
+    id: 2
+}
+const sub3 = {
+    name: "انسانی",
+    id: 3
+}
+const sub4 = {
+    name: "هنر",
+    id: 4
+}
+// making a sample subjects array
+const subjects = [sub1, sub2, sub3, sub4];
+
+
 // making sample book items
 const book1 = {
     name: "اسم کتاب درسی",
@@ -58,7 +126,7 @@ const footer_btn_home = document.querySelector('.footer-menu.it-2');
 const footer_btn_cart = document.querySelector('.footer-menu.it-3');
 
 // variable to know where where you lastly (probable delete)!
-let prev_page = "home";
+let address_to_here = "home/";
 
 // the variable for accssesing the wallet amount increasing
 let increase_amount = [];
@@ -87,6 +155,26 @@ let book_year_of_study = [];
 // btn in the book page for sorting 
 let sort_by_btn = [];
 
+// books main content element
+let books_main_content = [];
+
+//publishers dom element
+let publishers_DOM = [];
+
+//book year dom element
+let book_years_DOM = []
+
+//subjects dom element
+let subjects_DOM = []
+
+// clicked publisher for filters
+let clicked_publishers = [];
+
+// clicked book year for filter
+let clicked_book_years = [];
+
+// clicked book year for filter
+let clicked_subjects = [];
 
 
 
@@ -95,6 +183,7 @@ let sort_by_btn = [];
 // events
 document.addEventListener("DOMContentLoaded", () => {
     render_first_page();
+    //render_books(books);
 });
 
 // rendring first page via menu btn
@@ -118,6 +207,7 @@ function clearPage() {
 
 // render first page
 function render_first_page() {
+    address_to_here = "home/"
     clearPage();
     const firstPageHTML = `
         <div class="first-page">
@@ -196,7 +286,7 @@ function render_first_page() {
     books_btn = document.querySelector('.book-class-btns.books');
     // adding event listener to books btn
     books_btn.addEventListener('click', () => {
-        render_books();
+        render_books(books);
     });
 
     // fill the books btn
@@ -209,7 +299,12 @@ function render_first_page() {
 }
 
 //render book page
-function render_books() {
+function render_books(books) {
+    //map address
+    address_to_here += "book/"
+
+
+
     const static_contents = `
      <div class="books-wrapper">
             <div class="books-header">
@@ -231,8 +326,7 @@ function render_books() {
                     <i class="fa fa-caret-left"></i>
                 </div>
             </div>
-            <div class="main-content">
-                <div class="filters-wrapper">
+            <div class="filters-wrapper">
                     <span class="filters fil-1">
                         انتشارات 
                         <span class="sub-filter">
@@ -252,6 +346,8 @@ function render_books() {
                         </span>
                     </span>
                 </div>
+            <div class="main-content">
+                
                 <div class="books">
                    
                 </div>
@@ -261,31 +357,37 @@ function render_books() {
     main_area.innerHTML = static_contents;
 
     books_wrapper = document.querySelector('.books');
-
+    books_main_content = document.querySelector('.main-content')
 
     // activating back btn
     back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
-        map_handler('book');
+        map_handler(address_to_here);
     });
 
     //activating publishers filter
     book_publisher = document.querySelector('.fil-1');
     book_publisher.addEventListener("click", () => {
-        render_coming_soon_page();
+        clear_stage(books_main_content);
+        publisher_filter(publishers);
+        //render_coming_soon_page();
     })
 
     //activating subjects filter
     book_subjects = document.querySelector('.fil-2');
     book_subjects.addEventListener("click", () => {
-        render_coming_soon_page();
+        //render_coming_soon_page();
+        clear_stage(books_main_content);
+        subject_filter(subjects);
     })
 
 
     //activating paye filter
     book_year_of_study = document.querySelector('.fil-3');
     book_year_of_study.addEventListener("click", () => {
-        render_coming_soon_page();
+        clear_stage(books_main_content);
+        book_year_filter(book_years);
+        //render_coming_soon_page();
     })
 
     //activating sort by btn
@@ -331,6 +433,150 @@ function render_books() {
 
 }
 
+// render publisher filter 
+function publisher_filter(publishers) {
+
+    publishers.forEach((publisher) => {
+        const publisher_HTML = `
+            <span class="publisher-item" id="publisher-${publisher.id}">
+                ${publisher.name}
+            </span>
+        `;
+        books_main_content.innerHTML += publisher_HTML;
+    });
+    publishers_DOM = [...document.querySelectorAll('.publisher-item')];
+    publishers_DOM.forEach(el => {
+        el.addEventListener('click', (e) => {
+            clicked_publishers_identifier(e);
+        });
+    });
+    address_to_here = "home/book/filter/";
+    //console.log(address_to_here);
+
+}
+
+
+// render book year filter 
+function book_year_filter(book_years) {
+
+    book_years.forEach((book_year) => {
+        const book_year_HTML = `
+            <span class="book-year-item" id="bookyear-${book_year.id}">
+                ${book_year.name}
+            </span>
+        `;
+        books_main_content.innerHTML += book_year_HTML;
+    });
+    book_years_DOM = [...document.querySelectorAll('.book-year-item')];
+    book_years_DOM.forEach(el => {
+        el.addEventListener('click', (e) => {
+            clicked_book_years_identifier(e);
+        });
+    });
+    address_to_here = "home/book/filter/";
+    //console.log(address_to_here);
+
+}
+
+
+// render subjects filter 
+function subject_filter(subjects) {
+
+    subjects.forEach((subject) => {
+        const subject_HTML = `
+            <span class="subject-item" id="subject-${subject.id}">
+                ${subject.name}
+            </span>
+        `;
+        books_main_content.innerHTML += subject_HTML;
+    });
+    subjects_DOM = [...document.querySelectorAll('.subject-item')];
+    subjects_DOM.forEach(el => {
+        el.addEventListener('click', (e) => {
+            clicked_subjects_identifier(e);
+        });
+    });
+    address_to_here = "home/book/filter/";
+    //console.log(address_to_here);
+
+}
+
+// funnction for storing clicked publishers
+function clicked_publishers_identifier(e) {
+    const clicked_publisher = parseInt(e.target.id.split("publisher-")[1]);
+    if (clicked_publishers.includes(clicked_publisher)) {
+        clicked_publishers = clicked_publishers.filter(p => {
+            return p != clicked_publisher;
+        })
+    }
+    else {
+        clicked_publishers.push(clicked_publisher);
+    }
+    //console.log(clicked_publishers);
+}
+
+// funnction for storing clicked book years
+function clicked_book_years_identifier(e) {
+    const clicked_book_year = parseInt(e.target.id.split("bookyear-")[1]);
+    if (clicked_book_years.includes(clicked_book_year)) {
+        clicked_book_years = clicked_book_years.filter(p => {
+            return p != clicked_book_year;
+        })
+    }
+    else {
+        clicked_book_years.push(clicked_book_year);
+    }
+    //console.log(clicked_book_years);
+}
+
+// funnction for storing clicked subjects
+function clicked_subjects_identifier(e) {
+    const clicked_subject = parseInt(e.target.id.split("subject-")[1]);
+    if (clicked_subjects.includes(clicked_subject)) {
+        clicked_subjects = clicked_subjects.filter(p => {
+            return p != clicked_subject;
+        })
+    }
+    else {
+        clicked_subjects.push(clicked_subject);
+    }
+    //console.log(clicked_subjects);
+}
+
+
+// function to make book page ready for filters
+function clear_stage(element) {
+    element.innerHTML = "";
+    //return element;
+}
+
+
+
+
+// function for redirecting the user to the required page
+function map_handler() {
+    let address = address_to_here.split("/");
+    //console.log(address);
+
+    let len = address.length - 2;
+    if (address[len] === "book" && address[len - 1] === "home") {
+        render_first_page();
+        address_to_here = "home/"
+    }
+    else if (address[len] === "filter" && address[len - 1] === "book") {
+        render_books(books);
+        address_to_here = "home/book/";
+    }
+    //console.log(address_to_here);
+}
+
+// coming soon
+function render_coming_soon_page() {
+    const coming_soon_content = `
+    در حال ساختن این پارت می باشیم کمی صبور باشید ;)
+    `;
+    main_area.innerHTML = coming_soon_content;
+}
 // function for rendering the loading page
 function render_loading() {
     const loading_HTML = `
@@ -340,24 +586,5 @@ function render_loading() {
     `;
     main_area.innerHTML = loading_HTML;
 }
-
-
-// function for redirecting the user to the required page
-function map_handler(location) {
-    if ("book") {
-        render_first_page();
-        prev_page = "home";
-    }
-}
-
-// coming soon
-function render_coming_soon_page() {
-    const coming_soon_content = `
-        در حال ساختن این پارت می باشیم کمی صبور باشید ;)
-    `;
-    main_area.innerHTML = coming_soon_content;
-}
-
-
 
 // etc

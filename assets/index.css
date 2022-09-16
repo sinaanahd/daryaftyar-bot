@@ -255,6 +255,19 @@ body * {
         background-color: #c7be6e;
         font-size: 17px;
         border-radius: 10px; }
+.books-wrapper .publisher-item, .books-wrapper .book-year-item, .books-wrapper .subject-item {
+  width: 80%;
+  margin-bottom: 20px; }
+  .books-wrapper .publisher-item::before, .books-wrapper .book-year-item::before, .books-wrapper .subject-item::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: #937602;
+    border-radius: 50%;
+    position: relative;
+    top: 5px;
+    margin-left: 11px; }
 
 /* books page styles */
 footer {

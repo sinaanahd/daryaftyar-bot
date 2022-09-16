@@ -238,6 +238,21 @@ body {
             }
         }
     }
+    .publisher-item , .book-year-item , .subject-item{
+        width: 80%;
+        margin-bottom : 20px;
+        &::before {
+                content: '';
+                width: 20px;
+                height: 20px;
+                display: inline-block;
+                background-color: $mainColor;
+                border-radius: 50%;
+                position: relative;
+                top: 5px;
+                margin-left: 11px;
+        }
+    }
 }
 
 
