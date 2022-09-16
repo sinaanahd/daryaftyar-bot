@@ -259,6 +259,156 @@ body {
 /* books page styles */
 
 
+/* shopping cart styles */
+.cart-wrapper{
+    @include flexMixin(column,center,center);
+    width: 100%;
+    .cart-header {
+            position: relative;
+            width: 100%;
+    }
+    .back {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        @include styler($mainColor, $background, 40px, 10px);
+        border: 2px solid;
+        width: 40px;
+        height: 40px;
+        @include flexMixin (row, center, center);
+
+        i {
+            position: relative;
+            right: -3px;
+        }
+    }
+
+    .cart-page-title {
+        font-size: 40px;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+
+    .cart-is-empty{
+
+        @include flexMixin(column,center,center);
+        display: none;
+        width: 100%;
+        .empty-text{
+            font-size: 25px;
+            text-align: center;
+            animation-name: growMF;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            animation-direction: alternate-reverse;
+
+        }
+    }
+    .go-to-book-page{
+        @include styler($background,$mainColor,25px,40px);
+        border: 2px solid;
+        padding: 10px 20px;
+        margin: 20px 0;
+    }
+    .cart-main-content{
+        @include flexMixin(column,center,center);
+        width: 95%;
+        background-color: $extraColor1;
+        border-radius: 40px;
+        padding: 20px 0;
+    }
+    .cart-items{
+        width: 100%;
+        padding: 0 20px;
+    }
+    .cart-item{
+        width: 100%;
+        @include flexMixin(row,space-between,center);
+        font-size: 15px;
+        margin: 0 0 20px;
+        border-bottom: 1px solid $mainColor;
+        border-top: 1px solid $mainColor;
+        border-radius: 10px;
+        padding: 20px 0;
+    }
+    .details{
+        text-align: center;
+    }
+    .cart-item-name{
+        @include styler($mainColor,$background,15px,40px 0 40px 40px);
+        margin-bottom: 5px;
+        border: 1px solid;
+        padding: 2px 5px;
+    }
+    .cart-item-actions{
+        @include flexMixin(column,center,center);
+        width: 40px;
+    }
+    .more{
+        i{
+            @include flexMixin(row,center,center);
+            @include styler(#008000 , $extraColor1 , 15px,10px);
+            width: 30px;
+            height: 30px;
+            border: 2px solid;
+        }
+    }
+    .less {
+        i {
+            @include flexMixin(row, center, center);
+            @include styler(#ff6565, $extraColor1 , 15px, 10px);
+            width: 30px;
+            height: 30px;
+            border: 2px solid;
+        }
+    }
+    .quantity{
+        @include styler($mainColor , $background , 15px, 10px);
+        width: 30px;
+        height: 30px;
+        border: 1px solid;
+        @include flexMixin(row,center,center);
+        margin: 5px 0;
+    }
+    img{
+        width: 60px;
+        border-radius: 10px;
+        box-shadow: 0px 10px 15px 0 #00000080;
+    }
+    .totalprice-wrapper{
+        @include flexMixin(row,space-between,center);
+        width: 100%;
+        padding: 0 20px;
+        .label{
+            @include styler($mainColor,$background,18px,40px 0 40px 40px);
+            border: 1px solid;
+            padding: 5px 10px;
+        }
+        .total-price{
+            font-size: 12px;
+            color: #008000;
+        }
+        .price{
+            font-size: 20px;
+        }
+    }
+}
+@keyframes growMF {
+    from{
+        transform: scale(0.5);
+        color: $mainWhite;
+    }
+    to{
+        transform: scale(1.2);
+        color: $mainColor;
+    }
+}
+
+
+/* shopping cart styles */
+
 footer{
     @include flexMixin(row,space-evenly,center);
     height: 50px;

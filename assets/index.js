@@ -111,6 +111,11 @@ const book4 = {
 // the main use of this array for now is to render books in the book page
 const books = [book1, book2, book3, book4];
 
+// an array for cart items
+const cart_items = [book1, book2];
+
+
+
 // variables
 
 // the html element which all the datas are located
@@ -177,12 +182,11 @@ let clicked_book_years = [];
 let clicked_subjects = [];
 
 
-
 // classes
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
-    render_first_page();
+    //render_first_page();
     //render_books(books);
 });
 
@@ -411,7 +415,7 @@ function render_books(books) {
                         </div>
                         <div class="book-price">
                             <span class="dynamic-price">
-                                ${book.name}
+                                ${book.price}
                             </span>
                             تومان
                         </div>
@@ -551,6 +555,9 @@ function clear_stage(element) {
 }
 
 
+function render_shopping_cart(cart) {
+
+}
 
 
 // function for redirecting the user to the required page
