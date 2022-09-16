@@ -425,7 +425,11 @@ body * {
       font-size: 12px;
       color: #008000; }
     .cart-wrapper .totalprice-wrapper .price {
-      font-size: 20px; }
+      font-size: 20px;
+      border-bottom: 1px solid;
+      border-radius: 5px;
+      padding: 3px;
+      margin-left: 5px; }
 
 @keyframes growMF {
   from {

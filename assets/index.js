@@ -112,7 +112,7 @@ const book4 = {
 const books = [book1, book2, book3, book4];
 
 // an array for cart items
-const cart_items = [book1, book2];
+const cart_items = [book1, book2, book3];
 
 
 
@@ -186,7 +186,7 @@ let clicked_subjects = [];
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
-    //render_first_page();
+    render_first_page();
     //render_books(books);
 });
 
@@ -195,10 +195,12 @@ footer_btn_home.addEventListener('click', () => {
     render_first_page();
 })
 footer_btn_cart.addEventListener('click', () => {
-    render_coming_soon_page();
+    clearPage();
+    render_shopping_cart(cart_items);
 })
 footer_btn_checkout.addEventListener('click', () => {
     render_coming_soon_page();
+    //console.log(address_to_here);
 })
 
 // functions
@@ -554,9 +556,91 @@ function clear_stage(element) {
     //return element;
 }
 
-
+// function to render shopping cart
 function render_shopping_cart(cart) {
+    const shopping_cart_HTML = `
+        <div class="cart-wrapper">
+            <div class="cart-header">
+                <div class="back">
+                    <i class="fa fa-caret-right"></i>
+                </div>
+                <div class="cart-page-title">
+                    سبد خرید
+                </div>
+            </div>
+            <div class="cart-main-content">
+                <div class="cart-is-empty">
+                    <div class="empty-text">
+                        سبد خرید شما خالی است!!!
+                    </div>
+                    <div class="go-to-book-page">
+                        رفتن به صفحه فروشگاه
+                    </div>
+                </div>
+                <div class="cart-items">
+                </div>
+                <div class="totalprice-wrapper">
+                    <div class="label">
+                        مجموع :
+                    </div>
+                    <div class="total-price">
+                        <span class="price">
+                        </span>
+                        تومان
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 
+    main_area.innerHTML = shopping_cart_HTML;
+
+    const cart_item_wrapper = document.querySelector('.cart-items');
+    // to get total price wrapper
+    const total_price_HTML = document.querySelector('.price');
+    // a variable for calculating total price
+    let total_price_amount = 0;
+    // adding items in cart
+    cart.forEach(item => {
+        const cart_item_content = `
+        <div class="cart-item" id="cart-item-${item.id}">
+            <img src="./assets/images/book-img-1.jpg" alt="">
+            <div class="details">
+                <div class="cart-item-name">
+                    ${item.name}
+                </div>
+                <div class="cart-item-price">
+                    <span class="price">
+                        ${item.price}
+                    </span>
+                    تومان
+                </div>
+            </div>
+            <div class="cart-item-actions">
+                <span class="more">
+                    <i class="fa fa-plus"></i>
+                </span>
+                <span class="quantity">
+                    ${item.quantity_in_cart}
+                </span>
+                <span class="less">
+                    <i class="fa fa-minus"></i>
+                </span>
+            </div>
+        </div>
+        `;
+        total_price_amount += item.quantity_in_cart * item.price;
+        cart_item_wrapper.innerHTML += cart_item_content;
+    });
+    total_price_HTML.innerHTML = total_price_amount;
+
+    // updating curent place for map_handler method
+    stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
+
+    const back_btn = document.querySelector('.back');
+    back_btn.addEventListener('click', () => {
+        map_handler(address_to_here);
+    })
 }
 
 
@@ -566,11 +650,23 @@ function map_handler() {
     //console.log(address);
 
     let len = address.length - 2;
+    // if we are in book page
     if (address[len] === "book" && address[len - 1] === "home") {
         render_first_page();
         address_to_here = "home/"
     }
+    // if we are in filters and book page
     else if (address[len] === "filter" && address[len - 1] === "book") {
+        render_books(books);
+        address_to_here = "home/book/";
+    }
+    // if we are in cart page from home
+    else if (address[len] === "cart" && address[len - 1] === "home") {
+        render_first_page(cart_items);
+        address_to_here = "home/";
+    }
+    // if we are in cart page from home
+    else if (address[len] === "cart" && address[len - 1] === "book") {
         render_books(books);
         address_to_here = "home/book/";
     }
@@ -594,4 +690,9 @@ function render_loading() {
     main_area.innerHTML = loading_HTML;
 }
 
+// a function to prevent multiple repeat in address
+function stop_repeatation_in_addres(word, my_string) {
+    const arr = my_string.split('/');
+    return !arr.includes(word);
+}
 // etc
