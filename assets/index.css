@@ -201,7 +201,7 @@ body * {
     color: #e8e8a6; }
   .books-wrapper .books .book-name {
     font-size: 25px;
-    margin: 20px 0; }
+    margin: 0 0 20px; }
   .books-wrapper .books .book-price {
     color: #937602;
     background-color: #e8e8a6;
@@ -230,16 +230,24 @@ body * {
         align-items: center;
         width: 40px;
         height: 40px;
-        border: 2px solid #008000;
-        color: #008000;
-        background-color: #c7be6e;
+        border: 2px solid #487a3a;
+        color: #e8e8a6;
+        background-color: #487a3a;
         font-size: 17px;
         border-radius: 10px; }
     .books-wrapper .books .action-btns .book-quantity {
       display: flex;
       flex-direction: row;
       justify-content: center;
-      align-items: center; }
+      align-items: center;
+      margin: 0 5px;
+      background-color: #937602;
+      border-color: #937602;
+      padding-top: 5px;
+      color: #e8e8a6;
+      border: 2px solid #937602;
+      border-radius: 10px;
+      height: 40px; }
     .books-wrapper .books .action-btns .decrment-book {
       display: flex;
       flex-direction: row;
@@ -252,9 +260,9 @@ body * {
         align-items: center;
         width: 40px;
         height: 40px;
-        border: 2px solid #ff6565;
-        color: #ff6565;
-        background-color: #c7be6e;
+        border: 2px solid #e83c3c;
+        color: #e8e8a6;
+        background-color: #e83c3c;
         font-size: 17px;
         border-radius: 10px; }
 .books-wrapper .publisher-item, .books-wrapper .book-year-item, .books-wrapper .subject-item {
@@ -373,25 +381,25 @@ body * {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    color: #008000;
-    background-color: #c7be6e;
+    color: #e8e8a6;
+    background-color: #487a3a;
     font-size: 15px;
     border-radius: 10px;
     width: 30px;
     height: 30px;
-    border: 2px solid; }
+    border: 2px solid #487a3a; }
   .cart-wrapper .less i {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    color: #ff6565;
-    background-color: #c7be6e;
+    color: #e8e8a6;
+    background-color: #e83c3c;
     font-size: 15px;
     border-radius: 10px;
     width: 30px;
     height: 30px;
-    border: 2px solid; }
+    border: 2px solid #e83c3c; }
   .cart-wrapper .quantity {
     color: #937602;
     background-color: #e8e8a6;
@@ -425,7 +433,7 @@ body * {
       padding: 5px 10px; }
     .cart-wrapper .totalprice-wrapper .total-price {
       font-size: 12px;
-      color: #008000; }
+      color: #487a3a; }
     .cart-wrapper .totalprice-wrapper .price {
       font-size: 20px;
       border-bottom: 1px solid;
@@ -502,6 +510,127 @@ body * {
     margin: 0 0 10px; }
 
 /* wallet page styles */
+/* single prod page styles */
+.single-prod-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%; }
+  .single-prod-wrapper .single-prod-header {
+    position: relative;
+    width: 100%; }
+  .single-prod-wrapper .back {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    color: #937602;
+    background-color: #e8e8a6;
+    font-size: 40px;
+    border-radius: 10px;
+    border: 2px solid;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; }
+    .single-prod-wrapper .back i {
+      position: relative;
+      right: -3px; }
+  .single-prod-wrapper .single-prod-page-title {
+    font-size: 40px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 50px; }
+  .single-prod-wrapper .main-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px; }
+    .single-prod-wrapper .main-content * {
+      flex: 1; }
+  .single-prod-wrapper .details {
+    width: 100%;
+    margin: 50px 0 0; }
+  .single-prod-wrapper .pages-details-wrapper {
+    margin-bottom: 30px; }
+  .single-prod-wrapper ul {
+    padding: 0 40px;
+    font-size: 15px; }
+  .single-prod-wrapper .book-img-price-wrapper {
+    background-color: #c7be6e;
+    padding: 30px 0;
+    width: 100%;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; }
+  .single-prod-wrapper img {
+    width: 220px;
+    display: block;
+    max-width: 100%;
+    margin: 0 auto 50px;
+    border-radius: 5px;
+    position: relative;
+    z-index: 3;
+    box-shadow: 0px 5px 15px 0 #00000080; }
+  .single-prod-wrapper .price-wrapper {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    margin: 20px 0 0; }
+    .single-prod-wrapper .price-wrapper::before {
+      width: 290px;
+      height: 150px;
+      content: '';
+      border-radius: 80px;
+      background-image: linear-gradient(to left, #a88b2d, #937600);
+      display: block;
+      position: absolute;
+      top: -180px;
+      right: 30px;
+      z-index: 2; }
+    .single-prod-wrapper .price-wrapper .price {
+      font-size: 30px;
+      margin-left: 10px; }
+  .single-prod-wrapper .single-prod-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    margin: 50px 0 50px; }
+    .single-prod-wrapper .single-prod-footer * {
+      flex: 1; }
+    .single-prod-wrapper .single-prod-footer .more, .single-prod-wrapper .single-prod-footer .less, .single-prod-wrapper .single-prod-footer .quantity {
+      font-size: 30px;
+      border: 1px solid;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+      border-radius: 10px;
+      color: #e8e8a6; }
+    .single-prod-wrapper .single-prod-footer .more {
+      background-color: #487a3a;
+      border-color: #487a3a; }
+    .single-prod-wrapper .single-prod-footer .less {
+      background-color: #e83c3c;
+      border-color: #e83c3c; }
+    .single-prod-wrapper .single-prod-footer .quantity {
+      margin: 0 20px;
+      background-color: #937602;
+      border-color: #937602;
+      padding-top: 5px; }
+
+/* single prod page styles */
 footer {
   display: flex;
   flex-direction: row;
