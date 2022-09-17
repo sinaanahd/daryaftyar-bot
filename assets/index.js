@@ -79,32 +79,48 @@ const subjects = [sub1, sub2, sub3, sub4];
 
 // making sample book items
 const book1 = {
-    name: "اسم کتاب درسی",
+    id: 1,
+    name: "1 اسم کتاب درسی",
     quantity_in_cart: 2,
     publisher: "گاج",
     price: 240000,
-    img_url: "./assets/images/book-img-1.jpg"
+    img_url: "./assets/images/book-img-1.jpg",
+    author: "هامون سبطی",
+    page_count: 120,
+    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
 }
 const book2 = {
-    name: "اسم کتاب درسی",
+    id: 2,
+    name: "2 اسم کتاب درسی",
     quantity_in_cart: 2,
     publisher: "قلم چی",
     price: 240000,
-    img_url: "./assets/images/book-img-2.jpg"
+    img_url: "./assets/images/book-img-2.jpg",
+    author: "هامون سبطی",
+    page_count: 100,
+    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
 }
 const book3 = {
-    name: "اسم کتاب درسی",
+    id: 3,
+    name: "3 اسم کتاب درسی",
     quantity_in_cart: 2,
     publisher: "گاج",
     price: 240000,
-    img_url: "./assets/images/book-img-1.jpg"
+    img_url: "./assets/images/book-img-1.jpg",
+    author: "هامون سبطی",
+    page_count: 10,
+    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
 }
 const book4 = {
-    name: "اسم کتاب درسی",
+    id: 4,
+    name: "4 اسم کتاب درسی",
     quantity_in_cart: 2,
     publisher: "راه اندیشه",
     price: 240000,
-    img_url: "./assets/images/book-img-2.jpg"
+    img_url: "./assets/images/book-img-2.jpg",
+    author: "هامون سبطی",
+    page_count: 20,
+    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
 }
 
 // an array filled with book 
@@ -186,7 +202,7 @@ let clicked_subjects = [];
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
-    //render_first_page();
+    render_first_page();
     //render_books(books);
 });
 
@@ -309,9 +325,6 @@ function render_first_page() {
 function render_books(books) {
     //map address
     address_to_here += "book/"
-
-
-
     const static_contents = `
      <div class="books-wrapper">
             <div class="books-header">
@@ -405,15 +418,15 @@ function render_books(books) {
 
     books.forEach((book) => {
         const book_HTML = `
-                <div class="book-item">
-                        <img src="${book.img_url}" alt="" class="book-img" />
+                <div class="book-item" id="book-${book.id}">
+                        <img src="${book.img_url}" alt="" class="book-img" id="book-img-${book.id}"/>
                         <div class="publisher">
                             انتشارات : 
                             <span class="publisher-name">
                                 ${book.publisher}
                             </span>
                         </div>
-                        <div class="book-name">
+                        <div class="book-name" id="book-name-${book.id}">
                             ${book.name}
                         </div>
                         <div class="book-price">
@@ -436,6 +449,12 @@ function render_books(books) {
                     </div>
         `;
         books_wrapper.innerHTML += book_HTML;
+    });
+    const books_HTML = [...document.querySelectorAll('.book-item')];
+    books_HTML.forEach(book => {
+        book.addEventListener('click', (e) => {
+            book_clicked(e);
+        });
     });
 
 }
@@ -701,6 +720,81 @@ function render_wallet(user) {
 
 }
 
+// function to render single book page
+function render_single_book(book) {
+    const single_book_content = `
+        <div class="single-prod-wrapper">
+            <div class="single-prod-header">
+                <div class="back">
+                    <i class="fa fa-caret-right"></i>
+                </div>
+                <div class="single-prod-page-title">
+                    ${book.name}
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="details">
+                    <div class="publisher-wrapper">
+                        نویسنده : 
+                        <span class="publisher">
+                            ${book.author}
+                        </span>
+                    </div>
+                    <div class="pages-details-wrapper">
+                        تعداد صفحات :
+                        <span class="pages-count">
+                            ${book.page_count}
+                        </span>
+                        صفحه
+                    </div>
+                    <div class="full-details-wrapper">
+                        توضیحات :
+                        <ul class="book-details-ul">
+                            
+                        </ul>
+                    </div>
+                </div>
+                <div class="book-img-price-wrapper">
+                    <img src="${book.img_url}" alt="">
+                    <div class="price-wrapper">
+                        <span class="price">
+                            ${book.price}
+                        </span>
+                        تومان
+                    </div>
+                </div>
+            </div>
+            <div class="single-prod-footer">
+                <span class="more">
+                    <i class="fa fa-plus"></i>
+                </span>
+                <span class="quantity">
+                    ${book.quantity_in_cart}
+                </span>
+                <span class="less">
+                    <i class="fa fa-minus"></i>
+                </span>
+            </div>
+        </div>
+    `;
+    main_area.innerHTML = single_book_content;
+    const details_DOM = document.querySelector('.book-details-ul')
+    book.details.forEach(d => {
+        const book_detail_content = `
+            <li>
+                ${d}
+            </li>
+        `;
+        details_DOM.innerHTML += book_detail_content;
+    });
+    const back_btn = document.querySelector('.back');
+    address_to_here = "home/book/single-book/"
+    back_btn.addEventListener('click', () => {
+        map_handler();
+    })
+}
+
+
 // function for redirecting the user to the required page
 function map_handler() {
     let address = address_to_here.split("/");
@@ -731,6 +825,11 @@ function map_handler() {
         render_first_page();
         address_to_here = "home/"
     }
+    // if we were in single book page
+    else if (address[len] === "single-book" && address[len - 1] === "book") {
+        render_books(books);
+        address_to_here = "home/book/";
+    }
 }
 
 // coming soon
@@ -754,5 +853,19 @@ function render_loading() {
 function stop_repeatation_in_addres(word, my_string) {
     const arr = my_string.split('/');
     return !arr.includes(word);
+}
+
+
+//book clicked
+function book_clicked(e) {
+    let clicked_book = "";
+    if (e.target.id.includes("book-")) {
+        const splited = e.target.id.split("-")
+        const id = parseInt(splited[splited.length - 1]);
+        clicked_book = books.find(book => {
+            return book.id === id
+        });
+        render_single_book(clicked_book)
+    }
 }
 // etc
