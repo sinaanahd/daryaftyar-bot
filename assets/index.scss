@@ -63,12 +63,14 @@ body {
         line-height: 50px;
     }
     .usersName-wrapper{
-        @include styler($background, $mainColor, 22px, 50px);
+        @include styler($background, unset, 22px, 50px);
+        background-image: $gradiant;
         padding: 5px 10px;
         margin: 0 5px;
     }
     .wallet-wrapper{
-        @include styler($background, $mainColor, 20px, 100px);
+        @include styler($background, unset, 20px, 100px);
+        background-image: $gradiant;
         padding: 20px 20px;
         @include flexMixin(row, space-between , center);
     }
@@ -412,6 +414,71 @@ body {
 
 
 /* shopping cart styles */
+
+
+
+/* wallet page styles */
+
+.wallet-wrapper{
+    @include flexMixin(column, center, center);
+    width: 100%;
+    .wallet-header {
+        position: relative;
+        width: 100%;
+    }
+    .back {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        @include styler($mainColor, $background, 40px, 10px);
+        border: 2px solid;
+        width: 40px;
+        height: 40px;
+        @include flexMixin (row, center, center);
+
+        i {
+            position: relative;
+            right: -3px;
+        }
+    }
+    .wallet-page-title {
+        font-size: 40px;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+    .main-content{
+        width: 98%;
+        border-radius: 60px;
+        padding: 40px 30px 20px;
+        background-image: $gradiant;
+        color: $background;
+        font-size:15px;
+    }
+    .wallet-title{
+        text-align: right;
+        font-size: 30px;
+        margin : 0 0 10px;
+    }
+    .wallet-info{
+        @include flexMixin(row,space-between,center);
+        width: 80%;
+        margin : 0 0 50px;
+    }
+    .increase-title{
+        font-size: 20px;
+        border-bottom: 1px solid $background;
+        padding: 0 5px 5px;
+        border-radius: 40px;
+        margin: 0 0 20px;
+    }
+    .way-to-increase-title{
+        margin:0 0 10px;
+    }
+}
+
+
+/* wallet page styles */
 
 footer{
     @include flexMixin(row,space-evenly,center);

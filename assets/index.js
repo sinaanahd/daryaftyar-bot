@@ -186,7 +186,7 @@ let clicked_subjects = [];
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
-    render_first_page();
+    //render_first_page();
     //render_books(books);
 });
 
