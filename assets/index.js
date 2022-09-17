@@ -202,7 +202,7 @@ let clicked_subjects = [];
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
-    //render_first_page();
+    render_first_page();
     //render_books(books);
 });
 
@@ -621,6 +621,12 @@ function render_shopping_cart(cart) {
 
     main_area.innerHTML = shopping_cart_HTML;
 
+    const next_step_btn = document.querySelector('.cart-next-step');
+    next_step_btn.addEventListener('click', () => {
+        render_final_stage_cart(cart_items, 10000);
+    });
+
+
     const cart_item_wrapper = document.querySelector('.cart-items');
     // to get total price wrapper
     const total_price_HTML = document.querySelector('.price');
@@ -800,6 +806,123 @@ function render_single_book(book) {
     })
 }
 
+//function to render final stage of cart
+function render_final_stage_cart(cart_items, discount) {
+    let total_price = 0;
+    cart_items.forEach(c => {
+        total_price += c.quantity_in_cart * c.price;
+    });
+    const pay_amount = total_price - (user.amount + discount)
+    const final_cart_stage_content = `
+    <div class="cart-final-stage-wrapper">
+                    <div class="cart-header">
+                        <div class="back">
+                            <i class="fa fa-caret-right"></i>
+                        </div>
+                        <div class="cart-page-title">
+                            سبد خرید
+                        </div>
+                    </div>
+                    <div class="main-content">
+                        <div class="cart-details">
+                            <div class="prods-incart-text">
+                                <span class="number">
+                                    ${cart_items.length}
+                                </span>
+                                محصول در سبد خرید شما موجود است :
+                            </div>
+                            <div class="view-btn">
+                                مشاهده
+                            </div>
+                        </div>
+                        <div class="cart-notice">
+                            <p>
+                                <span class="notice">
+                                    نکته مهم :
+                                </span>
+                                شما باید قبلا در ربات و از بخش اطلاعات پستی ، اطلاعات حقیقی خود را ثبت
+                                کرده باشید تا ما بتونیم محصولات رو برای شما ارسال کنیم ؛ اگر این کار را نکرده باشید ، اجازه پرداخت
+                                نخواهید داشت .
+                            </p>
+                        </div>
+                        <div class="cart-items-details">
+                            <div class="cart-total-price">
+                                <span class="label">
+                                    مجموع مبلغ سبد خرید شما :
+                                </span>
+                                <span class="total-price">
+                                    <span class="price">
+                                        ${total_price}
+                                    </span>
+                                    تومان
+                                </span>
+                            </div>
+                            <div class="cart-discount">
+                                <span class="label">
+                                    تخفیف :
+                                </span>
+                                <span class="total-price">
+                                    <span class="price">
+                                        ${discount}
+                                    </span>
+                                    تومان
+                                </span>
+                            </div>
+                            <div class="cart-wallet">
+                                <span class="label">
+                                    اعتبار کیف پول :
+                                </span>
+                                <span class="total-price">
+                                    <span class="price">
+                                        ${user.amount}
+                                    </span>
+                                    تومان
+                                </span>
+                            </div>
+                            <div class="cart-final-pay">
+                                <span class="label">
+                                    قابل پرداخت :
+                                </span>
+                                <span class="total-price">
+                                    <span class="price">
+                                        ${pay_amount}
+                                    </span>
+                                    تومان
+                                </span>
+                            </div>
+                        </div>
+                        <div class="pay-btn-wrapper">
+                            <div class="pay-amount">
+                                پرداخت
+                                <span class="amount">
+                                    ${pay_amount}
+                                </span>
+                                <span class="curency">
+                                    تومان
+                                </span>
+                            </div>
+                            <span class="pointer">
+                                <i class="fa fa-caret-left"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+    `;
+    main_area.innerHTML = final_cart_stage_content;
+
+    const back_btn = document.querySelector('.back');
+    address_to_here += "finalStage/";
+    back_btn.addEventListener('click', () => {
+        map_handler();
+    });
+
+    const view_btn = document.querySelector('.view-btn');
+    view_btn.addEventListener("click", () => {
+        map_handler();
+    })
+
+
+}
 
 // function for redirecting the user to the required page
 function map_handler() {
@@ -835,6 +958,11 @@ function map_handler() {
     else if (address[len] === "single-book" && address[len - 1] === "book") {
         render_books(books);
         address_to_here = "home/book/";
+    }
+    // if we were in single book page
+    else if (address[len] === "finalStage" && address[len - 1] === "cart") {
+        render_shopping_cart(cart_items);
+        address_to_here = "home/cart/";
     }
 }
 
