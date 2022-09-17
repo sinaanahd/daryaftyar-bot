@@ -419,7 +419,7 @@ body {
 
 /* wallet page styles */
 
-.wallet-wrapper{
+.wallet-page-wrapper{
     @include flexMixin(column, center, center);
     width: 100%;
     .wallet-header {

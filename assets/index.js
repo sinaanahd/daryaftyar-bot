@@ -284,7 +284,8 @@ function render_first_page() {
     // adding event listener to increase btn
     increase_amount.addEventListener('click', () => {
         // some function 
-        render_coming_soon_page();
+        //render_coming_soon_page();
+        render_wallet(user);
     });
 
 
@@ -644,10 +645,65 @@ function render_shopping_cart(cart) {
 }
 
 
+// function to render wallet page
+function render_wallet(user) {
+    const wallet_content = `
+        <div class="wallet-page-wrapper">
+            <div class="wallet-header">
+                <div class="back">
+                    <i class="fa fa-caret-right"></i>
+                </div>
+                <div class="wallet-page-title">
+                    کیف پول
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="wallet-title">
+                    اعتبار کیف پول
+                </div>
+                <div class="wallet-info">
+                    <div class="wallet-amount">
+                        <span class="price">
+                            ${user.amount}
+                        </span>
+                        تومان
+                    </div>
+                    <div class="seprator">
+                        |
+                    </div>
+                    <div class="wallet-days-left">
+                        <span class="days">${user.days_left}</span>
+                        روز مهلت استفاده
+                    </div>
+                </div>
+                <div class="increase-title">
+                    راه های افزایش اعتبار کیف پول
+                </div>
+                <div class="way-to-increase-wrapper">
+                    <div class="way-to-increase-title">
+                        دوست خوبم تو از راه های زیر میتونی اعتبار کسب کنی و در خرید از این فروشگاه ازش استفاده کنی :
+                    </div>
+                    <div class="ways-to-increase">
+                        <p>
+                            1- با هربار جواب صحیح دادن به سوال دوستات در پرسشکده ربات ، میتونی 500 تومان اعتبار جمع کنی !
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    main_area.innerHTML = wallet_content;
+    const back_btn = document.querySelector('.back');
+    address_to_here = "home/wallet/";
+    back_btn.addEventListener('click', () => {
+        map_handler();
+    });
+
+}
+
 // function for redirecting the user to the required page
 function map_handler() {
     let address = address_to_here.split("/");
-    //console.log(address);
 
     let len = address.length - 2;
     // if we are in book page
@@ -670,7 +726,11 @@ function map_handler() {
         render_books(books);
         address_to_here = "home/book/";
     }
-    //console.log(address_to_here);
+    // if we are in wallet page from home
+    else if (address[len] === "wallet" && address[len - 1] === "home") {
+        render_first_page();
+        address_to_here = "home/"
+    }
 }
 
 // coming soon
