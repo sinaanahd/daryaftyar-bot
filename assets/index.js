@@ -202,7 +202,7 @@ let clicked_subjects = [];
 
 // events
 document.addEventListener("DOMContentLoaded", () => {
-    render_first_page();
+    //render_first_page();
     //render_books(books);
 });
 
@@ -610,6 +610,12 @@ function render_shopping_cart(cart) {
                     </div>
                 </div>
             </div>
+            <div class="cart-next-step">
+                <span class="label">
+                    مرحله بعد
+                </span>
+                <i class="fa fa-caret-left"></i>
+            </div>
         </div>
     `;
 
@@ -816,7 +822,7 @@ function map_handler() {
         address_to_here = "home/";
     }
     // if we are in cart page from home
-    else if (address[len] === "cart" && address[len - 1] === "book") {
+    else if ((address[len] === "cart" && address[len - 1] === "book") || (address[len] === "cart" && address[len - 1] === "single-book")) {
         render_books(books);
         address_to_here = "home/book/";
     }

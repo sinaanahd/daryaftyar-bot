@@ -408,6 +408,21 @@ body {
             margin-left: 5px;
         }
     }
+    .cart-next-step{
+        width: 95%;
+        @include flexMixin(row,space-between,center);
+        color: $background;
+        background-image: $gradiant;
+        font-size: 25px;
+        margin: 20px 0;
+        padding: 5px 20px;
+        border-radius: 30px;
+        .label{
+            font-size: 15px;
+            text-align: center;
+            flex-grow: 1;
+        }
+    }
 }
 @keyframes growMF {
     from{
@@ -479,6 +494,7 @@ body {
         padding: 0 5px 5px;
         border-radius: 40px;
         margin: 0 0 20px;
+        text-align: center;
     }
     .way-to-increase-title{
         margin:0 0 10px;
@@ -622,7 +638,106 @@ body {
 /* single prod page styles */
 
 
+/* cart final stage page */
+.cart-final-stage-wrapper{
+@include flexMixin(column, center, center);
+    width: 100%;
 
+    .cart-header {
+        position: relative;
+        width: 100%;
+    }
+
+    .back {
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        @include styler($mainColor, $background, 40px, 10px);
+        border: 2px solid;
+        width: 40px;
+        height: 40px;
+        @include flexMixin (row, center, center);
+
+        i {
+            position: relative;
+            right: -3px;
+        }
+    }
+
+    .cart-page-title {
+        font-size: 40px;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 50px;
+    }
+    .main-content{
+        @include flexMixin(column,center,center);
+        width: 100%;
+        padding: 0 10px;
+        .cart-details{
+            @include flexMixin(row,space-between,center);
+            width: 100%;
+            font-size: 15px;
+            margin: 0 0 50px;
+        }
+        .view-btn{
+            @include styler($background,unset,15px,20px);
+            padding: 2px 10px;
+            background-image: $gradiant;
+
+        }
+        .cart-notice{
+            font-size: 15px;
+            text-align: justify;
+            margin: 0 0 50px;
+        }
+        .notice{
+            @include styler($mainColor , $background , 15px , 20px);
+            border: 1px solid $mainColor;
+            padding: 2px 10px 2px 3px;
+            margin: 0 0 0 5px;
+        }
+        .cart-items-details{
+            width: 100%;
+            border: 3px solid $mainColor;
+            border-radius: 50px;
+            font-size: 15px;
+            padding: 20px 30px 10px;
+            div{
+                @include flexMixin(row,space-between,center);
+                width: 100%;
+                border-bottom: 1px solid ;
+                padding: 0 10px 5px;
+                margin-bottom: 10px;
+            }
+            .total-price{
+                font-size: 10px;
+                .price{
+                    font-size: 15px;
+                }
+            }
+        }
+        .pay-btn-wrapper{
+            @include flexMixin(row,space-between,center);
+            width: 100%;
+            margin: 50px 0;
+            @include styler($background,$greenColor,17px,40px);
+            padding: 5px 20px;
+        }
+        .pay-amount{
+            flex-grow: 1;
+            text-align: center;
+            .curency{
+                font-size: 12px;
+            }
+        }
+        .pointer{
+            font-size: 25px;
+        }
+    }
+
+}
+/* cart final stage page */
 
 footer{
     @include flexMixin(row,space-evenly,center);

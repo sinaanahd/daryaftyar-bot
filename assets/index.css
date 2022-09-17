@@ -440,6 +440,22 @@ body * {
       border-radius: 5px;
       padding: 3px;
       margin-left: 5px; }
+  .cart-wrapper .cart-next-step {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #e8e8a6;
+    background-image: linear-gradient(to left, #a88b2d, #937600);
+    font-size: 25px;
+    margin: 20px 0;
+    padding: 5px 20px;
+    border-radius: 30px; }
+    .cart-wrapper .cart-next-step .label {
+      font-size: 15px;
+      text-align: center;
+      flex-grow: 1; }
 
 @keyframes growMF {
   from {
@@ -505,7 +521,8 @@ body * {
     border-bottom: 1px solid #e8e8a6;
     padding: 0 5px 5px;
     border-radius: 40px;
-    margin: 0 0 20px; }
+    margin: 0 0 20px;
+    text-align: center; }
   .wallet-page-wrapper .way-to-increase-title {
     margin: 0 0 10px; }
 
@@ -631,6 +648,113 @@ body * {
       padding-top: 5px; }
 
 /* single prod page styles */
+/* cart final stage page */
+.cart-final-stage-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%; }
+  .cart-final-stage-wrapper .cart-header {
+    position: relative;
+    width: 100%; }
+  .cart-final-stage-wrapper .back {
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    color: #937602;
+    background-color: #e8e8a6;
+    font-size: 40px;
+    border-radius: 10px;
+    border: 2px solid;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; }
+    .cart-final-stage-wrapper .back i {
+      position: relative;
+      right: -3px; }
+  .cart-final-stage-wrapper .cart-page-title {
+    font-size: 40px;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 50px; }
+  .cart-final-stage-wrapper .main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 0 10px; }
+    .cart-final-stage-wrapper .main-content .cart-details {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      font-size: 15px;
+      margin: 0 0 50px; }
+    .cart-final-stage-wrapper .main-content .view-btn {
+      color: #e8e8a6;
+      background-color: unset;
+      font-size: 15px;
+      border-radius: 20px;
+      padding: 2px 10px;
+      background-image: linear-gradient(to left, #a88b2d, #937600); }
+    .cart-final-stage-wrapper .main-content .cart-notice {
+      font-size: 15px;
+      text-align: justify;
+      margin: 0 0 50px; }
+    .cart-final-stage-wrapper .main-content .notice {
+      color: #937602;
+      background-color: #e8e8a6;
+      font-size: 15px;
+      border-radius: 20px;
+      border: 1px solid #937602;
+      padding: 2px 10px 2px 3px;
+      margin: 0 0 0 5px; }
+    .cart-final-stage-wrapper .main-content .cart-items-details {
+      width: 100%;
+      border: 3px solid #937602;
+      border-radius: 50px;
+      font-size: 15px;
+      padding: 20px 30px 10px; }
+      .cart-final-stage-wrapper .main-content .cart-items-details div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        border-bottom: 1px solid;
+        padding: 0 10px 5px;
+        margin-bottom: 10px; }
+      .cart-final-stage-wrapper .main-content .cart-items-details .total-price {
+        font-size: 10px; }
+        .cart-final-stage-wrapper .main-content .cart-items-details .total-price .price {
+          font-size: 15px; }
+    .cart-final-stage-wrapper .main-content .pay-btn-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin: 50px 0;
+      color: #e8e8a6;
+      background-color: #487a3a;
+      font-size: 17px;
+      border-radius: 40px;
+      padding: 5px 20px; }
+    .cart-final-stage-wrapper .main-content .pay-amount {
+      flex-grow: 1;
+      text-align: center; }
+      .cart-final-stage-wrapper .main-content .pay-amount .curency {
+        font-size: 12px; }
+    .cart-final-stage-wrapper .main-content .pointer {
+      font-size: 25px; }
+
+/* cart final stage page */
 footer {
   display: flex;
   flex-direction: row;
