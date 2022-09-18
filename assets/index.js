@@ -81,7 +81,7 @@ const subjects = [sub1, sub2, sub3, sub4];
 const book1 = {
     id: 1,
     name: "1 اسم کتاب درسی",
-    quantity_in_cart: 2,
+    quantity_in_cart: 4,
     publisher: "گاج",
     price: 240000,
     img_url: "./assets/images/book-img-1.jpg",
@@ -92,7 +92,7 @@ const book1 = {
 const book2 = {
     id: 2,
     name: "2 اسم کتاب درسی",
-    quantity_in_cart: 2,
+    quantity_in_cart: 0,
     publisher: "قلم چی",
     price: 240000,
     img_url: "./assets/images/book-img-2.jpg",
@@ -114,7 +114,7 @@ const book3 = {
 const book4 = {
     id: 4,
     name: "4 اسم کتاب درسی",
-    quantity_in_cart: 2,
+    quantity_in_cart: 1,
     publisher: "راه اندیشه",
     price: 240000,
     img_url: "./assets/images/book-img-2.jpg",
@@ -126,9 +126,14 @@ const book4 = {
 // an array filled with book 
 // the main use of this array for now is to render books in the book page
 let books = [book1, book2, book3, book4];
+let cart_items = [];
 
+books.forEach(b => {
+    if (b.quantity_in_cart !== 0) {
+        cart_items.push(b);
+    }
+})
 // an array for cart items
-let cart_items = [book1, book2, book3];
 
 
 
@@ -204,8 +209,8 @@ let clicked_subjects = [];
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
-    render_first_page();
-    //render_books(books);
+    //render_first_page();
+    render_books(books);
 });
 
 // rendring first page via menu btn
@@ -446,11 +451,9 @@ function render_books(books) {
                         <div class="action-btns">
                             <span class="add-book">
                                 <i class="fa fa-plus"></i>
-                            </span>
-                            <span class="book-quantity">
+                            </span><span class="book-quantity">
                                 ${book.quantity_in_cart}
-                            </span>
-                            <span class="decrment-book">
+                            </span><span class="decrment-book">
                                 <i class="fa fa-minus"></i>
                             </span>
                         </div>
@@ -459,10 +462,75 @@ function render_books(books) {
         books_wrapper.innerHTML += book_HTML;
     });
     const books_HTML = [...document.querySelectorAll('.book-item')];
-    books_HTML.forEach(book => {
-        book.addEventListener('click', (e) => {
+    // books_HTML.forEach(book => {
+    //     book.addEventListener('click', (e) => {
+    //         book_clicked(e);
+    //     });
+    // });
+
+    books_HTML.forEach(item => {
+        item.addEventListener('click', (e) => {
             book_clicked(e);
         });
+        // handling more btn in book page
+        const add_book_btn = item.querySelector('.add-book');
+        add_book_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "add-book") {
+                const quantity_wrapper = e.target.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[1]);
+                update_quantity('book', id, "+");
+                //update_total(total_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "fa-plus") {
+                const quantity_wrapper = e.target.parentElement.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[1]);
+                update_quantity('book', id, "+");
+                //update_total(total_price_HTML);
+            }
+        });
+        // decreament items in book page
+        const less_btn = item.querySelector('.decrment-book');
+        less_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "decrment-book") {
+                const quantity_wrapper = e.target.previousSibling;
+                const id_string = e.target.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[1]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                    quantity_wrapper.innerHTML = 0;
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                //update_total(total_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "fa-minus") {
+                const quantity_wrapper = e.target.parentElement.previousSibling;
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[1]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                    quantity_wrapper.innerHTML = 0;
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                //update_total(total_price_HTML);
+            }
+        });
+
     });
 
 }
@@ -690,8 +758,6 @@ function render_shopping_cart(cart) {
     // get all the items in the cart for making events in the more or less
     const all_cart_items = [...document.querySelectorAll('.cart-item')];
     all_cart_items.forEach(item => {
-
-
         // handling more btn in cart
         const more_btn = item.querySelector('.more');
         more_btn.addEventListener('click', (e) => {
@@ -717,8 +783,7 @@ function render_shopping_cart(cart) {
                 update_total(total_price_HTML);
             }
         });
-
-
+        // decreament items in cart
         const less_btn = item.querySelector('.less');
         less_btn.addEventListener('click', (e) => {
             const classes = [...e.target.classList];
@@ -753,8 +818,6 @@ function render_shopping_cart(cart) {
         });
 
     });
-
-
 
     // updating curent place for map_handler method
     stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
@@ -1096,32 +1159,42 @@ function book_clicked(e) {
         const splited = e.target.id.split("-")
         const id = parseInt(splited[splited.length - 1]);
         clicked_book = books.find(book => {
-            return book.id === id
+            return book.id === id;
         });
-        render_single_book(clicked_book)
+        render_single_book(clicked_book);
     }
 }
 
 // update quantity
 function update_quantity(type, id, sign) {
 
-    const cart_item = cart_items.find(c => {
+    const item = books.find(c => {
         return c.id === id;
     });
 
     if ((type === "cart") && (sign === "+")) {
-        cart_item.quantity_in_cart += 1;
+        item.quantity_in_cart += 1;
     }
     else if ((type === "cart") && (sign === "-")) {
-        if (cart_item.quantity_in_cart === 1) {
-            cart_item.quantity_in_cart -= 1;
-            const index = cart_items.indexOf(cart_item);
+        if (item.quantity_in_cart === 1) {
+            item.quantity_in_cart -= 1;
+            const index = cart_items.indexOf(item);
             cart_items.splice(index, 1);
         }
+        else if (item.quantity_in_cart === 0) {
+            item.quantity_in_cart = 0;
+        }
         else
-            cart_item.quantity_in_cart -= 1;
+            item.quantity_in_cart -= 1;
 
     }
+    else if ((type === "book") && (sign === "+")) {
+        if (item.quantity_in_cart === 0) {
+            cart_items.push(item);
+        }
+        item.quantity_in_cart += 1;
+    }
+
 }
 //function to update total price
 function update_total(el) {
