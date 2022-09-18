@@ -932,11 +932,9 @@ function render_single_book(book) {
             <div class="single-prod-footer">
                 <span class="more">
                     <i class="fa fa-plus"></i>
-                </span>
-                <span class="quantity">
+                </span><span class="quantity">
                     ${book.quantity_in_cart}
-                </span>
-                <span class="less">
+                </span><span class="less">
                     <i class="fa fa-minus"></i>
                 </span>
             </div>
@@ -952,8 +950,69 @@ function render_single_book(book) {
         `;
         details_DOM.innerHTML += book_detail_content;
     });
+
+    //const single_book_footer = document.querySelectorAll('.single-prod-footer')
+    const more_btn = document.querySelector('.more');
+    more_btn.addEventListener('click', (e) => {
+        const classes = [...e.target.classList];
+        if (classes[classes.length - 1] === "more") {
+            const quantity_wrapper = e.target.nextElementSibling;
+            quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+            // changing the array quantity
+            //const id_string = e.target.parentElement.parentElement.id;
+            const id = book.id;
+            update_quantity('book', id, "+");
+            //update_total(total_price_HTML);
+        }
+        else if (classes[classes.length - 1] === "fa-plus") {
+            const quantity_wrapper = e.target.parentElement.nextElementSibling;
+            quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+            // changing the array quantity
+            //const id_string = e.target.parentElement.parentElement.parentElement.id;
+            const id = book.id;
+            update_quantity('book', id, "+");
+            //update_total(total_price_HTML);
+        }
+    });
+    const less_btn = document.querySelector('.less');
+    less_btn.addEventListener('click', (e) => {
+        const classes = [...e.target.classList];
+        if (classes[classes.length - 1] === "less") {
+            const quantity_wrapper = e.target.previousSibling;
+            //const id_string = e.target.parentElement.parentElement.id;
+            const id = book.id;
+            update_quantity('cart', id, "-");
+            if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                //e.target.parentElement.parentElement.remove();
+                quantity_wrapper.innerHTML = 0;
+            }
+            else {
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                // changing the array quantity
+            }
+            //update_total(total_price_HTML);
+        }
+        else if (classes[classes.length - 1] === "fa-minus") {
+            const quantity_wrapper = e.target.parentElement.previousSibling;
+            //const id_string = e.target.parentElement.parentElement.parentElement.id;
+            const id = book.id;
+            update_quantity('cart', id, "-");
+            if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                //e.target.parentElement.parentElement.parentElement.remove();
+                quantity_wrapper.innerHTML = 0;
+            }
+            else {
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                // changing the array quantity
+            }
+            //update_total(total_price_HTML);
+        }
+    });
+
     const back_btn = document.querySelector('.back');
-    address_to_here = "home/book/single-book/"
+    address_to_here = "home/book/single-book/";
     back_btn.addEventListener('click', () => {
         map_handler();
     })
