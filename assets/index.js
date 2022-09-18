@@ -128,6 +128,7 @@ const book4 = {
 let books = [book1, book2, book3, book4];
 let cart_items = [];
 
+// filling cart_items arr
 books.forEach(b => {
     if (b.quantity_in_cart !== 0) {
         cart_items.push(b);
@@ -209,8 +210,8 @@ let clicked_subjects = [];
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
-    //render_first_page();
-    render_books(books);
+    render_first_page();
+    //render_books(books);
 });
 
 // rendring first page via menu btn
