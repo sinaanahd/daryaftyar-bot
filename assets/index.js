@@ -125,10 +125,10 @@ const book4 = {
 
 // an array filled with book 
 // the main use of this array for now is to render books in the book page
-const books = [book1, book2, book3, book4];
+let books = [book1, book2, book3, book4];
 
 // an array for cart items
-const cart_items = [book1, book2, book3];
+let cart_items = [book1, book2, book3];
 
 
 
@@ -201,6 +201,8 @@ let clicked_subjects = [];
 // classes
 
 // events
+
+//documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
     render_first_page();
     //render_books(books);
@@ -209,11 +211,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // rendring first page via menu btn
 footer_btn_home.addEventListener('click', () => {
     render_first_page();
-})
+});
+//rendering cart via menu btn
 footer_btn_cart.addEventListener('click', () => {
     clearPage();
     render_shopping_cart(cart_items);
-})
+    if (cart_items.length === 0) {
+        const total_price_HTML = document.querySelector('.price');
+        update_total(total_price_HTML);
+    }
+});
+//render checkout page via menu btn
 footer_btn_checkout.addEventListener('click', () => {
     render_coming_soon_page();
     //console.log(address_to_here);
@@ -578,6 +586,8 @@ function clear_stage(element) {
 
 // function to render shopping cart
 function render_shopping_cart(cart) {
+
+    // creating content for the shopping cart (HTML template)
     const shopping_cart_HTML = `
         <div class="cart-wrapper">
             <div class="cart-header">
@@ -619,11 +629,23 @@ function render_shopping_cart(cart) {
         </div>
     `;
 
+    //appending the main text to the dom
     main_area.innerHTML = shopping_cart_HTML;
 
+    //activating next step btn
     const next_step_btn = document.querySelector('.cart-next-step');
+    // click action for cart next step
     next_step_btn.addEventListener('click', () => {
-        render_final_stage_cart(cart_items, 10000);
+        // render final stage with cart items and dicount amount
+        let discount = 100000;
+        render_final_stage_cart(cart_items, discount);
+    });
+
+    // activating go to book page btn 
+    const back_to_shop_btn = document.querySelector('.go-to-book-page');
+    back_to_shop_btn.addEventListener("click", () => {
+        render_books(books);
+        address_to_here = "home/books/";
     });
 
 
@@ -636,7 +658,7 @@ function render_shopping_cart(cart) {
     cart.forEach(item => {
         const cart_item_content = `
         <div class="cart-item" id="cart-item-${item.id}">
-            <img src="./assets/images/book-img-1.jpg" alt="">
+            <img src="${item.img_url}" alt="">
             <div class="details">
                 <div class="cart-item-name">
                     ${item.name}
@@ -651,11 +673,9 @@ function render_shopping_cart(cart) {
             <div class="cart-item-actions">
                 <span class="more">
                     <i class="fa fa-plus"></i>
-                </span>
-                <span class="quantity">
+                </span><span class="quantity">
                     ${item.quantity_in_cart}
-                </span>
-                <span class="less">
+                </span><span class="less">
                     <i class="fa fa-minus"></i>
                 </span>
             </div>
@@ -666,13 +686,83 @@ function render_shopping_cart(cart) {
     });
     total_price_HTML.innerHTML = total_price_amount;
 
+
+    // get all the items in the cart for making events in the more or less
+    const all_cart_items = [...document.querySelectorAll('.cart-item')];
+    all_cart_items.forEach(item => {
+
+
+        // handling more btn in cart
+        const more_btn = item.querySelector('.more');
+        more_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "more") {
+                const quantity_wrapper = e.target.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "+");
+                update_total(total_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "fa-plus") {
+                const quantity_wrapper = e.target.parentElement.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "+");
+                update_total(total_price_HTML);
+            }
+        });
+
+
+        const less_btn = item.querySelector('.less');
+        less_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "less") {
+                const quantity_wrapper = e.target.previousSibling;
+                const id_string = e.target.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 1) {
+                    e.target.parentElement.parentElement.remove();
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                update_total(total_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "fa-minus") {
+                const quantity_wrapper = e.target.parentElement.previousSibling;
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 1) {
+                    e.target.parentElement.parentElement.parentElement.remove();
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                update_total(total_price_HTML);
+            }
+        });
+
+    });
+
+
+
     // updating curent place for map_handler method
     stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
 
     const back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
         map_handler(address_to_here);
-    })
+    });
 }
 
 
@@ -924,6 +1014,15 @@ function render_final_stage_cart(cart_items, discount) {
 
 }
 
+// function to render sort by filter 
+function render_sort_by_filter() {
+    const sort_by_filter_content = `
+
+    `;
+
+    books_main_content.innerHTML += " ";
+}
+
 // function for redirecting the user to the required page
 function map_handler() {
     let address = address_to_here.split("/");
@@ -1000,6 +1099,47 @@ function book_clicked(e) {
             return book.id === id
         });
         render_single_book(clicked_book)
+    }
+}
+
+// update quantity
+function update_quantity(type, id, sign) {
+
+    const cart_item = cart_items.find(c => {
+        return c.id === id;
+    });
+
+    if ((type === "cart") && (sign === "+")) {
+        cart_item.quantity_in_cart += 1;
+    }
+    else if ((type === "cart") && (sign === "-")) {
+        if (cart_item.quantity_in_cart === 1) {
+            cart_item.quantity_in_cart -= 1;
+            const index = cart_items.indexOf(cart_item);
+            cart_items.splice(index, 1);
+        }
+        else
+            cart_item.quantity_in_cart -= 1;
+
+    }
+}
+//function to update total price
+function update_total(el) {
+    let sum = 0;
+    const cart_empty_HTML = document.querySelector('.cart-is-empty');
+    const cart_main_content = document.querySelector('.cart-main-content');
+    cart_items.forEach(c => {
+        sum += c.quantity_in_cart * c.price;
+    });
+    if (sum != 0) {
+        cart_empty_HTML.style.display = "none";
+        el.innerHTML = sum;
+    }
+    else {
+        el.innerHTML = sum;
+        cart_main_content.innerHTML = '';
+        cart_main_content.appendChild(cart_empty_HTML);
+        cart_empty_HTML.style.display = "flex";
     }
 }
 // etc

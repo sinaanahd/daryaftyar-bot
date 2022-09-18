@@ -136,9 +136,10 @@ body * {
   width: 100%;
   padding: 10px 20px;
   color: #e8e8a6;
-  background-color: #937602;
+  background-color: unset;
   font-size: 20px;
-  border-radius: 50px; }
+  border-radius: 50px;
+  background-image: linear-gradient(to left, #a88b2d, #937600); }
 .books-wrapper .main-content {
   display: flex;
   flex-direction: column;
@@ -525,6 +526,9 @@ body * {
     text-align: center; }
   .wallet-page-wrapper .way-to-increase-title {
     margin: 0 0 10px; }
+  .wallet-page-wrapper .sina {
+    background-color: red;
+    width: 100px; }
 
 /* wallet page styles */
 /* single prod page styles */

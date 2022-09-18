@@ -133,7 +133,8 @@ body {
         @include flexMixin(row,space-between,center);
         width: 100%;
         padding: 10px 20px;
-        @include styler($background,$mainColor,20px,50px);
+        @include styler($background,unset,20px,50px);
+        background-image: $gradiant;
     }
     .main-content{
         @include flexMixin(column,center,center);
@@ -498,6 +499,10 @@ body {
     }
     .way-to-increase-title{
         margin:0 0 10px;
+    }
+    .sina{
+        background-color: red;
+        width: 100px;
     }
 }
 
