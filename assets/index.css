@@ -276,9 +276,12 @@ body * {
     display: inline-block;
     background-color: #937602;
     border-radius: 50%;
+    border: 1px solid;
     position: relative;
     top: 5px;
     margin-left: 11px; }
+.books-wrapper .disabled::before {
+  background-color: #e8e8a6 !important; }
 
 /* books page styles */
 /* shopping cart styles */

@@ -1,60 +1,14 @@
 //temp
 
-
 // user needed data
 const user = {
     name: 'سینا اناهید',
     amount: 4000,
     days_left: 17,
+    year: "دهم",
+    subject: "ریاضی",
 }
 
-
-// making sample publishers
-
-const pub1 = {
-    name: "مبتکران",
-    id: 1
-}
-const pub2 = {
-    name: "گاج",
-    id: 2
-}
-const pub3 = {
-    name: "الگو",
-    id: 3
-}
-const pub4 = {
-    name: "قلم چی",
-    id: 4
-}
-const pub5 = {
-    name: "خیلی سبز",
-    id: 5
-}
-const pub6 = {
-    name: "مهر و ماه",
-    id: 6
-}
-
-
-// making a sample publisher array 
-
-const publishers = [pub1, pub2, pub3, pub4, pub5, pub6];
-
-const by1 = {
-    name: " دهم",
-    id: 1
-}
-const by2 = {
-    name: " یازدهم",
-    id: 2
-}
-const by3 = {
-    name: " دوازدهم",
-    id: 3
-}
-// making a sample book year array 
-const book_years = [by1, by2, by3];
 
 
 const sub1 = {
@@ -82,7 +36,12 @@ const book1 = {
     id: 1,
     name: "1 اسم کتاب درسی",
     quantity_in_cart: 4,
-    publisher: "گاج",
+    book_year: "دهم",
+    publisher: {
+        clicked: false,
+        name: "مبتکران",
+        id: 1
+    },
     price: 240000,
     img_url: "./assets/images/book-img-1.jpg",
     author: "هامون سبطی",
@@ -93,7 +52,12 @@ const book2 = {
     id: 2,
     name: "2 اسم کتاب درسی",
     quantity_in_cart: 0,
-    publisher: "قلم چی",
+    book_year: "دهم",
+    publisher: {
+        clicked: false,
+        name: "گاج",
+        id: 2
+    },
     price: 240000,
     img_url: "./assets/images/book-img-2.jpg",
     author: "هامون سبطی",
@@ -104,7 +68,12 @@ const book3 = {
     id: 3,
     name: "3 اسم کتاب درسی",
     quantity_in_cart: 2,
-    publisher: "گاج",
+    book_year: "یازدهم",
+    publisher: {
+        clicked: false,
+        name: "الگو",
+        id: 3
+    },
     price: 240000,
     img_url: "./assets/images/book-img-1.jpg",
     author: "هامون سبطی",
@@ -115,25 +84,79 @@ const book4 = {
     id: 4,
     name: "4 اسم کتاب درسی",
     quantity_in_cart: 1,
-    publisher: "راه اندیشه",
+    book_year: "یازدهم",
+    publisher: {
+        clicked: false,
+        name: "خیلی سبز",
+        id: 4
+    },
     price: 240000,
     img_url: "./assets/images/book-img-2.jpg",
     author: "هامون سبطی",
     page_count: 20,
     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
 }
+const book5 = {
+    id: 5,
+    name: "5 اسم کتاب درسی",
+    quantity_in_cart: 4,
+    book_year: "دوازدهم",
+    publisher: {
+        clicked: false,
+        name: "مبتکران",
+        id: 1
+    },
+    price: 240000,
+    img_url: "./assets/images/book-img-1.jpg",
+    author: "هامون سبطی",
+    page_count: 120,
+    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+}
+const book6 = {
+    id: 6,
+    name: "6 اسم کتاب درسی",
+    quantity_in_cart: 4,
+    book_year: "دوازدهم",
+    publisher: {
+        clicked: false,
+        name: "مبتکران",
+        id: 1
+    },
+    price: 240000,
+    img_url: "./assets/images/book-img-2.jpg",
+    author: "هامون سبطی",
+    page_count: 120,
+    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+}
 
 // an array filled with book 
 // the main use of this array for now is to render books in the book page
-let books = [book1, book2, book3, book4];
+let books = [book1, book2, book3, book4, book5, book6];
+
+
+// making a sample book year array 
+const book_years = [];
 let cart_items = [];
 
+// variable for filtered book
+let filtered_book = [];
+
+// making a sample publisher array 
+const publishers = [];
+let publishers_name = [];
 // filling cart_items arr
 books.forEach(b => {
     if (b.quantity_in_cart !== 0) {
         cart_items.push(b);
     }
-})
+    if (!publishers_name.includes(b.publisher.name)) {
+        publishers_name.push(b.publisher.name);
+        publishers.push(b.publisher);
+    }
+    if (!book_years.includes(b.book_year)) {
+        book_years.push(b.book_year);
+    }
+});
 // an array for cart items
 
 
@@ -195,7 +218,7 @@ let book_years_DOM = []
 let subjects_DOM = []
 
 // clicked publisher for filters
-let clicked_publishers = [];
+let clicked_publishers_ids = [];
 
 // clicked book year for filter
 let clicked_book_years = [];
@@ -437,7 +460,7 @@ function render_books(books) {
                         <div class="publisher">
                             انتشارات : 
                             <span class="publisher-name">
-                                ${book.publisher}
+                                ${book.publisher.name}
                             </span>
                         </div>
                         <div class="book-name" id="book-name-${book.id}">
@@ -541,7 +564,7 @@ function publisher_filter(publishers) {
 
     publishers.forEach((publisher) => {
         const publisher_HTML = `
-            <span class="publisher-item" id="publisher-${publisher.id}">
+            <span class="publisher-item ${!publisher.clicked ? "disabled" : " "}" id="publisher-${publisher.id}">
                 ${publisher.name}
             </span>
         `;
@@ -564,7 +587,7 @@ function book_year_filter(book_years) {
 
     book_years.forEach((book_year) => {
         const book_year_HTML = `
-            <span class="book-year-item" id="bookyear-${book_year.id}">
+            <span class="book-year-item ${!book_year.clicked ? "disabled" : " "}" id="bookyear-${book_year.id}">
                 ${book_year.name}
             </span>
         `;
@@ -606,16 +629,24 @@ function subject_filter(subjects) {
 
 // funnction for storing clicked publishers
 function clicked_publishers_identifier(e) {
-    const clicked_publisher = parseInt(e.target.id.split("publisher-")[1]);
-    if (clicked_publishers.includes(clicked_publisher)) {
-        clicked_publishers = clicked_publishers.filter(p => {
-            return p != clicked_publisher;
-        })
+    //console.log([...e.target.classList].includes("disabled"));
+    if (![...e.target.classList].includes("disabled")) {
+        e.target.classList.add('disabled');
     }
     else {
-        clicked_publishers.push(clicked_publisher);
+        e.target.classList.remove('disabled');
     }
-    //console.log(clicked_publishers);
+    const clicked_publisher = parseInt(e.target.id.split("publisher-")[1]);
+    if (clicked_publishers_ids.includes(clicked_publisher)) {
+        clicked_publishers_ids = clicked_publishers_ids.filter(p => {
+            return p != clicked_publisher;
+        });
+    }
+    else {
+        clicked_publishers_ids.push(clicked_publisher);
+    }
+    //console.log(clicked_publishers_ids);
+    adjust_books();
 }
 
 // funnction for storing clicked book years
@@ -1158,7 +1189,7 @@ function map_handler() {
     }
     // if we are in filters and book page
     else if (address[len] === "filter" && address[len - 1] === "book") {
-        render_books(books);
+        render_books(filtered_book);
         address_to_here = "home/book/";
     }
     // if we are in cart page from home
@@ -1275,4 +1306,19 @@ function update_total(el) {
         cart_empty_HTML.style.display = "flex";
     }
 }
+
+// function for applying filters on books
+function adjust_books() {
+    filtered_book = [];
+    books.map(b => b.publisher.clicked = false);
+    clicked_publishers_ids.forEach(cp => {
+        filtered_book = filtered_book.concat(books.filter(b => b.publisher.id === cp));
+        let cliked_pub = books.filter(b => b.publisher.id == cp);
+        cliked_pub.map(t => t.publisher.clicked = true);
+    });
+    //console.log(books);
+}
 // etc
+
+// function to identify objects include 
+

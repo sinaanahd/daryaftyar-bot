@@ -259,9 +259,15 @@ body {
                 display: inline-block;
                 background-color: $mainColor;
                 border-radius: 50%;
+                border:1px solid;
                 position: relative;
                 top: 5px;
                 margin-left: 11px;
+        }
+    }
+    .disabled{
+        &::before {
+            background-color: $background!important;
         }
     }
 }
