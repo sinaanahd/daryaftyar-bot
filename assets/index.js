@@ -9,33 +9,12 @@ const user = {
     subject: "ریاضی",
 }
 
-
-
-const sub1 = {
-    name: "ریاضی",
-    id: 1
-}
-const sub2 = {
-    name: "تجربی",
-    id: 2
-}
-const sub3 = {
-    name: "انسانی",
-    id: 3
-}
-const sub4 = {
-    name: "هنر",
-    id: 4
-}
-// making a sample subjects array
-const subjects = [sub1, sub2, sub3, sub4];
-
-
 // making sample book items
 const book1 = {
     id: 1,
     name: "1 اسم کتاب درسی",
     quantity_in_cart: 4,
+    subject: 'هنر',
     book_year: "دهم",
     publisher: {
         clicked: false,
@@ -52,6 +31,7 @@ const book2 = {
     id: 2,
     name: "2 اسم کتاب درسی",
     quantity_in_cart: 0,
+    subject: 'ریاضی',
     book_year: "دهم",
     publisher: {
         clicked: false,
@@ -68,6 +48,7 @@ const book3 = {
     id: 3,
     name: "3 اسم کتاب درسی",
     quantity_in_cart: 2,
+    subject: 'هنر',
     book_year: "یازدهم",
     publisher: {
         clicked: false,
@@ -84,6 +65,7 @@ const book4 = {
     id: 4,
     name: "4 اسم کتاب درسی",
     quantity_in_cart: 1,
+    subject: 'انسانی',
     book_year: "یازدهم",
     publisher: {
         clicked: false,
@@ -100,6 +82,7 @@ const book5 = {
     id: 5,
     name: "5 اسم کتاب درسی",
     quantity_in_cart: 4,
+    subject: 'تجربی',
     book_year: "دوازدهم",
     publisher: {
         clicked: false,
@@ -116,6 +99,7 @@ const book6 = {
     id: 6,
     name: "6 اسم کتاب درسی",
     quantity_in_cart: 4,
+    subject: 'ریاضی',
     book_year: "دوازدهم",
     publisher: {
         clicked: false,
@@ -133,6 +117,7 @@ const book6 = {
 // the main use of this array for now is to render books in the book page
 let books = [book1, book2, book3, book4, book5, book6];
 
+let needed_books = books.map(b => b.subject === user.subject);
 
 // making a sample book year array 
 const book_years = [];
@@ -140,6 +125,10 @@ let cart_items = [];
 
 // variable for filtered book
 let filtered_book = [];
+
+
+// making a sample subjects array
+const subjects = [];
 
 // making a sample publisher array 
 const publishers = [];
@@ -156,10 +145,25 @@ books.forEach(b => {
     if (!book_years.includes(b.book_year)) {
         book_years.push(b.book_year);
     }
+    if (!subjects.includes(b.subject)) {
+        subjects.push(b.subject);
+    }
 });
-// an array for cart items
 
 
+
+// notice the false filter send (it just for now )
+let subjects_obj = [];
+subjects.forEach((s, i) => {
+    subjects_obj.push({ name: s, id: i, clicked: user.subject === s ? false : false });
+});
+console.log(subjects_obj);
+
+let book_years_obj = [];
+book_years.forEach((by, i) => {
+    book_years_obj.push({ name: by, id: i, clicked: user.year === by ? false : false });
+});
+console.log(book_years_obj);
 
 // variables
 
@@ -435,7 +439,7 @@ function render_books(books) {
     book_subjects.addEventListener("click", () => {
         //render_coming_soon_page();
         clear_stage(books_main_content);
-        subject_filter(subjects);
+        subject_filter(subjects_obj);
     })
 
 
@@ -443,7 +447,7 @@ function render_books(books) {
     book_year_of_study = document.querySelector('.fil-3');
     book_year_of_study.addEventListener("click", () => {
         clear_stage(books_main_content);
-        book_year_filter(book_years);
+        book_year_filter(book_years_obj);
         //render_coming_soon_page();
     })
 
@@ -610,7 +614,7 @@ function subject_filter(subjects) {
 
     subjects.forEach((subject) => {
         const subject_HTML = `
-            <span class="subject-item" id="subject-${subject.id}">
+            <span class="subject-item ${!subject.clicked ? "disabled" : " "}" id="subject-${subject.id}">
                 ${subject.name}
             </span>
         `;
@@ -629,7 +633,6 @@ function subject_filter(subjects) {
 
 // funnction for storing clicked publishers
 function clicked_publishers_identifier(e) {
-    //console.log([...e.target.classList].includes("disabled"));
     if (![...e.target.classList].includes("disabled")) {
         e.target.classList.add('disabled');
     }
@@ -646,25 +649,17 @@ function clicked_publishers_identifier(e) {
         clicked_publishers_ids.push(clicked_publisher);
     }
     //console.log(clicked_publishers_ids);
-    adjust_books();
-}
-
-// funnction for storing clicked book years
-function clicked_book_years_identifier(e) {
-    const clicked_book_year = parseInt(e.target.id.split("bookyear-")[1]);
-    if (clicked_book_years.includes(clicked_book_year)) {
-        clicked_book_years = clicked_book_years.filter(p => {
-            return p != clicked_book_year;
-        })
-    }
-    else {
-        clicked_book_years.push(clicked_book_year);
-    }
-    //console.log(clicked_book_years);
+    adjust_books("pub");
 }
 
 // funnction for storing clicked subjects
 function clicked_subjects_identifier(e) {
+    if (![...e.target.classList].includes("disabled")) {
+        e.target.classList.add('disabled');
+    }
+    else {
+        e.target.classList.remove('disabled');
+    }
     const clicked_subject = parseInt(e.target.id.split("subject-")[1]);
     if (clicked_subjects.includes(clicked_subject)) {
         clicked_subjects = clicked_subjects.filter(p => {
@@ -674,9 +669,30 @@ function clicked_subjects_identifier(e) {
     else {
         clicked_subjects.push(clicked_subject);
     }
+    adjust_books("sub");
     //console.log(clicked_subjects);
 }
 
+// funnction for storing clicked book years
+function clicked_book_years_identifier(e) {
+    if (![...e.target.classList].includes("disabled")) {
+        e.target.classList.add('disabled');
+    }
+    else {
+        e.target.classList.remove('disabled');
+    }
+    const clicked_book_year = parseInt(e.target.id.split("bookyear-")[1]);
+    if (clicked_book_years.includes(clicked_book_year)) {
+        clicked_book_years = clicked_book_years.filter(p => {
+            return p != clicked_book_year;
+        })
+    }
+    else {
+        clicked_book_years.push(clicked_book_year);
+    }
+    adjust_books("year");
+    //console.log(clicked_book_years);
+}
 
 // function to make book page ready for filters
 function clear_stage(element) {
@@ -1308,17 +1324,44 @@ function update_total(el) {
 }
 
 // function for applying filters on books
-function adjust_books() {
+function adjust_books(state) {
     filtered_book = [];
-    books.map(b => b.publisher.clicked = false);
-    clicked_publishers_ids.forEach(cp => {
-        filtered_book = filtered_book.concat(books.filter(b => b.publisher.id === cp));
-        let cliked_pub = books.filter(b => b.publisher.id == cp);
-        cliked_pub.map(t => t.publisher.clicked = true);
-    });
-    //console.log(books);
+    if (state === "pub") {
+        books.map(b => b.publisher.clicked = false);
+        clicked_publishers_ids.forEach(cp => {
+            filtered_book = filtered_book.concat(books.filter(b => b.publisher.id === cp));
+            let cliked_pub = books.filter(b => b.publisher.id == cp);
+            cliked_pub.map(t => t.publisher.clicked = true);
+        });
+    }
+    else if (state === "sub") {
+        subjects_obj.map(s => s.clicked = false);
+        clicked_subjects.forEach(sub => {
+            filtered_book = filtered_book.concat(books.filter(b => b.subject === el_by_id(subjects_obj, sub).name));
+            let clicked_sub = subjects_obj.filter(s => s.id == sub);
+            clicked_sub.map(t => t.clicked = true);
+        });
+    }
+    else if (state === "year") {
+        book_years_obj.map(s => s.clicked = false);
+        clicked_book_years.forEach(sub => {
+            filtered_book = filtered_book.concat(books.filter(b => b.book_year === el_by_id(book_years_obj, sub).name));
+            let clicked_sub = book_years_obj.filter(s => s.id == sub);
+            clicked_sub.map(t => t.clicked = true);
+        });
+    }
 }
+
+// function to get el by id 
+function el_by_id(arr, id) {
+    let my_return = "sina";
+    arr.forEach(a => {
+        if (a.id === id)
+            my_return = a;
+    });
+    return my_return;
+}
+
 // etc
 
-// function to identify objects include 
 
