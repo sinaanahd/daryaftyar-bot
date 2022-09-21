@@ -193,6 +193,10 @@ const footer_btn_home = document.querySelector('.footer-menu.it-2');
 // footer menu for cart btn
 const footer_btn_cart = document.querySelector('.footer-menu.it-3');
 
+//cart count wrapper
+const footer_cart_wrapper_HTML = document.querySelector('.cart-item-number');
+
+
 // variable to know where where you lastly (probable delete)!
 let address_to_here = "home/";
 
@@ -263,6 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => {
             cart = res.data;
             cart_items = cart.cart_details;
+            footer_cart_wrapper_HTML.innerHTML = cart_items.length;
         })
         .catch((err) => console.log(err));
     axios
@@ -1033,7 +1038,7 @@ function render_single_book(book) {
                 <span class="more">
                     <i class="fa fa-plus"></i>
                 </span><span class="quantity">
-                    ${el_by_id(cart_items).count_in_user_cart || 0}
+                    ${el_by_id(cart_items, book.id).count_in_user_cart || 0}
                 </span><span class="less">
                     <i class="fa fa-minus"></i>
                 </span>
@@ -1377,6 +1382,7 @@ function update_quantity(type, id, sign) {
         }
         item.count_in_user_cart += 1;
     }
+    footer_cart_wrapper_HTML.innerHTML = cart_items.length;
     //console.log(cart_items, cart.cart_items_ids);
 }
 //function to update total price

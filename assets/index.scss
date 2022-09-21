@@ -753,6 +753,7 @@ body {
 footer{
     @include flexMixin(row,space-evenly,center);
     height: 50px;
+    font-size: 15px;
     background-color: $mainColor;
     position: fixed;
     bottom: -1px;
@@ -761,6 +762,21 @@ footer{
     right: 0;
     text-align: center;
     z-index: 99999;
+    .it-3{
+        @include flexMixin(row,space-around,center);
+    }
+    .cart-item-number{
+        position: relative;
+        right: -10px;
+        flex:  0 0 30px!important;
+        width: 30px;
+        height: 30px;
+        @include styler($greenColor , $background , 10px , 50%);
+        border: 1px solid $greenColor;
+        @include flexMixin (row,center,center);
+        font-size: 17px;
+        padding: 3px 0 0 0;
+    }
     *{
         flex: 1;
     }
