@@ -1,121 +1,122 @@
 //temp
 
 // user needed data
-const user = {
-    name: 'سینا اناهید',
-    amount: 4000,
-    days_left: 17,
-    year: "دهم",
-    subject: "ریاضی",
-}
+// let user = {
+//     name: 'سینا اناهید',
+//     amount: 4000,
+//     days_left: 17,
+//     year: "دهم",
+//     subject: "ریاضی",
+// };
+let user = {};
 
 // making sample book items
-const book1 = {
-    id: 1,
-    name: "1 اسم کتاب درسی",
-    quantity_in_cart: 4,
-    subject: 'هنر',
-    book_year: "دهم",
-    publisher: {
-        clicked: false,
-        name: "مبتکران",
-        id: 1
-    },
-    price: 240000,
-    img_url: "./assets/images/book-img-1.jpg",
-    author: "هامون سبطی",
-    page_count: 120,
-    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-}
-const book2 = {
-    id: 2,
-    name: "2 اسم کتاب درسی",
-    quantity_in_cart: 0,
-    subject: 'ریاضی',
-    book_year: "دهم",
-    publisher: {
-        clicked: false,
-        name: "گاج",
-        id: 2
-    },
-    price: 240000,
-    img_url: "./assets/images/book-img-2.jpg",
-    author: "هامون سبطی",
-    page_count: 100,
-    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-}
-const book3 = {
-    id: 3,
-    name: "3 اسم کتاب درسی",
-    quantity_in_cart: 2,
-    subject: 'هنر',
-    book_year: "یازدهم",
-    publisher: {
-        clicked: false,
-        name: "الگو",
-        id: 3
-    },
-    price: 240000,
-    img_url: "./assets/images/book-img-1.jpg",
-    author: "هامون سبطی",
-    page_count: 10,
-    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-}
-const book4 = {
-    id: 4,
-    name: "4 اسم کتاب درسی",
-    quantity_in_cart: 1,
-    subject: 'انسانی',
-    book_year: "یازدهم",
-    publisher: {
-        clicked: false,
-        name: "خیلی سبز",
-        id: 4
-    },
-    price: 240000,
-    img_url: "./assets/images/book-img-2.jpg",
-    author: "هامون سبطی",
-    page_count: 20,
-    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-}
-const book5 = {
-    id: 5,
-    name: "5 اسم کتاب درسی",
-    quantity_in_cart: 4,
-    subject: 'تجربی',
-    book_year: "دوازدهم",
-    publisher: {
-        clicked: false,
-        name: "مبتکران",
-        id: 1
-    },
-    price: 240000,
-    img_url: "./assets/images/book-img-1.jpg",
-    author: "هامون سبطی",
-    page_count: 120,
-    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-}
-const book6 = {
-    id: 6,
-    name: "6 اسم کتاب درسی",
-    quantity_in_cart: 4,
-    subject: 'ریاضی',
-    book_year: "دوازدهم",
-    publisher: {
-        clicked: false,
-        name: "مبتکران",
-        id: 1
-    },
-    price: 240000,
-    img_url: "./assets/images/book-img-2.jpg",
-    author: "هامون سبطی",
-    page_count: 120,
-    details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-}
+// const book1 = {
+//     id: 1,
+//     name: "1 اسم کتاب درسی",
+//     quantity_in_cart: 4,
+//     subject: 'هنر',
+//     book_year: "دهم",
+//     publisher: {
+//         clicked: false,
+//         name: "مبتکران",
+//         id: 1
+//     },
+//     price: 240000,
+//     img_url: "./assets/images/book-img-1.jpg",
+//     author: "هامون سبطی",
+//     page_count: 120,
+//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+// }
+// const book2 = {
+//     id: 2,
+//     name: "2 اسم کتاب درسی",
+//     quantity_in_cart: 0,
+//     subject: 'ریاضی',
+//     book_year: "دهم",
+//     publisher: {
+//         clicked: false,
+//         name: "گاج",
+//         id: 2
+//     },
+//     price: 240000,
+//     img_url: "./assets/images/book-img-2.jpg",
+//     author: "هامون سبطی",
+//     page_count: 100,
+//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+// }
+// const book3 = {
+//     id: 3,
+//     name: "3 اسم کتاب درسی",
+//     quantity_in_cart: 2,
+//     subject: 'هنر',
+//     book_year: "یازدهم",
+//     publisher: {
+//         clicked: false,
+//         name: "الگو",
+//         id: 3
+//     },
+//     price: 240000,
+//     img_url: "./assets/images/book-img-1.jpg",
+//     author: "هامون سبطی",
+//     page_count: 10,
+//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+// }
+// const book4 = {
+//     id: 4,
+//     name: "4 اسم کتاب درسی",
+//     quantity_in_cart: 1,
+//     subject: 'انسانی',
+//     book_year: "یازدهم",
+//     publisher: {
+//         clicked: false,
+//         name: "خیلی سبز",
+//         id: 4
+//     },
+//     price: 240000,
+//     img_url: "./assets/images/book-img-2.jpg",
+//     author: "هامون سبطی",
+//     page_count: 20,
+//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+// }
+// const book5 = {
+//     id: 5,
+//     name: "5 اسم کتاب درسی",
+//     quantity_in_cart: 4,
+//     subject: 'تجربی',
+//     book_year: "دوازدهم",
+//     publisher: {
+//         clicked: false,
+//         name: "مبتکران",
+//         id: 1
+//     },
+//     price: 240000,
+//     img_url: "./assets/images/book-img-1.jpg",
+//     author: "هامون سبطی",
+//     page_count: 120,
+//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+// }
+// const book6 = {
+//     id: 6,
+//     name: "6 اسم کتاب درسی",
+//     quantity_in_cart: 4,
+//     subject: 'ریاضی',
+//     book_year: "دوازدهم",
+//     publisher: {
+//         clicked: false,
+//         name: "مبتکران",
+//         id: 1
+//     },
+//     price: 240000,
+//     img_url: "./assets/images/book-img-2.jpg",
+//     author: "هامون سبطی",
+//     page_count: 120,
+//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
+// }
 
 // an array filled with book 
 // the main use of this array for now is to render books in the book page
-let books = [book1, book2, book3, book4, book5, book6];
+let books = [];
 
 let needed_books = books.map(b => b.subject === user.subject);
 
@@ -131,24 +132,24 @@ let filtered_book = [];
 const subjects = [];
 
 // making a sample publisher array 
-const publishers = [];
+let publishers = [];
 let publishers_name = [];
 // filling cart_items arr
-books.forEach(b => {
-    if (b.quantity_in_cart !== 0) {
-        cart_items.push(b);
-    }
-    if (!publishers_name.includes(b.publisher.name)) {
-        publishers_name.push(b.publisher.name);
-        publishers.push(b.publisher);
-    }
-    if (!book_years.includes(b.book_year)) {
-        book_years.push(b.book_year);
-    }
-    if (!subjects.includes(b.subject)) {
-        subjects.push(b.subject);
-    }
-});
+// books.forEach(b => {
+//     if (b.quantity_in_cart !== 0) {
+//         cart_items.push(b);
+//     }
+//     if (!publishers_name.includes(b.publisher.name)) {
+//         publishers_name.push(b.publisher.name);
+//         publishers.push(b.publisher);
+//     }
+//     if (!book_years.includes(b.book_year)) {
+//         book_years.push(b.book_year);
+//     }
+//     if (!subjects.includes(b.subject)) {
+//         subjects.push(b.subject);
+//     }
+// });
 
 
 
@@ -157,13 +158,13 @@ let subjects_obj = [];
 subjects.forEach((s, i) => {
     subjects_obj.push({ name: s, id: i, clicked: user.subject === s ? false : false });
 });
-console.log(subjects_obj);
+//console.log(subjects_obj);
 
 let book_years_obj = [];
 book_years.forEach((by, i) => {
     book_years_obj.push({ name: by, id: i, clicked: user.year === by ? false : false });
 });
-console.log(book_years_obj);
+//console.log(book_years_obj);
 
 // variables
 
@@ -237,8 +238,41 @@ let clicked_subjects = [];
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
-    render_first_page();
-    //render_books(books);
+    //RENDER LOADING till the main pages be loaded
+    render_loading();
+    axios
+        .get("https://daryaftyar.ir/storeV2/user/341393410")
+        .then((res) => {
+            console.log("user :", res.data);
+            user = res.data;
+            //render_first_page();
+        })
+        .catch((err) => console.log(err));
+    axios
+        .get("https://daryaftyar.ir/storeV2/cart/341393410")
+        .then((res) => {
+            console.log("cart :", res.data);
+        })
+        .catch((err) => console.log(err));
+    axios
+        .get("https://daryaftyar.ir/storeV2/books")
+        .then((res) => {
+            console.log("book :", res.data[2]);
+            books = res.data;
+            render_books(books);
+        })
+        .catch((err) => console.log(err));
+    axios
+        .get("https://daryaftyar.ir/storeV2/pubs")
+        .then((res) => {
+            console.log("publishers :", res.data);
+            // publishers = res.data;
+            res.data.forEach(p => {
+                publishers.push({ ...p, clicked: false });
+                clicked_publishers_ids.push(p.id);
+            });
+        })
+        .catch((err) => console.log(err));
 });
 
 // rendring first page via menu btn
@@ -464,7 +498,7 @@ function render_books(books) {
                         <div class="publisher">
                             انتشارات : 
                             <span class="publisher-name">
-                                ${book.publisher.name}
+                                ${book.publisher}
                             </span>
                         </div>
                         <div class="book-name" id="book-name-${book.id}">
@@ -649,7 +683,7 @@ function clicked_publishers_identifier(e) {
         clicked_publishers_ids.push(clicked_publisher);
     }
     //console.log(clicked_publishers_ids);
-    adjust_books("pub");
+    adjust_books("pub", clicked_publisher);
 }
 
 // funnction for storing clicked subjects
@@ -956,7 +990,7 @@ function render_single_book(book) {
                     <div class="pages-details-wrapper">
                         تعداد صفحات :
                         <span class="pages-count">
-                            ${book.page_count}
+                            ${book.pages_count}
                         </span>
                         صفحه
                     </div>
@@ -989,7 +1023,8 @@ function render_single_book(book) {
         </div>
     `;
     main_area.innerHTML = single_book_content;
-    const details_DOM = document.querySelector('.book-details-ul')
+    const details_DOM = document.querySelector('.book-details-ul');
+    // details bug
     book.details.forEach(d => {
         const book_detail_content = `
             <li>
@@ -1225,6 +1260,7 @@ function map_handler() {
     }
     // if we were in single book page
     else if (address[len] === "single-book" && address[len - 1] === "book") {
+        //render_loading();
         render_books(books);
         address_to_here = "home/book/";
     }
@@ -1324,15 +1360,17 @@ function update_total(el) {
 }
 
 // function for applying filters on books
-function adjust_books(state) {
+function adjust_books(state, id) {
     filtered_book = [];
     if (state === "pub") {
-        books.map(b => b.publisher.clicked = false);
+        console.log(publishers, el_by_id(publishers, id).name);
+        books.map(b => el_by_id(publishers, id).name === b.publisher);
         clicked_publishers_ids.forEach(cp => {
-            filtered_book = filtered_book.concat(books.filter(b => b.publisher.id === cp));
-            let cliked_pub = books.filter(b => b.publisher.id == cp);
-            cliked_pub.map(t => t.publisher.clicked = true);
+            filtered_book = filtered_book.concat(books.filter(b => b.publisher === el_by_id(publishers, id).name));
+            let cliked_pub = publishers.filter(p => p.id == cp);
+            cliked_pub.map(t => t.clicked = true);
         });
+        console.log(filtered_book);
     }
     else if (state === "sub") {
         subjects_obj.map(s => s.clicked = false);
