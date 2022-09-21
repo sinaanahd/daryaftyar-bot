@@ -118,53 +118,66 @@ let user = {};
 // the main use of this array for now is to render books in the book page
 let books = [];
 
-let needed_books = books.map(b => b.subject === user.subject);
-
 // making a sample book year array 
-const book_years = [];
+const grades = [
+    {
+        id: 10,
+        clicked: false,
+        name: "دهم"
+    },
+    {
+        id: 11,
+        clicked: false,
+        name: "یازدهم"
+    },
+    {
+        id: 12,
+        clicked: false,
+        name: "دوازدهم"
+    },
+    {
+        id: 0,
+        clicked: false,
+        name: "فارغ التحصیل"
+    }
+];
+let cart = [];
 let cart_items = [];
 
 // variable for filtered book
 let filtered_book = [];
 
 
-// making a sample subjects array
-const subjects = [];
+// making  subjects array
+const subjects = [
+    {
+        id: 0,
+        clicked: false,
+        name: "ریاضی"
+    },
+    {
+        id: 1,
+        clicked: false,
+        name: "تجربی"
+    },
+    {
+        id: 2,
+        clicked: false,
+        name: "انسانی"
+    },
+    {
+        id: 3,
+        clicked: false,
+        name: "هنر"
+    }
+];
 
-// making a sample publisher array 
+// making  publisher array 
 let publishers = [];
-let publishers_name = [];
-// filling cart_items arr
-// books.forEach(b => {
-//     if (b.quantity_in_cart !== 0) {
-//         cart_items.push(b);
-//     }
-//     if (!publishers_name.includes(b.publisher.name)) {
-//         publishers_name.push(b.publisher.name);
-//         publishers.push(b.publisher);
-//     }
-//     if (!book_years.includes(b.book_year)) {
-//         book_years.push(b.book_year);
-//     }
-//     if (!subjects.includes(b.subject)) {
-//         subjects.push(b.subject);
-//     }
-// });
 
 
-
-// notice the false filter send (it just for now )
-let subjects_obj = [];
-subjects.forEach((s, i) => {
-    subjects_obj.push({ name: s, id: i, clicked: user.subject === s ? false : false });
-});
-//console.log(subjects_obj);
-
-let book_years_obj = [];
-book_years.forEach((by, i) => {
-    book_years_obj.push({ name: by, id: i, clicked: user.year === by ? false : false });
-});
-//console.log(book_years_obj);
+//books according to users data
+let needed_books = [];
 
 // variables
 
@@ -217,7 +230,7 @@ let books_main_content = [];
 let publishers_DOM = [];
 
 //book year dom element
-let book_years_DOM = []
+let grades_DOM = []
 
 //subjects dom element
 let subjects_DOM = []
@@ -226,13 +239,10 @@ let subjects_DOM = []
 let clicked_publishers_ids = [];
 
 // clicked book year for filter
-let clicked_book_years = [];
+let clicked_grades = [];
 
 // clicked book year for filter
 let clicked_subjects = [];
-
-
-// classes
 
 // events
 
@@ -243,33 +253,35 @@ document.addEventListener("DOMContentLoaded", () => {
     axios
         .get("https://daryaftyar.ir/storeV2/user/341393410")
         .then((res) => {
-            console.log("user :", res.data);
+            //console.log("user :", res.data);
             user = res.data;
-            //render_first_page();
+            render_first_page();
         })
         .catch((err) => console.log(err));
     axios
         .get("https://daryaftyar.ir/storeV2/cart/341393410")
         .then((res) => {
-            console.log("cart :", res.data);
+            cart = res.data;
+            cart_items = cart.cart_details;
         })
         .catch((err) => console.log(err));
     axios
         .get("https://daryaftyar.ir/storeV2/books")
         .then((res) => {
-            console.log("book :", res.data[2]);
+            //console.log("book :", res.data[2], res.data.length);
             books = res.data;
-            render_books(books);
+            needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
+            //render_books(books);
+            //console.log(needed_books);
         })
         .catch((err) => console.log(err));
     axios
         .get("https://daryaftyar.ir/storeV2/pubs")
         .then((res) => {
-            console.log("publishers :", res.data);
+            //console.log("publishers :", res.data);
             // publishers = res.data;
             res.data.forEach(p => {
                 publishers.push({ ...p, clicked: false });
-                clicked_publishers_ids.push(p.id);
             });
         })
         .catch((err) => console.log(err));
@@ -291,8 +303,13 @@ footer_btn_cart.addEventListener('click', () => {
 //render checkout page via menu btn
 footer_btn_checkout.addEventListener('click', () => {
     render_coming_soon_page();
-    //console.log(address_to_here);
-})
+    // books.forEach(b => {
+    //     if (b.publisher === "-") {
+    //         publsihers_from_books.push(b);
+    //     }
+    // });
+    // console.log(publsihers_from_books);
+});
 
 // functions
 
@@ -384,7 +401,7 @@ function render_first_page() {
     books_btn = document.querySelector('.book-class-btns.books');
     // adding event listener to books btn
     books_btn.addEventListener('click', () => {
-        render_books(books);
+        render_books(needed_books);
     });
 
     // fill the books btn
@@ -473,7 +490,7 @@ function render_books(books) {
     book_subjects.addEventListener("click", () => {
         //render_coming_soon_page();
         clear_stage(books_main_content);
-        subject_filter(subjects_obj);
+        subject_filter(subjects);
     })
 
 
@@ -481,7 +498,8 @@ function render_books(books) {
     book_year_of_study = document.querySelector('.fil-3');
     book_year_of_study.addEventListener("click", () => {
         clear_stage(books_main_content);
-        book_year_filter(book_years_obj);
+        grade_filter(grades);
+        console.log(grades)
         //render_coming_soon_page();
     })
 
@@ -514,7 +532,7 @@ function render_books(books) {
                             <span class="add-book">
                                 <i class="fa fa-plus"></i>
                             </span><span class="book-quantity">
-                                ${book.quantity_in_cart}
+                                ${el_by_id(cart_items, book.id).count_in_user_cart || 0}
                             </span><span class="decrment-book">
                                 <i class="fa fa-minus"></i>
                             </span>
@@ -621,20 +639,20 @@ function publisher_filter(publishers) {
 
 
 // render book year filter 
-function book_year_filter(book_years) {
+function grade_filter(grades) {
 
-    book_years.forEach((book_year) => {
-        const book_year_HTML = `
-            <span class="book-year-item ${!book_year.clicked ? "disabled" : " "}" id="bookyear-${book_year.id}">
-                ${book_year.name}
+    grades.forEach((grade) => {
+        const grade_HTML = `
+            <span class="book-year-item ${!grade.clicked ? "disabled" : " "}" id="bookyear-${grade.id}">
+                ${grade.name}
             </span>
         `;
-        books_main_content.innerHTML += book_year_HTML;
+        books_main_content.innerHTML += grade_HTML;
     });
-    book_years_DOM = [...document.querySelectorAll('.book-year-item')];
-    book_years_DOM.forEach(el => {
+    grades_DOM = [...document.querySelectorAll('.book-year-item')];
+    grades_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
-            clicked_book_years_identifier(e);
+            clicked_grades_identifier(e);
         });
     });
     address_to_here = "home/book/filter/";
@@ -683,7 +701,7 @@ function clicked_publishers_identifier(e) {
         clicked_publishers_ids.push(clicked_publisher);
     }
     //console.log(clicked_publishers_ids);
-    adjust_books("pub", clicked_publisher);
+    adjust_books("pub");
 }
 
 // funnction for storing clicked subjects
@@ -708,24 +726,24 @@ function clicked_subjects_identifier(e) {
 }
 
 // funnction for storing clicked book years
-function clicked_book_years_identifier(e) {
+function clicked_grades_identifier(e) {
     if (![...e.target.classList].includes("disabled")) {
         e.target.classList.add('disabled');
     }
     else {
         e.target.classList.remove('disabled');
     }
-    const clicked_book_year = parseInt(e.target.id.split("bookyear-")[1]);
-    if (clicked_book_years.includes(clicked_book_year)) {
-        clicked_book_years = clicked_book_years.filter(p => {
-            return p != clicked_book_year;
+    const clicked_grade = parseInt(e.target.id.split("bookyear-")[1]);
+    if (clicked_grades.includes(clicked_grade)) {
+        clicked_grades = clicked_grades.filter(p => {
+            return p != clicked_grade;
         })
     }
     else {
-        clicked_book_years.push(clicked_book_year);
+        clicked_grades.push(clicked_grade);
     }
     adjust_books("year");
-    //console.log(clicked_book_years);
+    //console.log(clicked_grades);
 }
 
 // function to make book page ready for filters
@@ -824,14 +842,14 @@ function render_shopping_cart(cart) {
                 <span class="more">
                     <i class="fa fa-plus"></i>
                 </span><span class="quantity">
-                    ${item.quantity_in_cart}
+                    ${item.count_in_user_cart}
                 </span><span class="less">
                     <i class="fa fa-minus"></i>
                 </span>
             </div>
         </div>
         `;
-        total_price_amount += item.quantity_in_cart * item.price;
+        total_price_amount += item.count_in_user_cart * item.price;
         cart_item_wrapper.innerHTML += cart_item_content;
     });
     total_price_HTML.innerHTML = total_price_amount;
@@ -1015,7 +1033,7 @@ function render_single_book(book) {
                 <span class="more">
                     <i class="fa fa-plus"></i>
                 </span><span class="quantity">
-                    ${book.quantity_in_cart}
+                    ${el_by_id(cart_items).count_in_user_cart || 0}
                 </span><span class="less">
                     <i class="fa fa-minus"></i>
                 </span>
@@ -1105,7 +1123,7 @@ function render_single_book(book) {
 function render_final_stage_cart(cart_items, discount) {
     let total_price = 0;
     cart_items.forEach(c => {
-        total_price += c.quantity_in_cart * c.price;
+        total_price += c.count_in_user_cart * c.price;
     });
     const pay_amount = total_price - (user.amount + discount)
     const final_cart_stage_content = `
@@ -1250,7 +1268,7 @@ function map_handler() {
     }
     // if we are in cart page from home
     else if ((address[len] === "cart" && address[len - 1] === "book") || (address[len] === "cart" && address[len - 1] === "single-book")) {
-        render_books(books);
+        render_books(needed_books);
         address_to_here = "home/book/";
     }
     // if we are in wallet page from home
@@ -1261,7 +1279,7 @@ function map_handler() {
     // if we were in single book page
     else if (address[len] === "single-book" && address[len - 1] === "book") {
         //render_loading();
-        render_books(books);
+        render_books(needed_books);
         address_to_here = "home/book/";
     }
     // if we were in single book page
@@ -1310,34 +1328,56 @@ function book_clicked(e) {
 
 // update quantity
 function update_quantity(type, id, sign) {
+    let item = [];
 
-    const item = books.find(c => {
-        return c.id === id;
-    });
-
+    if (!cart.cart_items_ids.includes(id)) {
+        item = books.find(c => {
+            return c.id === id;
+        });
+        // cart_items.push({ ...item, count_in_user_cart: 1 });
+        // cart.cart_items_ids.push(id);
+    }
+    else {
+        item = cart_items.find(c => {
+            return c.id === id;
+        });
+        // cart.cart_items_ids.push(id);
+    }
     if ((type === "cart") && (sign === "+")) {
-        item.quantity_in_cart += 1;
+        item.count_in_user_cart += 1;
     }
     else if ((type === "cart") && (sign === "-")) {
-        if (item.quantity_in_cart === 1) {
-            item.quantity_in_cart -= 1;
+        if (item.count_in_user_cart === 1) {
+            item.count_in_user_cart -= 1;
             const index = cart_items.indexOf(item);
             cart_items.splice(index, 1);
+            cart.cart_items_ids = cart.cart_items_ids.filter(ci => parseInt(ci) !== id);
         }
-        else if (item.quantity_in_cart === 0) {
-            item.quantity_in_cart = 0;
+        // else if (item.count_in_user_cart === 0) {
+        //     item.count_in_user_cart = 0;
+        // }
+        else {
+            item.count_in_user_cart -= 1;
+            if (cart.cart_items_ids.includes(id)) {
+                cart.cart_items_ids.splice(cart.cart_items_ids.indexOf(id), 1);
+            }
         }
-        else
-            item.quantity_in_cart -= 1;
 
     }
     else if ((type === "book") && (sign === "+")) {
-        if (item.quantity_in_cart === 0) {
-            cart_items.push(item);
+        // if (item.count_in_user_cart === 0) {
+        //     cart_items.push(item);
+        // }
+        if (!cart.cart_items_ids.includes(id)) {
+            cart_items.push({ ...item, count_in_user_cart: 1 });
+            cart.cart_items_ids.push(id);
         }
-        item.quantity_in_cart += 1;
+        else {
+            cart.cart_items_ids.push(id);
+        }
+        item.count_in_user_cart += 1;
     }
-
+    //console.log(cart_items, cart.cart_items_ids);
 }
 //function to update total price
 function update_total(el) {
@@ -1345,7 +1385,7 @@ function update_total(el) {
     const cart_empty_HTML = document.querySelector('.cart-is-empty');
     const cart_main_content = document.querySelector('.cart-main-content');
     cart_items.forEach(c => {
-        sum += c.quantity_in_cart * c.price;
+        sum += c.count_in_user_cart * c.price;
     });
     if (sum != 0) {
         cart_empty_HTML.style.display = "none";
@@ -1360,33 +1400,36 @@ function update_total(el) {
 }
 
 // function for applying filters on books
-function adjust_books(state, id) {
+function adjust_books(state) {
     filtered_book = [];
     if (state === "pub") {
-        console.log(publishers, el_by_id(publishers, id).name);
-        books.map(b => el_by_id(publishers, id).name === b.publisher);
+        publishers.map(p => p.clicked = false);
+        // console.log(publishers);
         clicked_publishers_ids.forEach(cp => {
-            filtered_book = filtered_book.concat(books.filter(b => b.publisher === el_by_id(publishers, id).name));
+            //console.log(el_by_id(publishers, cp).name);
+            filtered_book = filtered_book.concat(books.filter(b => b.publisher === el_by_id(publishers, cp).name));
             let cliked_pub = publishers.filter(p => p.id == cp);
             cliked_pub.map(t => t.clicked = true);
         });
         console.log(filtered_book);
     }
     else if (state === "sub") {
-        subjects_obj.map(s => s.clicked = false);
+        subjects.map(s => s.clicked = false);
         clicked_subjects.forEach(sub => {
-            filtered_book = filtered_book.concat(books.filter(b => b.subject === el_by_id(subjects_obj, sub).name));
-            let clicked_sub = subjects_obj.filter(s => s.id == sub);
+            filtered_book = filtered_book.concat(books.filter(b => b.subject === el_by_id(subjects, sub).id));
+            let clicked_sub = subjects.filter(s => s.id == sub);
             clicked_sub.map(t => t.clicked = true);
         });
+        console.log(filtered_book);
     }
     else if (state === "year") {
-        book_years_obj.map(s => s.clicked = false);
-        clicked_book_years.forEach(sub => {
-            filtered_book = filtered_book.concat(books.filter(b => b.book_year === el_by_id(book_years_obj, sub).name));
-            let clicked_sub = book_years_obj.filter(s => s.id == sub);
+        grades.map(s => s.clicked = false);
+        clicked_grades.forEach(sub => {
+            filtered_book = filtered_book.concat(books.filter(b => b.book_year === el_by_id(grades, sub).id));
+            let clicked_sub = grades.filter(s => s.id == sub);
             clicked_sub.map(t => t.clicked = true);
         });
+        console.log(filtered_book);
     }
 }
 
