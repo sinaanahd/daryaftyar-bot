@@ -1464,8 +1464,7 @@ function adjust_books(state) {
 
     const set = new Set(final_ids);
     if (
-        ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0) && (ids_by_year.length !== 0))
-        || ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0))
+        ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0))
         || ((ids_by_pub.length !== 0) && (ids_by_year.length !== 0))
         || ((ids_by_year.length !== 0) && (ids_by_sub.length !== 0))
     ) {
@@ -1477,7 +1476,19 @@ function adjust_books(state) {
             }
         });
     }
-    console.log(final_ids);
+    // const my_count = {};
+    // final_ids.map(id => toString(id));
+    // final_ids.forEach(element => {
+    //     my_count[element] = (my_count[element] || 0) + 1;
+    // });
+    // let sina = [];
+    // for (const key in my_count) {
+    //     if (my_count[key] === 3) {
+    //         sina.push(key);
+    //     }
+    // }
+    // console.log(sina);
+    // sina.map(id => parseInt(id));
     final_ids.forEach(id => {
         filtered_book = filtered_book.concat(books.filter(b => b.id === id))
     });
