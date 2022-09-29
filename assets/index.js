@@ -141,7 +141,7 @@ const grades = [
         name: "فارغ التحصیل"
     }
 ];
-let cart = [];
+var cart = [];
 let cart_items = [];
 
 // variable for filtered book
@@ -248,6 +248,9 @@ let clicked_grades = [];
 // clicked book year for filter
 let clicked_subjects = [];
 
+//
+let pay_btn_wrapper = [];
+
 // events
 
 //documnet load to render first page
@@ -268,6 +271,9 @@ document.addEventListener("DOMContentLoaded", () => {
             cart = res.data;
             cart_items = cart.cart_details;
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
+            // unnessecary value update 
+            cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
+            console.log(cart);
         })
         .catch((err) => console.log(err));
     axios
@@ -504,7 +510,7 @@ function render_books(books) {
     book_year_of_study.addEventListener("click", () => {
         clear_stage(books_main_content);
         grade_filter(grades);
-        console.log(grades)
+        //console.log(grades)
         //render_coming_soon_page();
     })
 
@@ -727,7 +733,7 @@ function clicked_subjects_identifier(e) {
         clicked_subjects.push(clicked_subject);
     }
     adjust_books("sub");
-    //console.log(clicked_subjects);
+    //console.log(clicked_subject);
 }
 
 // funnction for storing clicked book years
@@ -758,7 +764,7 @@ function clear_stage(element) {
 }
 
 // function to render shopping cart
-function render_shopping_cart(cart) {
+function render_shopping_cart(cart1) {
 
     // creating content for the shopping cart (HTML template)
     const shopping_cart_HTML = `
@@ -810,7 +816,7 @@ function render_shopping_cart(cart) {
     // click action for cart next step
     next_step_btn.addEventListener('click', () => {
         // render final stage with cart items and dicount amount
-        let discount = 100000;
+        let discount = cart.cart_summary.total_discount_of_items;
         render_final_stage_cart(cart_items, discount);
     });
 
@@ -828,7 +834,7 @@ function render_shopping_cart(cart) {
     // a variable for calculating total price
     let total_price_amount = 0;
     // adding items in cart
-    cart.forEach(item => {
+    cart1.forEach(item => {
         const cart_item_content = `
         <div class="cart-item" id="cart-item-${item.id}">
             <img src="${item.img_url}" alt="">
@@ -1233,14 +1239,27 @@ function render_final_stage_cart(cart_items, discount) {
     back_btn.addEventListener('click', () => {
         map_handler();
     });
+    pay_btn_wrapper = document.querySelector('.pay-btn-wrapper');
+    pay_btn_wrapper.addEventListener('click', () => {
+        axios
+            //.post("https://daryaftyar.ir/storeV2/cart/341393410", JSON.stringify(cart))
+            .patch('https://daryaftyar.ir/storeV2/cart/341393410', {
+                cart_details: cart_items,
+                cart_items_ids: cart.cart_items_ids,
+                cart_summary: cart.cart_summary
+            })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => console.log(err));
 
+    })
     const view_btn = document.querySelector('.view-btn');
     view_btn.addEventListener("click", () => {
         map_handler();
     })
-
-
 }
+
 
 // function to render sort by filter 
 function render_sort_by_filter() {
@@ -1383,7 +1402,7 @@ function update_quantity(type, id, sign) {
         item.count_in_user_cart += 1;
     }
     footer_cart_wrapper_HTML.innerHTML = cart_items.length;
-    //console.log(cart_items, cart.cart_items_ids);
+    console.log(cart_items, cart.cart_items_ids);
 }
 //function to update total price
 function update_total(el) {
@@ -1403,40 +1422,95 @@ function update_total(el) {
         cart_main_content.appendChild(cart_empty_HTML);
         cart_empty_HTML.style.display = "flex";
     }
+    cart.cart_summary.total_price_of_items = sum;
+    //console.log(cart);
 }
 
 // function for applying filters on books
 function adjust_books(state) {
+
     filtered_book = [];
-    if (state === "pub") {
-        publishers.map(p => p.clicked = false);
-        // console.log(publishers);
-        clicked_publishers_ids.forEach(cp => {
-            //console.log(el_by_id(publishers, cp).name);
-            filtered_book = filtered_book.concat(books.filter(b => b.publisher === el_by_id(publishers, cp).name));
-            let cliked_pub = publishers.filter(p => p.id == cp);
-            cliked_pub.map(t => t.clicked = true);
+    let filterd_by_pubs = []
+    let filterd_by_sub = []
+    let filtered_by_year = [];
+    publishers.map(p => p.clicked = false);
+    subjects.map(s => s.clicked = false);
+    grades.map(s => s.clicked = false);
+    clicked_publishers_ids.forEach(cp => {
+        filterd_by_pubs = filterd_by_pubs.concat(books.filter(b => b.publisher === el_by_id(publishers, cp).name));
+        let cliked_pub = publishers.filter(p => p.id == cp);
+        cliked_pub.map(t => t.clicked = true);
+    });
+    clicked_subjects.forEach(sub => {
+        filterd_by_sub = filterd_by_sub.concat(books.filter(b => b.subject === el_by_id(subjects, sub).id));
+        let clicked_sub = subjects.filter(s => s.id == sub);
+        clicked_sub.map(t => t.clicked = true);
+    });
+    clicked_grades.forEach(sub => {
+        filtered_by_year = filtered_by_year.concat(books.filter(b => b.book_year === el_by_id(grades, sub).id));
+        let clicked_sub = grades.filter(s => s.id == sub);
+        clicked_sub.map(t => t.clicked = true);
+    });
+    let ids_by_pub = [];
+    filterd_by_pubs.forEach(b => ids_by_pub.push(b.id));
+    let ids_by_sub = [];
+    filterd_by_sub.forEach(b => ids_by_sub.push(b.id));
+    let ids_by_year = [];
+    filtered_by_year.forEach(b => ids_by_year.push(b.id));
+
+    // operates as or
+    let final_ids = ids_by_pub.concat(ids_by_sub, ids_by_year);
+    //operating as and
+
+    const set = new Set(final_ids);
+    if (
+        ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0) && (ids_by_year.length !== 0))
+        || ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0))
+        || ((ids_by_pub.length !== 0) && (ids_by_year.length !== 0))
+        || ((ids_by_year.length !== 0) && (ids_by_sub.length !== 0))
+    ) {
+        final_ids = final_ids.filter(item => {
+            if (set.has(item)) {
+                set.delete(item);
+            } else {
+                return item;
+            }
         });
-        console.log(filtered_book);
     }
-    else if (state === "sub") {
-        subjects.map(s => s.clicked = false);
-        clicked_subjects.forEach(sub => {
-            filtered_book = filtered_book.concat(books.filter(b => b.subject === el_by_id(subjects, sub).id));
-            let clicked_sub = subjects.filter(s => s.id == sub);
-            clicked_sub.map(t => t.clicked = true);
-        });
-        console.log(filtered_book);
-    }
-    else if (state === "year") {
-        grades.map(s => s.clicked = false);
-        clicked_grades.forEach(sub => {
-            filtered_book = filtered_book.concat(books.filter(b => b.book_year === el_by_id(grades, sub).id));
-            let clicked_sub = grades.filter(s => s.id == sub);
-            clicked_sub.map(t => t.clicked = true);
-        });
-        console.log(filtered_book);
-    }
+    console.log(final_ids);
+    final_ids.forEach(id => {
+        filtered_book = filtered_book.concat(books.filter(b => b.id === id))
+    });
+    // if (state === "pub") {
+    //     publishers.map(p => p.clicked = false);
+    //     // console.log(publishers);
+    //     clicked_publishers_ids.forEach(cp => {
+    //         //console.log(el_by_id(publishers, cp).name);
+    //         filtered_book = filtered_book.concat(books.filter(b => b.publisher === el_by_id(publishers, cp).name));
+    //         let cliked_pub = publishers.filter(p => p.id == cp);
+    //         cliked_pub.map(t => t.clicked = true);
+    //     });
+    //     //console.log(filtered_book);
+    // }
+    // else if (state === "sub") {
+    //     subjects.map(s => s.clicked = false);
+    //     clicked_subjects.forEach(sub => {
+    //         filtered_book = filtered_book.concat(books.filter(b => b.subject === el_by_id(subjects, sub).id));
+    //         let clicked_sub = subjects.filter(s => s.id == sub);
+    //         clicked_sub.map(t => t.clicked = true);
+    //     });
+    //     console.log(filtered_book);
+    // }
+    // else if (state === "year") {
+    //     grades.map(s => s.clicked = false);
+    //     clicked_grades.forEach(sub => {
+    //         filtered_book = filtered_book.concat(books.filter(b => b.book_year === el_by_id(grades, sub).id));
+    //         let clicked_sub = grades.filter(s => s.id == sub);
+    //         clicked_sub.map(t => t.clicked = true);
+    //     });
+    //     console.log(filtered_book);
+    // }
+    console.log(filtered_book);
 }
 
 // function to get el by id 
