@@ -257,14 +257,28 @@ let pay_btn_wrapper = [];
 document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
     render_loading();
-    axios
-        .get("https://daryaftyar.ir/storeV2/user/341393410")
-        .then((res) => {
-            //console.log("user :", res.data);
-            user = res.data;
-            render_first_page();
-        })
-        .catch((err) => console.log(err));
+    alert(window.Telegram.initData);
+    const user_id = window.Telegram.initData
+    if (!window.Telegram.initData) {
+        axios
+            .get("https://daryaftyar.ir/storeV2/user/341393410")
+            .then((res) => {
+                //console.log("user :", res.data);
+                user = res.data;
+                render_first_page();
+            })
+            .catch((err) => console.log(err));
+    }
+    else {
+        axios
+            .get(`https://daryaftyar.ir/storeV2/user/${user_id}`)
+            .then((res) => {
+                console.log("user :", res.data);
+                user = res.data;
+                render_first_page();
+            })
+            .catch((err) => console.log(err));
+    }
     axios
         .get("https://daryaftyar.ir/storeV2/cart/341393410")
         .then((res) => {
@@ -273,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update 
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
-            console.log(cart);
+            //console.log(cart);
         })
         .catch((err) => console.log(err));
     axios
@@ -519,110 +533,113 @@ function render_books(books) {
     sort_by_btn.addEventListener('click', () => {
         render_coming_soon_page();
     })
+    if (books.length !== 0) {
+        books.forEach((book) => {
+            const book_HTML = `
+                    <div class="book-item" id="book-${book.id}">
+                            <img src="${book.img_url}" alt="" class="book-img" id="book-img-${book.id}"/>
+                            <div class="publisher">
+                                انتشارات : 
+                                <span class="publisher-name">
+                                    ${book.publisher}
+                                </span>
+                            </div>
+                            <div class="book-name" id="book-name-${book.id}">
+                                ${book.name}
+                            </div>
+                            <div class="book-price">
+                                <span class="dynamic-price">
+                                    ${book.price}
+                                </span>
+                                تومان
+                            </div>
+                            <div class="action-btns">
+                                <span class="add-book">
+                                    <i class="fa fa-plus"></i>
+                                </span><span class="book-quantity">
+                                    ${el_by_id(cart_items, book.id).count_in_user_cart || 0}
+                                </span><span class="decrment-book">
+                                    <i class="fa fa-minus"></i>
+                                </span>
+                            </div>
+                        </div>
+            `;
+            books_wrapper.innerHTML += book_HTML;
+        });
+        const books_HTML = [...document.querySelectorAll('.book-item')];
+        books_HTML.forEach(item => {
+            item.addEventListener('click', (e) => {
+                book_clicked(e);
+            });
+            // handling more btn in book page
+            const add_book_btn = item.querySelector('.add-book');
+            add_book_btn.addEventListener('click', (e) => {
+                const classes = [...e.target.classList];
+                if (classes[classes.length - 1] === "add-book") {
+                    const quantity_wrapper = e.target.nextElementSibling;
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
-    books.forEach((book) => {
-        const book_HTML = `
-                <div class="book-item" id="book-${book.id}">
-                        <img src="${book.img_url}" alt="" class="book-img" id="book-img-${book.id}"/>
-                        <div class="publisher">
-                            انتشارات : 
-                            <span class="publisher-name">
-                                ${book.publisher}
-                            </span>
-                        </div>
-                        <div class="book-name" id="book-name-${book.id}">
-                            ${book.name}
-                        </div>
-                        <div class="book-price">
-                            <span class="dynamic-price">
-                                ${book.price}
-                            </span>
-                            تومان
-                        </div>
-                        <div class="action-btns">
-                            <span class="add-book">
-                                <i class="fa fa-plus"></i>
-                            </span><span class="book-quantity">
-                                ${el_by_id(cart_items, book.id).count_in_user_cart || 0}
-                            </span><span class="decrment-book">
-                                <i class="fa fa-minus"></i>
-                            </span>
-                        </div>
-                    </div>
+                    // changing the array quantity
+                    const id_string = e.target.parentElement.parentElement.id;
+                    const id = parseInt(id_string.split("-")[1]);
+                    update_quantity('book', id, "+");
+                    //update_total(total_price_HTML);
+                }
+                else if (classes[classes.length - 1] === "fa-plus") {
+                    const quantity_wrapper = e.target.parentElement.nextElementSibling;
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+                    // changing the array quantity
+                    const id_string = e.target.parentElement.parentElement.parentElement.id;
+                    const id = parseInt(id_string.split("-")[1]);
+                    update_quantity('book', id, "+");
+                    //update_total(total_price_HTML);
+                }
+            });
+            // decreament items in book page
+            const less_btn = item.querySelector('.decrment-book');
+            less_btn.addEventListener('click', (e) => {
+                const classes = [...e.target.classList];
+                if (classes[classes.length - 1] === "decrment-book") {
+                    const quantity_wrapper = e.target.previousSibling;
+                    const id_string = e.target.parentElement.parentElement.id;
+                    const id = parseInt(id_string.split("-")[1]);
+                    update_quantity('cart', id, "-");
+                    if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                        quantity_wrapper.innerHTML = 0;
+                    }
+                    else {
+                        quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                        // changing the array quantity
+                    }
+                    //update_total(total_price_HTML);
+                }
+                else if (classes[classes.length - 1] === "fa-minus") {
+                    const quantity_wrapper = e.target.parentElement.previousSibling;
+                    const id_string = e.target.parentElement.parentElement.parentElement.id;
+                    const id = parseInt(id_string.split("-")[1]);
+                    update_quantity('cart', id, "-");
+                    if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                        quantity_wrapper.innerHTML = 0;
+                    }
+                    else {
+                        quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                        // changing the array quantity
+                    }
+                    //update_total(total_price_HTML);
+                }
+            });
+
+        });
+    }
+    else {
+        const empty_content = `
+            <div class="books-empty">
+                متاسفانه کتابی یافت نشد !!!
+            </div>
         `;
-        books_wrapper.innerHTML += book_HTML;
-    });
-    const books_HTML = [...document.querySelectorAll('.book-item')];
-    // books_HTML.forEach(book => {
-    //     book.addEventListener('click', (e) => {
-    //         book_clicked(e);
-    //     });
-    // });
-
-    books_HTML.forEach(item => {
-        item.addEventListener('click', (e) => {
-            book_clicked(e);
-        });
-        // handling more btn in book page
-        const add_book_btn = item.querySelector('.add-book');
-        add_book_btn.addEventListener('click', (e) => {
-            const classes = [...e.target.classList];
-            if (classes[classes.length - 1] === "add-book") {
-                const quantity_wrapper = e.target.nextElementSibling;
-                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
-
-                // changing the array quantity
-                const id_string = e.target.parentElement.parentElement.id;
-                const id = parseInt(id_string.split("-")[1]);
-                update_quantity('book', id, "+");
-                //update_total(total_price_HTML);
-            }
-            else if (classes[classes.length - 1] === "fa-plus") {
-                const quantity_wrapper = e.target.parentElement.nextElementSibling;
-                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
-
-                // changing the array quantity
-                const id_string = e.target.parentElement.parentElement.parentElement.id;
-                const id = parseInt(id_string.split("-")[1]);
-                update_quantity('book', id, "+");
-                //update_total(total_price_HTML);
-            }
-        });
-        // decreament items in book page
-        const less_btn = item.querySelector('.decrment-book');
-        less_btn.addEventListener('click', (e) => {
-            const classes = [...e.target.classList];
-            if (classes[classes.length - 1] === "decrment-book") {
-                const quantity_wrapper = e.target.previousSibling;
-                const id_string = e.target.parentElement.parentElement.id;
-                const id = parseInt(id_string.split("-")[1]);
-                update_quantity('cart', id, "-");
-                if (parseInt(quantity_wrapper.innerHTML) === 0) {
-                    quantity_wrapper.innerHTML = 0;
-                }
-                else {
-                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
-                    // changing the array quantity
-                }
-                //update_total(total_price_HTML);
-            }
-            else if (classes[classes.length - 1] === "fa-minus") {
-                const quantity_wrapper = e.target.parentElement.previousSibling;
-                const id_string = e.target.parentElement.parentElement.parentElement.id;
-                const id = parseInt(id_string.split("-")[1]);
-                update_quantity('cart', id, "-");
-                if (parseInt(quantity_wrapper.innerHTML) === 0) {
-                    quantity_wrapper.innerHTML = 0;
-                }
-                else {
-                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
-                    // changing the array quantity
-                }
-                //update_total(total_price_HTML);
-            }
-        });
-
-    });
+        books_wrapper.innerHTML = empty_content;
+    }
 
 }
 
@@ -1550,7 +1567,7 @@ function adjust_books(state) {
     //     });
     //     console.log(filtered_book);
     // }
-    console.log(filtered_book);
+    //console.log(filtered_book);
 }
 
 // function to get el by id 
