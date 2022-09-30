@@ -257,28 +257,27 @@ let pay_btn_wrapper = [];
 document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
     render_loading();
-    alert(window.Telegram.initData);
     const user_id = window.Telegram.initData
-    if (!window.Telegram.initData) {
-        axios
-            .get("https://daryaftyar.ir/storeV2/user/1914838101")
-            .then((res) => {
-                //console.log("user :", res.data);
-                user = res.data;
-                render_first_page();
-            })
-            .catch((err) => console.log(err));
-    }
-    else {
-        axios
-            .get(`https://daryaftyar.ir/storeV2/user/${user_id}`)
-            .then((res) => {
-                console.log("user :", res.data);
-                user = res.data;
-                render_first_page();
-            })
-            .catch((err) => console.log(err));
-    }
+    // if (window.Telegram.initData === undefined) {
+    axios
+        .get("https://daryaftyar.ir/storeV2/user/1914838101")
+        .then((res) => {
+            //console.log("user :", res.data);
+            user = res.data;
+            render_first_page();
+        })
+        .catch((err) => console.log(err));
+    // }
+    // else {
+    // axios
+    //     .get(`https://daryaftyar.ir/storeV2/user/${user_id}`)
+    //     .then((res) => {
+    //         console.log("user :", res.data);
+    //         user = res.data;
+    //         render_first_page();
+    //     })
+    //     .catch((err) => console.log(err));
+    // }
     axios
         .get("https://daryaftyar.ir/storeV2/cart/1914838101")
         .then((res) => {
@@ -327,7 +326,9 @@ footer_btn_cart.addEventListener('click', () => {
 });
 //render checkout page via menu btn
 footer_btn_checkout.addEventListener('click', () => {
-    render_coming_soon_page();
+    //render_coming_soon_page();
+    //alert(window.Telegram.initData);
+    main_area.innerHTML = window.Telegram.initData;
     // books.forEach(b => {
     //     if (b.publisher === "-") {
     //         publsihers_from_books.push(b);
