@@ -1461,37 +1461,66 @@ function adjust_books(state) {
     // operates as or
     let final_ids = ids_by_pub.concat(ids_by_sub, ids_by_year);
     //operating as and
-
-    const set = new Set(final_ids);
-    if (
-        ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0))
-        || ((ids_by_pub.length !== 0) && (ids_by_year.length !== 0))
-        || ((ids_by_year.length !== 0) && (ids_by_sub.length !== 0))
-    ) {
-        final_ids = final_ids.filter(item => {
-            if (set.has(item)) {
-                set.delete(item);
-            } else {
-                return item;
-            }
+    if ((((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0)) && (ids_by_year.length !== 0))) {
+        // const set = new Set(final_ids);
+        // final_ids = final_ids.filter(item => {
+        //     if (set.has(item)) {
+        //         set.delete(item);
+        //     } else {
+        //         return item;
+        //     }
+        // });
+        // final_ids.forEach(id => {
+        //     filtered_book = filtered_book.concat(books.filter(b => b.id === id));
+        // });
+        const my_count = {};
+        final_ids.map(id => toString(id));
+        final_ids.forEach(element => {
+            my_count[element] = (my_count[element] || 0) + 1;
         });
+        let obj_id = [];
+        for (const key in my_count) {
+            if (my_count[key] === 3) {
+                obj_id.push(key);
+            }
+        }
+        obj_id = obj_id.map(id => parseInt(id));
+        obj_id.forEach(id => {
+            filtered_book = filtered_book.concat(books.filter(b => b.id === id));
+        })
     }
-    // const my_count = {};
-    // final_ids.map(id => toString(id));
-    // final_ids.forEach(element => {
-    //     my_count[element] = (my_count[element] || 0) + 1;
-    // });
-    // let sina = [];
-    // for (const key in my_count) {
-    //     if (my_count[key] === 3) {
-    //         sina.push(key);
-    //     }
-    // }
-    // console.log(sina);
-    // sina.map(id => parseInt(id));
-    final_ids.forEach(id => {
-        filtered_book = filtered_book.concat(books.filter(b => b.id === id))
-    });
+    else {
+        if (
+            ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0))
+            ||
+            ((ids_by_year.length !== 0) && (ids_by_pub.length !== 0))
+            ||
+            ((ids_by_year.length !== 0) && (ids_by_sub.length !== 0))
+        ) {
+            const my_count = {};
+            final_ids.map(id => toString(id));
+            final_ids.forEach(element => {
+                my_count[element] = (my_count[element] || 0) + 1;
+            });
+            let obj_id = [];
+            for (const key in my_count) {
+                if (my_count[key] === 2) {
+                    obj_id.push(key);
+                }
+            }
+            obj_id = obj_id.map(id => parseInt(id));
+            //console.log(obj_id);
+            obj_id.forEach(id => {
+                filtered_book = filtered_book.concat(books.filter(b => b.id === id));
+            })
+        }
+        else if ((ids_by_pub.length !== 0) || (ids_by_sub.length !== 0) || (ids_by_year.length !== 0)) {
+            final_ids.forEach(id => {
+                filtered_book = filtered_book.concat(books.filter(b => b.id === id));
+            });
+        }
+    }
+
     // if (state === "pub") {
     //     publishers.map(p => p.clicked = false);
     //     // console.log(publishers);
