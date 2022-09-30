@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const user_id = window.Telegram.initData
     if (!window.Telegram.initData) {
         axios
-            .get("https://daryaftyar.ir/storeV2/user/341393410")
+            .get("https://daryaftyar.ir/storeV2/user/1914838101")
             .then((res) => {
                 //console.log("user :", res.data);
                 user = res.data;
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch((err) => console.log(err));
     }
     axios
-        .get("https://daryaftyar.ir/storeV2/cart/341393410")
+        .get("https://daryaftyar.ir/storeV2/cart/1914838101")
         .then((res) => {
             cart = res.data;
             cart_items = cart.cart_details;
@@ -1419,7 +1419,7 @@ function update_quantity(type, id, sign) {
         item.count_in_user_cart += 1;
     }
     footer_cart_wrapper_HTML.innerHTML = cart_items.length;
-    console.log(cart_items, cart.cart_items_ids);
+    //console.log(cart_items, cart.cart_items_ids);
 }
 //function to update total price
 function update_total(el) {
