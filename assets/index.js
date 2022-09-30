@@ -328,7 +328,8 @@ footer_btn_cart.addEventListener('click', () => {
 footer_btn_checkout.addEventListener('click', () => {
     //render_coming_soon_page();
     //alert(window.Telegram.initData);
-    main_area.innerHTML = window.Telegram.initData;
+    console.log(window.Telegram.WebApp.initData)
+    main_area.innerHTML = window.Telegram.WebApp.initData;
     // books.forEach(b => {
     //     if (b.publisher === "-") {
     //         publsihers_from_books.push(b);
