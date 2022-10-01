@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
     render_loading();
     const us_id = window.Telegram.WebApp.initData
-    //const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0]
+    const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0]
     // if (window.Telegram.initData === undefined) {
     axios
         .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
