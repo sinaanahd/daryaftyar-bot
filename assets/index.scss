@@ -57,7 +57,7 @@ body {
         font-size: 20px;
     }
     .greeting-messsage{
-        font-size: 35px;
+        font-size: 25px;
         margin: 30px 0;
         text-align: center;
         line-height: 50px;
@@ -414,6 +414,10 @@ body {
             padding: 3px;
             margin-left: 5px;
         }
+    }
+    .disabled{
+        background-color: gray;
+        background-image: none!important;
     }
     .cart-next-step{
         width: 95%;

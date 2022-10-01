@@ -258,10 +258,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
     render_loading();
     const us_id = window.Telegram.WebApp.initData
-    const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0]
+    //const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0]
     // if (window.Telegram.initData === undefined) {
     axios
         .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
+        //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
         .then((res) => {
             //console.log("user :", res.data);
             user = res.data;
@@ -280,7 +281,8 @@ document.addEventListener("DOMContentLoaded", () => {
     //     .catch((err) => console.log(err));
     // }
     axios
-        .get("https://daryaftyar.ir/storeV2/cart/1914838101")
+        .get(`https://daryaftyar.ir/storeV2/cart/${final_id}`)
+        //.get("https://daryaftyar.ir/storeV2/cart/341393410")
         .then((res) => {
             cart = res.data;
             cart_items = cart.cart_details;
@@ -363,7 +365,7 @@ function render_first_page() {
                 <div class="greeting-messsage">
                     <p>
                         <bdi>
-                            به فروشگاه دریافت یار خوش امدید!
+                            به فروشگاه دریافت یار خوش آمدید!
                         </bdi>
                     </p>
                 </div>
@@ -819,7 +821,7 @@ function render_shopping_cart(cart1) {
                     </div>
                 </div>
             </div>
-            <div class="cart-next-step">
+            <div class="cart-next-step ${cart1.length === 0 ? "disabled" : " "}">
                 <span class="label">
                     مرحله بعد
                 </span>
@@ -836,8 +838,10 @@ function render_shopping_cart(cart1) {
     // click action for cart next step
     next_step_btn.addEventListener('click', () => {
         // render final stage with cart items and dicount amount
-        let discount = cart.cart_summary.total_discount_of_items;
-        render_final_stage_cart(cart_items, discount);
+        if (cart1.length !== 0) {
+            let discount = cart.cart_summary.total_discount_of_items;
+            render_final_stage_cart(cart_items, discount);
+        }
     });
 
     // activating go to book page btn 
@@ -1420,6 +1424,9 @@ function update_quantity(type, id, sign) {
             cart.cart_items_ids.push(id);
         }
         item.count_in_user_cart += 1;
+    }
+    if (cart_items.length === 0) {
+        document.querySelector('.cart-next-step').classList.add('disabled');
     }
     footer_cart_wrapper_HTML.innerHTML = cart_items.length;
     //console.log(cart_items, cart.cart_items_ids);
