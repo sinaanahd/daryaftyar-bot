@@ -251,15 +251,19 @@ let clicked_subjects = [];
 //
 let pay_btn_wrapper = [];
 
+//global error for test
+
+let global_err = "I am empty for now";
+
+
 // events
+const us_id = window.Telegram.WebApp.initData
+const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
     render_loading();
-    const us_id = window.Telegram.WebApp.initData
-    const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0]
-    // if (window.Telegram.initData === undefined) {
     axios
         .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
@@ -289,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update 
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
-            //console.log(cart);
+            console.log(cart);
         })
         .catch((err) => console.log(err));
     axios
@@ -331,8 +335,8 @@ footer_btn_cart.addEventListener('click', () => {
 footer_btn_checkout.addEventListener('click', () => {
     //render_coming_soon_page();
     //alert(window.Telegram.initData);
-    console.log(window.Telegram.WebApp.initData)
-    main_area.innerHTML = window.Telegram.WebApp.initData;
+    //console.log(window.Telegram.WebApp.initData)
+    main_area.innerHTML = global_err;
     // books.forEach(b => {
     //     if (b.publisher === "-") {
     //         publsihers_from_books.push(b);
@@ -1267,15 +1271,18 @@ function render_final_stage_cart(cart_items, discount) {
     pay_btn_wrapper.addEventListener('click', () => {
         axios
             //.post("https://daryaftyar.ir/storeV2/cart/341393410", JSON.stringify(cart))
-            .patch('https://daryaftyar.ir/storeV2/cart/341393410', {
-                cart_details: cart_items,
+            // cart_details: cart_items,
+            // cart_summary: cart.cart_summary,
+            // name: cart.name,
+            // user_id: cart.user_id
+            .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, {
                 cart_items_ids: cart.cart_items_ids,
-                cart_summary: cart.cart_summary
             })
             .then(res => {
-                console.log(res);
+                //console.log(res.data);\
+                global_err = res.data;
             })
-            .catch(err => console.log(err));
+            .catch(err => global_err = err);
 
     })
     const view_btn = document.querySelector('.view-btn');
