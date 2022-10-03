@@ -1,124 +1,10 @@
-//temp
-
-// user needed data
-// let user = {
-//     name: 'سینا اناهید',
-//     amount: 4000,
-//     days_left: 17,
-//     year: "دهم",
-//     subject: "ریاضی",
-// };
+// user global variable 
 let user = {};
 
-// making sample book items
-// const book1 = {
-//     id: 1,
-//     name: "1 اسم کتاب درسی",
-//     quantity_in_cart: 4,
-//     subject: 'هنر',
-//     book_year: "دهم",
-//     publisher: {
-//         clicked: false,
-//         name: "مبتکران",
-//         id: 1
-//     },
-//     price: 240000,
-//     img_url: "./assets/images/book-img-1.jpg",
-//     author: "هامون سبطی",
-//     page_count: 120,
-//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-// }
-// const book2 = {
-//     id: 2,
-//     name: "2 اسم کتاب درسی",
-//     quantity_in_cart: 0,
-//     subject: 'ریاضی',
-//     book_year: "دهم",
-//     publisher: {
-//         clicked: false,
-//         name: "گاج",
-//         id: 2
-//     },
-//     price: 240000,
-//     img_url: "./assets/images/book-img-2.jpg",
-//     author: "هامون سبطی",
-//     page_count: 100,
-//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-// }
-// const book3 = {
-//     id: 3,
-//     name: "3 اسم کتاب درسی",
-//     quantity_in_cart: 2,
-//     subject: 'هنر',
-//     book_year: "یازدهم",
-//     publisher: {
-//         clicked: false,
-//         name: "الگو",
-//         id: 3
-//     },
-//     price: 240000,
-//     img_url: "./assets/images/book-img-1.jpg",
-//     author: "هامون سبطی",
-//     page_count: 10,
-//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-// }
-// const book4 = {
-//     id: 4,
-//     name: "4 اسم کتاب درسی",
-//     quantity_in_cart: 1,
-//     subject: 'انسانی',
-//     book_year: "یازدهم",
-//     publisher: {
-//         clicked: false,
-//         name: "خیلی سبز",
-//         id: 4
-//     },
-//     price: 240000,
-//     img_url: "./assets/images/book-img-2.jpg",
-//     author: "هامون سبطی",
-//     page_count: 20,
-//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-// }
-// const book5 = {
-//     id: 5,
-//     name: "5 اسم کتاب درسی",
-//     quantity_in_cart: 4,
-//     subject: 'تجربی',
-//     book_year: "دوازدهم",
-//     publisher: {
-//         clicked: false,
-//         name: "مبتکران",
-//         id: 1
-//     },
-//     price: 240000,
-//     img_url: "./assets/images/book-img-1.jpg",
-//     author: "هامون سبطی",
-//     page_count: 120,
-//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-// }
-// const book6 = {
-//     id: 6,
-//     name: "6 اسم کتاب درسی",
-//     quantity_in_cart: 4,
-//     subject: 'ریاضی',
-//     book_year: "دوازدهم",
-//     publisher: {
-//         clicked: false,
-//         name: "مبتکران",
-//         id: 1
-//     },
-//     price: 240000,
-//     img_url: "./assets/images/book-img-2.jpg",
-//     author: "هامون سبطی",
-//     page_count: 120,
-//     details: [' مناسب برای همه ی رشته ها', 'مناسب برای همه پایه ها', 'به همراه کنکور 1400', ' با همکاری امیر محمد دهقان'],
-// }
-
-// an array filled with book 
-// the main use of this array for now is to render books in the book page
+// the main use of this array is to have all the books from api
 let books = [];
 
-// making a sample book year array 
+// making a book year array 
 const grades = [
     {
         id: 10,
@@ -141,14 +27,18 @@ const grades = [
         name: "فارغ التحصیل"
     }
 ];
+
+// cart varibale 
 var cart = [];
+// cart items variables
 let cart_items = [];
 
 // variable for filtered book
+// when books been filtered by the main 3 filters in the book page the result would be shown here
 let filtered_book = [];
 
 
-// making  subjects array
+// making subjects array for the books
 const subjects = [
     {
         id: 0,
@@ -172,7 +62,8 @@ const subjects = [
     }
 ];
 
-// making  publisher array 
+// making publisher array 
+// an array to have all publishers stored in a place
 let publishers = [];
 
 
@@ -197,7 +88,7 @@ const footer_btn_cart = document.querySelector('.footer-menu.it-3');
 const footer_cart_wrapper_HTML = document.querySelector('.cart-item-number');
 
 
-// variable to know where where you lastly (probable delete)!
+// variable to know where where you lastly
 let address_to_here = "home/";
 
 // the variable for accssesing the wallet amount increasing
@@ -248,50 +139,48 @@ let clicked_grades = [];
 // clicked book year for filter
 let clicked_subjects = [];
 
-//
+// pay btn html
 let pay_btn_wrapper = [];
 
 //global error for test
-
 let global_err = "I am empty for now";
 
 
 // events
+
+// filling the user via telegram object
 const us_id = window.Telegram.WebApp.initData;
+// spiliting data to find the id of the user
 const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
     render_loading();
+    // getting the user from api
     axios
         .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
         .then((res) => {
             //console.log("user :", res.data);
+            // filling user via the main data from api
             user = res.data;
+            // render app first page
             render_first_page();
         })
         .catch((err) => console.log(err));
-    // }
-    // else {
-    // axios
-    //     .get(`https://daryaftyar.ir/storeV2/user/${user_id}`)
-    //     .then((res) => {
-    //         console.log("user :", res.data);
-    //         user = res.data;
-    //         render_first_page();
-    //     })
-    //     .catch((err) => console.log(err));
-    // }
+    // getting users cart items (with the id we have)
     axios
         .get(`https://daryaftyar.ir/storeV2/cart/${final_id}`)
         //.get("https://daryaftyar.ir/storeV2/cart/341393410")
         .then((res) => {
+            //filling the cart with the main object from back end
             cart = res.data;
+            //filling the cart_items var with items in cart for rendering
             cart_items = cart.cart_details;
+            //having the label in the footer the correct number
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
-            // unnessecary value update 
+            // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
             //console.log(cart);
         })
@@ -299,18 +188,16 @@ document.addEventListener("DOMContentLoaded", () => {
     axios
         .get("https://daryaftyar.ir/storeV2/books")
         .then((res) => {
-            //console.log("book :", res.data[2], res.data.length);
+            // filling the main books varibale
             books = res.data;
+            // filling books according to the users data
             needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
-            //render_books(books);
-            //console.log(needed_books);
         })
         .catch((err) => console.log(err));
     axios
         .get("https://daryaftyar.ir/storeV2/pubs")
         .then((res) => {
-            //console.log("publishers :", res.data);
-            // publishers = res.data;
+            // filling the publishers and adding the clicked attr to their objects
             res.data.forEach(p => {
                 publishers.push({ ...p, clicked: false });
             });
@@ -324,8 +211,12 @@ footer_btn_home.addEventListener('click', () => {
 });
 //rendering cart via menu btn
 footer_btn_cart.addEventListener('click', () => {
+    // clear the main page for rendering shopping cart
     clearPage();
+    // calling render shopping cart via cart items filled with back end data
     render_shopping_cart(cart_items);
+
+    // checking the cart items length and calling the update total method for adjusting the situtaion
     if (cart_items.length === 0) {
         const total_price_HTML = document.querySelector('.price');
         update_total(total_price_HTML);
@@ -333,20 +224,11 @@ footer_btn_cart.addEventListener('click', () => {
 });
 //render checkout page via menu btn
 footer_btn_checkout.addEventListener('click', () => {
-    //render_coming_soon_page();
-    //alert(window.Telegram.initData);
-    //console.log(window.Telegram.WebApp.initData)
-    main_area.innerHTML = global_err;
-    // books.forEach(b => {
-    //     if (b.publisher === "-") {
-    //         publsihers_from_books.push(b);
-    //     }
-    // });
-    // console.log(publsihers_from_books);
+    // page is not ready so we have to render coming soon page
+    render_coming_soon_page();
 });
 
 // functions
-
 
 // function which clears the main area 
 function clearPage() {
@@ -355,8 +237,11 @@ function clearPage() {
 
 // render first page
 function render_first_page() {
-    address_to_here = "home/"
+    // using the address variable for having the map method
+    address_to_here = "home/";
+    //clearing the area for first page
     clearPage();
+    // making first page html content
     const firstPageHTML = `
         <div class="first-page">
             <div class="greetings">
@@ -418,15 +303,13 @@ function render_first_page() {
             </div>
         </div>
         `;
+    // appending content of first page to the main area
     main_area.innerHTML = firstPageHTML;
 
     // fill the amount btn
-
     increase_amount = document.querySelector('.increase-wallet-wrapper');
     // adding event listener to increase btn
     increase_amount.addEventListener('click', () => {
-        // some function 
-        //render_coming_soon_page();
         render_wallet(user);
     });
 
@@ -438,7 +321,7 @@ function render_first_page() {
         render_books(needed_books);
     });
 
-    // fill the books btn
+    // fill the classes btn
     classes_btn = document.querySelector('.book-class-btns.classes');
     // adding event listener to classes btn
     classes_btn.addEventListener('click', () => {
@@ -450,7 +333,8 @@ function render_first_page() {
 //render book page
 function render_books(books) {
     //map address
-    address_to_here += "book/"
+    address_to_here += "book/";
+    // creating static contents of the book page
     const static_contents = `
      <div class="books-wrapper">
             <div class="books-header">
@@ -500,9 +384,12 @@ function render_books(books) {
             </div>
         </div>
     `;
+    // appending the static contents
     main_area.innerHTML = static_contents;
 
+    // filling the books wrapper html
     books_wrapper = document.querySelector('.books');
+    // having the books page main content html
     books_main_content = document.querySelector('.main-content')
 
     // activating back btn
@@ -516,16 +403,14 @@ function render_books(books) {
     book_publisher.addEventListener("click", () => {
         clear_stage(books_main_content);
         publisher_filter(publishers);
-        //render_coming_soon_page();
-    })
+    });
 
     //activating subjects filter
     book_subjects = document.querySelector('.fil-2');
     book_subjects.addEventListener("click", () => {
-        //render_coming_soon_page();
         clear_stage(books_main_content);
         subject_filter(subjects);
-    })
+    });
 
 
     //activating paye filter
@@ -535,14 +420,16 @@ function render_books(books) {
         grade_filter(grades);
         //console.log(grades)
         //render_coming_soon_page();
-    })
+    });
 
     //activating sort by btn
     sort_by_btn = document.querySelector('.filter-opener');
     sort_by_btn.addEventListener('click', () => {
         render_coming_soon_page();
-    })
+    });
+    // check if the books are empty or not ( because of an error or th filters )
     if (books.length !== 0) {
+        // read each book and render it to the app
         books.forEach((book) => {
             const book_HTML = `
                     <div class="book-item" id="book-${book.id}">
@@ -575,7 +462,9 @@ function render_books(books) {
             `;
             books_wrapper.innerHTML += book_HTML;
         });
+        // storing all books for being clicked and other actions
         const books_HTML = [...document.querySelectorAll('.book-item')];
+        // adding event listener for all books and identify every book to be clicked and rendered
         books_HTML.forEach(item => {
             item.addEventListener('click', (e) => {
                 book_clicked(e);
@@ -670,10 +559,7 @@ function publisher_filter(publishers) {
         });
     });
     address_to_here = "home/book/filter/";
-    //console.log(address_to_here);
-
 }
-
 
 // render book year filter 
 function grade_filter(grades) {
@@ -693,10 +579,7 @@ function grade_filter(grades) {
         });
     });
     address_to_here = "home/book/filter/";
-    //console.log(address_to_here);
-
 }
-
 
 // render subjects filter 
 function subject_filter(subjects) {
@@ -716,8 +599,6 @@ function subject_filter(subjects) {
         });
     });
     address_to_here = "home/book/filter/";
-    //console.log(address_to_here);
-
 }
 
 // funnction for storing clicked publishers
@@ -737,7 +618,6 @@ function clicked_publishers_identifier(e) {
     else {
         clicked_publishers_ids.push(clicked_publisher);
     }
-    //console.log(clicked_publishers_ids);
     adjust_books("pub");
 }
 
@@ -759,7 +639,6 @@ function clicked_subjects_identifier(e) {
         clicked_subjects.push(clicked_subject);
     }
     adjust_books("sub");
-    //console.log(clicked_subject);
 }
 
 // funnction for storing clicked book years
@@ -780,13 +659,11 @@ function clicked_grades_identifier(e) {
         clicked_grades.push(clicked_grade);
     }
     adjust_books("year");
-    //console.log(clicked_grades);
 }
 
 // function to make book page ready for filters
 function clear_stage(element) {
     element.innerHTML = "";
-    //return element;
 }
 
 // function to render shopping cart
@@ -1393,8 +1270,6 @@ function update_quantity(type, id, sign) {
         item = books.find(c => {
             return c.id === id;
         });
-        // cart_items.push({ ...item, count_in_user_cart: 1 });
-        // cart.cart_items_ids.push(id);
     }
     else {
         item = cart_items.find(c => {
@@ -1468,7 +1343,6 @@ function update_total(el) {
 
 // function for applying filters on books
 function adjust_books(state) {
-
     filtered_book = [];
     let filterd_by_pubs = []
     let filterd_by_sub = []
@@ -1502,17 +1376,6 @@ function adjust_books(state) {
     let final_ids = ids_by_pub.concat(ids_by_sub, ids_by_year);
     //operating as and
     if ((((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0)) && (ids_by_year.length !== 0))) {
-        // const set = new Set(final_ids);
-        // final_ids = final_ids.filter(item => {
-        //     if (set.has(item)) {
-        //         set.delete(item);
-        //     } else {
-        //         return item;
-        //     }
-        // });
-        // final_ids.forEach(id => {
-        //     filtered_book = filtered_book.concat(books.filter(b => b.id === id));
-        // });
         const my_count = {};
         final_ids.map(id => toString(id));
         final_ids.forEach(element => {
@@ -1560,37 +1423,6 @@ function adjust_books(state) {
             });
         }
     }
-
-    // if (state === "pub") {
-    //     publishers.map(p => p.clicked = false);
-    //     // console.log(publishers);
-    //     clicked_publishers_ids.forEach(cp => {
-    //         //console.log(el_by_id(publishers, cp).name);
-    //         filtered_book = filtered_book.concat(books.filter(b => b.publisher === el_by_id(publishers, cp).name));
-    //         let cliked_pub = publishers.filter(p => p.id == cp);
-    //         cliked_pub.map(t => t.clicked = true);
-    //     });
-    //     //console.log(filtered_book);
-    // }
-    // else if (state === "sub") {
-    //     subjects.map(s => s.clicked = false);
-    //     clicked_subjects.forEach(sub => {
-    //         filtered_book = filtered_book.concat(books.filter(b => b.subject === el_by_id(subjects, sub).id));
-    //         let clicked_sub = subjects.filter(s => s.id == sub);
-    //         clicked_sub.map(t => t.clicked = true);
-    //     });
-    //     console.log(filtered_book);
-    // }
-    // else if (state === "year") {
-    //     grades.map(s => s.clicked = false);
-    //     clicked_grades.forEach(sub => {
-    //         filtered_book = filtered_book.concat(books.filter(b => b.book_year === el_by_id(grades, sub).id));
-    //         let clicked_sub = grades.filter(s => s.id == sub);
-    //         clicked_sub.map(t => t.clicked = true);
-    //     });
-    //     console.log(filtered_book);
-    // }
-    //console.log(filtered_book);
 }
 
 // function to get el by id 
@@ -1610,11 +1442,9 @@ function update_cart(ids) {
         //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
-            //console.log(cart);
         })
         .catch(err => {
             global_err = err;
-            //console.log(err);
         })
 }
 // etc
