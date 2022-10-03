@@ -755,7 +755,8 @@ body * {
       background-color: #487a3a;
       font-size: 17px;
       border-radius: 40px;
-      padding: 5px 20px; }
+      padding: 5px 20px;
+      text-decoration: none; }
     .cart-final-stage-wrapper .main-content .pay-amount {
       flex-grow: 1;
       text-align: center; }

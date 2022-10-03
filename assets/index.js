@@ -257,7 +257,7 @@ let global_err = "I am empty for now";
 
 
 // events
-const us_id = window.Telegram.WebApp.initData
+const us_id = window.Telegram.WebApp.initData;
 const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
 
 //documnet load to render first page
@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update 
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
-            console.log(cart);
+            //console.log(cart);
         })
         .catch((err) => console.log(err));
     axios
@@ -844,14 +844,24 @@ function render_shopping_cart(cart1) {
         // render final stage with cart items and dicount amount
         if (cart1.length !== 0) {
             let discount = cart.cart_summary.total_discount_of_items;
-            render_final_stage_cart(cart_items, discount);
+            axios
+                .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                .then((res) => {
+                    const url = res.data
+                    render_final_stage_cart(cart_items, discount, url.url_to_pay);
+                })
+                .catch(err => {
+                    global_err = err;
+                    console.log(err);
+                })
         }
     });
 
     // activating go to book page btn 
     const back_to_shop_btn = document.querySelector('.go-to-book-page');
     back_to_shop_btn.addEventListener("click", () => {
-        render_books(books);
+        render_books(needed_books);
         address_to_here = "home/books/";
     });
 
@@ -865,7 +875,7 @@ function render_shopping_cart(cart1) {
     cart1.forEach(item => {
         const cart_item_content = `
         <div class="cart-item" id="cart-item-${item.id}">
-            <img src="${item.img_url}" alt="">
+            <img src="${item.image_url}" alt="">
             <div class="details">
                 <div class="cart-item-name">
                     ${item.name}
@@ -1159,7 +1169,7 @@ function render_single_book(book) {
 }
 
 //function to render final stage of cart
-function render_final_stage_cart(cart_items, discount) {
+function render_final_stage_cart(cart_items, discount, url) {
     let total_price = 0;
     cart_items.forEach(c => {
         total_price += c.count_in_user_cart * c.price;
@@ -1243,8 +1253,8 @@ function render_final_stage_cart(cart_items, discount) {
                                 </span>
                             </div>
                         </div>
-                        <div class="pay-btn-wrapper">
-                            <div class="pay-amount">
+                        <a href="${url}" class="pay-btn-wrapper">
+                            <span class="pay-amount">
                                 پرداخت
                                 <span class="amount">
                                     ${pay_amount}
@@ -1252,11 +1262,11 @@ function render_final_stage_cart(cart_items, discount) {
                                 <span class="curency">
                                     تومان
                                 </span>
-                            </div>
+                            </span>
                             <span class="pointer">
                                 <i class="fa fa-caret-left"></i>
                             </span>
-                        </div>
+                        </a>
                     </div>
                 </div>
     `;
@@ -1270,16 +1280,10 @@ function render_final_stage_cart(cart_items, discount) {
     pay_btn_wrapper = document.querySelector('.pay-btn-wrapper');
     pay_btn_wrapper.addEventListener('click', () => {
         axios
-            //.post("https://daryaftyar.ir/storeV2/cart/341393410", JSON.stringify(cart))
-            // cart_details: cart_items,
-            // cart_summary: cart.cart_summary,
-            // name: cart.name,
-            // user_id: cart.user_id
-            .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, {
-                cart_items_ids: cart.cart_items_ids,
-            })
+            .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
+            //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, cart.cart_items_ids)
             .then(res => {
-                //console.log(res.data);\
+                //console.log(res.data);
                 global_err = res.data;
             })
             .catch(err => global_err = err);
@@ -1432,11 +1436,13 @@ function update_quantity(type, id, sign) {
         }
         item.count_in_user_cart += 1;
     }
-    if (cart_items.length === 0) {
+    let curent_place = address_to_here.split('/')[address_to_here.split("/").length - 2];
+    //console.log(curent_place);
+    if ((cart_items.length === 0) && (curent_place === "cart")) {
         document.querySelector('.cart-next-step').classList.add('disabled');
     }
     footer_cart_wrapper_HTML.innerHTML = cart_items.length;
-    //console.log(cart_items, cart.cart_items_ids);
+    update_cart(cart.cart_items_ids);
 }
 //function to update total price
 function update_total(el) {
@@ -1597,6 +1603,20 @@ function el_by_id(arr, id) {
     return my_return;
 }
 
+function update_cart(ids) {
+    //console.log(cart);
+    axios
+        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, ids)
+        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .then((res) => {
+            cart = res.data;
+            //console.log(cart);
+        })
+        .catch(err => {
+            global_err = err;
+            //console.log(err);
+        })
+}
 // etc
 
 
