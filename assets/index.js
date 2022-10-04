@@ -151,9 +151,9 @@ let is_filled = false;
 // events
 
 // filling the user via telegram object
-//const us_id = window.Telegram.WebApp.initData;
+const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
