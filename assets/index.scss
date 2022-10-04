@@ -158,11 +158,34 @@ body {
         padding: 10px 0;
         height: 100%;
         font-size: 15px;
+        position: relative;
+        z-index: 5;
+    }
+    .active-filter{
+        color: $greenColor;
+        // &::after{
+        //     display: block;
+        //     position: absolute;
+        //     width: 115px;
+        //     height: 35px;
+        //     border-radius: 10px;
+        //     background-color: $mainColor;
+        //     content: ' ';
+        //     z-index: -1;
+        //     top:10px;
+        //     right: 5px;
+        // }
     }
     .fil-2{
-        border-right: 2px solid;
-        border-left: 2px solid;
+        border-right: 2px solid $mainColor;
+        border-left: 2px solid $mainColor;
         padding: 10px 10px;
+    }
+    .save_and_return_btn{
+        @include styler($mainColor , $background , 15px , 50px);
+        border: 2px solid $mainColor;
+        padding: 5px 20px;
+        margin-top: 40px;
     }
     .books{
         @include flexMixin(column,center,center);

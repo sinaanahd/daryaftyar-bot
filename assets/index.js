@@ -145,13 +145,15 @@ let pay_btn_wrapper = [];
 //global error for test
 let global_err = "I am empty for now";
 
+// publishers filter is filled once (bad idea !)
+let is_filled = false;
 
 // events
 
 // filling the user via telegram object
-const us_id = window.Telegram.WebApp.initData;
+//const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
@@ -167,6 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
             user = res.data;
             // render app first page
             render_first_page();
+            clicked_grades.push(user.year);
+            clicked_subjects.push(user.subject);
+            el_by_id(grades, clicked_grades[0]).clicked = true;
+            el_by_id(subjects, clicked_subjects[0]).clicked = true;
         })
         .catch((err) => console.log(err));
     // getting users cart items (with the id we have)
@@ -200,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // filling the publishers and adding the clicked attr to their objects
             res.data.forEach(p => {
                 publishers.push({ ...p, clicked: false });
+                //clicked_publishers_ids.push(p.id)
             });
         })
         .catch((err) => console.log(err));
@@ -360,19 +367,19 @@ function render_books(books) {
                     <span class="filters fil-1">
                         انتشارات 
                         <span class="sub-filter">
-                            (همه)
+                            ${!is_filled ? "( همه )" : (clicked_publishers_ids.length === publishers.length) ? "( همه )" : " ( " + clicked_publishers_ids.length + " ) "}    
                         </span>
                     </span>
                     <span class="filters fil-2">
                         رشته 
                         <span class="sub-filter">
-                            (همه)
+                            ${clicked_subjects.length === subjects.length ? "( همه )" : " ( " + clicked_subjects.length + " ) "}    
                         </span>
                     </span>
                     <span class="filters fil-3">
                         پایه
                         <span class="sub-filter">
-                            (همه)
+                            ${clicked_grades.length === grades.length ? "( همه )" : " ( " + clicked_grades.length + " ) "}    
                         </span>
                     </span>
                 </div>
@@ -395,7 +402,7 @@ function render_books(books) {
     // activating back btn
     back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
-        map_handler(address_to_here);
+        map_handler();
     });
 
     //activating publishers filter
@@ -403,6 +410,10 @@ function render_books(books) {
     book_publisher.addEventListener("click", () => {
         clear_stage(books_main_content);
         publisher_filter(publishers);
+        //active-filter
+        [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
+        book_publisher.classList.add('active-filter');
+        adjust_books("pub");
     });
 
     //activating subjects filter
@@ -410,6 +421,9 @@ function render_books(books) {
     book_subjects.addEventListener("click", () => {
         clear_stage(books_main_content);
         subject_filter(subjects);
+        [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
+        book_subjects.classList.add('active-filter');
+        adjust_books("sub");
     });
 
 
@@ -418,8 +432,9 @@ function render_books(books) {
     book_year_of_study.addEventListener("click", () => {
         clear_stage(books_main_content);
         grade_filter(grades);
-        //console.log(grades)
-        //render_coming_soon_page();
+        [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
+        book_year_of_study.classList.add('active-filter');
+        adjust_books("year");
     });
 
     //activating sort by btn
@@ -552,6 +567,12 @@ function publisher_filter(publishers) {
         `;
         books_main_content.innerHTML += publisher_HTML;
     });
+    const save_and_return_btn_content = `
+            <span class="save_and_return_btn">
+            ذخیره و بازگشت
+            </span>
+        `;
+    books_main_content.innerHTML += save_and_return_btn_content;
     publishers_DOM = [...document.querySelectorAll('.publisher-item')];
     publishers_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -559,6 +580,9 @@ function publisher_filter(publishers) {
         });
     });
     address_to_here = "home/book/filter/";
+    document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        map_handler();
+    });
 }
 
 // render book year filter 
@@ -572,6 +596,12 @@ function grade_filter(grades) {
         `;
         books_main_content.innerHTML += grade_HTML;
     });
+    const save_and_return_btn_content = `
+            <span class="save_and_return_btn">
+            ذخیره و بازگشت
+            </span>
+        `;
+    books_main_content.innerHTML += save_and_return_btn_content;
     grades_DOM = [...document.querySelectorAll('.book-year-item')];
     grades_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -579,6 +609,9 @@ function grade_filter(grades) {
         });
     });
     address_to_here = "home/book/filter/";
+    document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        map_handler();
+    });
 }
 
 // render subjects filter 
@@ -592,6 +625,12 @@ function subject_filter(subjects) {
         `;
         books_main_content.innerHTML += subject_HTML;
     });
+    const save_and_return_btn_content = `
+            <span class="save_and_return_btn">
+            ذخیره و بازگشت
+            </span>
+        `;
+    books_main_content.innerHTML += save_and_return_btn_content;
     subjects_DOM = [...document.querySelectorAll('.subject-item')];
     subjects_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -599,6 +638,9 @@ function subject_filter(subjects) {
         });
     });
     address_to_here = "home/book/filter/";
+    document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        map_handler();
+    });
 }
 
 // funnction for storing clicked publishers
@@ -617,7 +659,9 @@ function clicked_publishers_identifier(e) {
     }
     else {
         clicked_publishers_ids.push(clicked_publisher);
+        is_filled = true;
     }
+    document.querySelector('.fil-1 .sub-filter').innerHTML = `( ${clicked_publishers_ids.length} )`;
     adjust_books("pub");
 }
 
@@ -638,6 +682,7 @@ function clicked_subjects_identifier(e) {
     else {
         clicked_subjects.push(clicked_subject);
     }
+    document.querySelector('.fil-2 .sub-filter').innerHTML = `( ${clicked_subjects.length} )`;
     adjust_books("sub");
 }
 
@@ -658,6 +703,7 @@ function clicked_grades_identifier(e) {
     else {
         clicked_grades.push(clicked_grade);
     }
+    document.querySelector('.fil-3 .sub-filter').innerHTML = `( ${clicked_grades.length} )`;
     adjust_books("year");
 }
 
@@ -1074,7 +1120,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 مشاهده
                             </div>
                         </div>
-                        <div class="cart-notice">
+                        <!-- <div class="cart-notice">
                             <p>
                                 <span class="notice">
                                     نکته مهم :
@@ -1083,7 +1129,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 کرده باشید تا ما بتونیم محصولات رو برای شما ارسال کنیم ؛ اگر این کار را نکرده باشید ، اجازه پرداخت
                                 نخواهید داشت .
                             </p>
-                        </div>
+                        </div> -->
                         <div class="cart-items-details">
                             <div class="cart-total-price">
                                 <span class="label">
@@ -1423,6 +1469,7 @@ function adjust_books(state) {
             });
         }
     }
+    //console.log(filtered_book);
 }
 
 // function to get el by id 

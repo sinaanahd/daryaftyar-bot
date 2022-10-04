@@ -166,11 +166,23 @@ body * {
   display: inline-block;
   padding: 10px 0;
   height: 100%;
-  font-size: 15px; }
+  font-size: 15px;
+  position: relative;
+  z-index: 5; }
+.books-wrapper .active-filter {
+  color: #487a3a; }
 .books-wrapper .fil-2 {
-  border-right: 2px solid;
-  border-left: 2px solid;
+  border-right: 2px solid #937602;
+  border-left: 2px solid #937602;
   padding: 10px 10px; }
+.books-wrapper .save_and_return_btn {
+  color: #937602;
+  background-color: #e8e8a6;
+  font-size: 15px;
+  border-radius: 50px;
+  border: 2px solid #937602;
+  padding: 5px 20px;
+  margin-top: 40px; }
 .books-wrapper .books {
   display: flex;
   flex-direction: column;
