@@ -1,9 +1,9 @@
+// ! variables
+
 // user global variable 
 let user = {};
-
 // the main use of this array is to have all the books from api
 let books = [];
-
 // making a book year array 
 const grades = [
     {
@@ -27,17 +27,13 @@ const grades = [
         name: "فارغ التحصیل"
     }
 ];
-
 // cart varibale 
 var cart = [];
 // cart items variables
 let cart_items = [];
-
 // variable for filtered book
 // when books been filtered by the main 3 filters in the book page the result would be shown here
 let filtered_book = [];
-
-
 // making subjects array for the books
 const subjects = [
     {
@@ -61,95 +57,63 @@ const subjects = [
         name: "هنر"
     }
 ];
-
 // making publisher array 
 // an array to have all publishers stored in a place
 let publishers = [];
-
-
 //books according to users data
 let needed_books = [];
-
-// variables
-
 // the html element which all the datas are located
 const main_area = document.querySelector('.main-area');
-
 // footer menu for checkout btn
 const footer_btn_checkout = document.querySelector('.footer-menu.it-1');
-
 // footer menu for accssesing the home btn
 const footer_btn_home = document.querySelector('.footer-menu.it-2');
-
 // footer menu for cart btn
 const footer_btn_cart = document.querySelector('.footer-menu.it-3');
-
 //cart count wrapper
 const footer_cart_wrapper_HTML = document.querySelector('.cart-item-number');
-
-
 // variable to know where where you lastly
 let address_to_here = "home/";
-
 // the variable for accssesing the wallet amount increasing
 let increase_amount = [];
-
 // home page btn which leads to the books page
 let books_btn = [];
-
 // home page btn which leads to the classes page
 let classes_btn = [];
-
 // html element which contains the book-item and the main place for renderign books
 let books_wrapper = [];
-
 // the book page back btn (for now)
 let back_btn = [];
-
 // filter in book page about publishers
 let book_publisher = [];
-
 // filter in book page about subject of books
 let book_subjects = [];
-
 // filter in book page about paye
 let book_year_of_study = [];
-
 // btn in the book page for sorting 
 let sort_by_btn = [];
-
 // books main content element
 let books_main_content = [];
-
 //publishers dom element
 let publishers_DOM = [];
-
 //book year dom element
 let grades_DOM = []
-
 //subjects dom element
 let subjects_DOM = []
-
 // clicked publisher for filters
 let clicked_publishers_ids = [];
-
 // clicked book year for filter
 let clicked_grades = [];
-
 // clicked book year for filter
 let clicked_subjects = [];
-
 // pay btn html
 let pay_btn_wrapper = [];
-
 //global error for test
 let global_err = "I am empty for now";
-
 // publishers filter is filled once (bad idea !)
 let is_filled = false;
-
-// events
-
+// ! events
+// * ids with telegram object
 // filling the user via telegram object
 const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
@@ -169,8 +133,10 @@ document.addEventListener("DOMContentLoaded", () => {
             user = res.data;
             // render app first page
             render_first_page();
+            // activating filters for the books page filter
             clicked_grades.push(user.year);
             clicked_subjects.push(user.subject);
+            // making the first filter btn active
             el_by_id(grades, clicked_grades[0]).clicked = true;
             el_by_id(subjects, clicked_subjects[0]).clicked = true;
         })
@@ -188,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
-            //console.log(cart);
         })
         .catch((err) => console.log(err));
     axios
@@ -211,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => console.log(err));
 });
-
 // rendring first page via menu btn
 footer_btn_home.addEventListener('click', () => {
     render_first_page();
@@ -235,7 +199,7 @@ footer_btn_checkout.addEventListener('click', () => {
     render_coming_soon_page();
 });
 
-// functions
+// ! functions
 
 // function which clears the main area 
 function clearPage() {
@@ -325,7 +289,13 @@ function render_first_page() {
     books_btn = document.querySelector('.book-class-btns.books');
     // adding event listener to books btn
     books_btn.addEventListener('click', () => {
-        render_books(needed_books);
+        // if filters are active the main page should be loaded with filtered books
+        if (filtered_book.length === 0) {
+            render_books(needed_books);
+        }
+        else {
+            render_books(filtered_book);
+        }
     });
 
     // fill the classes btn
@@ -408,21 +378,34 @@ function render_books(books) {
     //activating publishers filter
     book_publisher = document.querySelector('.fil-1');
     book_publisher.addEventListener("click", () => {
+        // clear the main content for having the place to load filters content
         clear_stage(books_main_content);
+        // calling the publisher filter render method
         publisher_filter(publishers);
-        //active-filter
+
+        //active-filter actions
+
+        //selects all the filters and remove the active class
         [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
+        //adds active to only the clicked method
         book_publisher.classList.add('active-filter');
+        //calling the method to fill the books acording to the active filters
         adjust_books("pub");
     });
 
     //activating subjects filter
     book_subjects = document.querySelector('.fil-2');
     book_subjects.addEventListener("click", () => {
+        // clear the html node for new content
         clear_stage(books_main_content);
+        // calling the subjects render method
         subject_filter(subjects);
+
+        //selects all the filters and remove the active class
         [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
+        //adds active to only the clicked method
         book_subjects.classList.add('active-filter');
+        //calling the method to fill the books acording to the active filters
         adjust_books("sub");
     });
 
@@ -430,16 +413,24 @@ function render_books(books) {
     //activating paye filter
     book_year_of_study = document.querySelector('.fil-3');
     book_year_of_study.addEventListener("click", () => {
+
+        // clearing html node content for the filters content
         clear_stage(books_main_content);
+        // calling render grade filter methods
         grade_filter(grades);
+
+        //selects all the filters and remove the active class
         [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
+        //adds active to only the clicked method
         book_year_of_study.classList.add('active-filter');
+        //calling the method to fill the books acording to the active filters
         adjust_books("year");
     });
 
     //activating sort by btn
     sort_by_btn = document.querySelector('.filter-opener');
     sort_by_btn.addEventListener('click', () => {
+        // this part is disactivated so ...
         render_coming_soon_page();
     });
     // check if the books are empty or not ( because of an error or th filters )
@@ -482,29 +473,45 @@ function render_books(books) {
         // adding event listener for all books and identify every book to be clicked and rendered
         books_HTML.forEach(item => {
             item.addEventListener('click', (e) => {
+                //calling the book clicked method for identifying which book is clicked for single book render method
                 book_clicked(e);
             });
             // handling more btn in book page
             const add_book_btn = item.querySelector('.add-book');
             add_book_btn.addEventListener('click', (e) => {
+                //reading the clicked class
                 const classes = [...e.target.classList];
+                // if the span is clicked
                 if (classes[classes.length - 1] === "add-book") {
+                    // reading quantity wrapper from HTML DOM
                     const quantity_wrapper = e.target.nextElementSibling;
+                    // increase the amount of the html node 
                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
                     // changing the array quantity
+
+                    //finding the book id via wrapper element's id
                     const id_string = e.target.parentElement.parentElement.id;
+                    //turn it into a number for use of id
                     const id = parseInt(id_string.split("-")[1]);
+                    // calling the function for updating the quality
                     update_quantity('book', id, "+");
                     //update_total(total_price_HTML);
                 }
+                // if you have clicked on the i tag instead of span
                 else if (classes[classes.length - 1] === "fa-plus") {
+                    // finding the quantity wrapper on the DOM
                     const quantity_wrapper = e.target.parentElement.nextElementSibling;
+                    // increasing the quantity on the HTML Live view 
                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
                     // changing the array quantity
+
+                    // finding the modified book id from html 
                     const id_string = e.target.parentElement.parentElement.parentElement.id;
+                    //turn it to a number
                     const id = parseInt(id_string.split("-")[1]);
+                    // call the update quantity for the modifications
                     update_quantity('book', id, "+");
                     //update_total(total_price_HTML);
                 }
@@ -512,13 +519,21 @@ function render_books(books) {
             // decreament items in book page
             const less_btn = item.querySelector('.decrment-book');
             less_btn.addEventListener('click', (e) => {
+                // geting all the class for checking
                 const classes = [...e.target.classList];
+                // if you clicked on the span tag
                 if (classes[classes.length - 1] === "decrment-book") {
+                    // find quantity wrapper on the HTML
                     const quantity_wrapper = e.target.previousSibling;
+                    //find id via wrappers id
                     const id_string = e.target.parentElement.parentElement.id;
+                    // turn id to a number and delete the prefix
                     const id = parseInt(id_string.split("-")[1]);
+                    // call the update method fot modifications
                     update_quantity('cart', id, "-");
+                    // if items quantity is 0 this condition prevents the number to be a negative value
                     if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                        // make the item stays on zero not a negative number
                         quantity_wrapper.innerHTML = 0;
                     }
                     else {
@@ -527,12 +542,19 @@ function render_books(books) {
                     }
                     //update_total(total_price_HTML);
                 }
+                // if you have clicked on the i tag instead of span tag
                 else if (classes[classes.length - 1] === "fa-minus") {
+                    // find quantity wrapper on the HTML
                     const quantity_wrapper = e.target.parentElement.previousSibling;
+                    //find id via wrappers id
                     const id_string = e.target.parentElement.parentElement.parentElement.id;
+                    // turn id to a number and delete the prefix
                     const id = parseInt(id_string.split("-")[1]);
+                    // call the update method fot modifications
                     update_quantity('cart', id, "-");
+                    // if items quantity is 0 this condition prevents the number to be a negative value
                     if (parseInt(quantity_wrapper.innerHTML) === 0) {
+                        // make the item stays on zero not a negative number
                         quantity_wrapper.innerHTML = 0;
                     }
                     else {
@@ -545,6 +567,7 @@ function render_books(books) {
 
         });
     }
+    // if we had no book to show we render this message for user
     else {
         const empty_content = `
             <div class="books-empty">
@@ -558,28 +581,37 @@ function render_books(books) {
 
 // render publisher filter 
 function publisher_filter(publishers) {
-
+    // render and read each publisher
+    // check the clicked status
     publishers.forEach((publisher) => {
         const publisher_HTML = `
             <span class="publisher-item ${!publisher.clicked ? "disabled" : " "}" id="publisher-${publisher.id}">
                 ${publisher.name}
             </span>
         `;
+        // add the html content to the dom 
         books_main_content.innerHTML += publisher_HTML;
     });
+    // create a button to adjust the changes and returns to the books page
     const save_and_return_btn_content = `
             <span class="save_and_return_btn">
             ذخیره و بازگشت
             </span>
         `;
+    // add the btn content to the bottom of the publishers
     books_main_content.innerHTML += save_and_return_btn_content;
+    // select all publishers
     publishers_DOM = [...document.querySelectorAll('.publisher-item')];
+    // adding events for all the publishers clicks
     publishers_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
+            // calling the clicked publishers identifier method for doing the necessary actions for the clicked publsihers
             clicked_publishers_identifier(e);
         });
     });
+    // updatign the addres to have users place 
     address_to_here = "home/book/filter/";
+    // activating save and return button 
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
         map_handler();
     });
@@ -587,6 +619,7 @@ function publisher_filter(publishers) {
 
 // render book year filter 
 function grade_filter(grades) {
+    // * actions are the same as publishers filter
 
     grades.forEach((grade) => {
         const grade_HTML = `
@@ -616,6 +649,7 @@ function grade_filter(grades) {
 
 // render subjects filter 
 function subject_filter(subjects) {
+    // * actions are the same as publishers filter
 
     subjects.forEach((subject) => {
         const subject_HTML = `
@@ -644,28 +678,48 @@ function subject_filter(subjects) {
 }
 
 // funnction for storing clicked publishers
+// * function gets clicked event as an argument
 function clicked_publishers_identifier(e) {
+    // check if the clicked item has disabled class or not ( toggle class action ) for css styles
     if (![...e.target.classList].includes("disabled")) {
+        // if item doesn't have the class add it
         e.target.classList.add('disabled');
     }
     else {
+        // otherwise remove the class
         e.target.classList.remove('disabled');
     }
+    // getting publisher id from the html wrapper id
     const clicked_publisher = parseInt(e.target.id.split("publisher-")[1]);
+    /* 
+        if the clicked publisher ids which restores the all clicked item includes this clicked id
+        it should be removed 
+        * kind of toggle action
+    */
     if (clicked_publishers_ids.includes(clicked_publisher)) {
+        // filter the array and return all items except the given id
         clicked_publishers_ids = clicked_publishers_ids.filter(p => {
             return p != clicked_publisher;
         });
     }
     else {
+        // otherwise push the id into the array 
         clicked_publishers_ids.push(clicked_publisher);
+        /* 
+         ? this is not the correct way I assume but this is for the rendering all word in the book page
+         ? without having the force to fill the ids array
+         ! maybe a refactor be necessary here
+        */
         is_filled = true;
     }
+    // fill the paranteses next to filter label in the html with clicked items length
     document.querySelector('.fil-1 .sub-filter').innerHTML = `( ${clicked_publishers_ids.length} )`;
+    // pass the value for the adjust books and fill the filtered book method
     adjust_books("pub");
 }
 
 // funnction for storing clicked subjects
+// * same as the clicked publishers identifier
 function clicked_subjects_identifier(e) {
     if (![...e.target.classList].includes("disabled")) {
         e.target.classList.add('disabled');
@@ -687,6 +741,7 @@ function clicked_subjects_identifier(e) {
 }
 
 // funnction for storing clicked book years
+// * same as the clicked publishers identifier
 function clicked_grades_identifier(e) {
     if (![...e.target.classList].includes("disabled")) {
         e.target.classList.add('disabled');
@@ -713,6 +768,7 @@ function clear_stage(element) {
 }
 
 // function to render shopping cart
+// ! the reason for the function value is cart1 is because of global variable with name of cart 
 function render_shopping_cart(cart1) {
 
     // creating content for the shopping cart (HTML template)
@@ -765,16 +821,21 @@ function render_shopping_cart(cart1) {
     // click action for cart next step
     next_step_btn.addEventListener('click', () => {
         // render final stage with cart items and dicount amount
+        // check if the cart isn't empty ro render final stage cart
         if (cart1.length !== 0) {
+            // fill the discount value from api
             let discount = cart.cart_summary.total_discount_of_items;
+            // get the pay url for the final step btn
             axios
                 .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
                 //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
                 .then((res) => {
-                    const url = res.data
+                    const url = res.data;
+                    // render final stage cart with given parameters
                     render_final_stage_cart(cart_items, discount, url.url_to_pay);
                 })
                 .catch(err => {
+                    // ? we need a better way to handle the errors :)
                     global_err = err;
                     console.log(err);
                 })
@@ -784,7 +845,14 @@ function render_shopping_cart(cart1) {
     // activating go to book page btn 
     const back_to_shop_btn = document.querySelector('.go-to-book-page');
     back_to_shop_btn.addEventListener("click", () => {
-        render_books(needed_books);
+        // have the filter's results saved as an out come
+        if (filtered_book.length === 0) {
+            render_books(needed_books);
+        }
+        else {
+            render_books(filtered_book);
+        }
+        // have the address updated
         address_to_here = "home/books/";
     });
 
@@ -798,7 +866,7 @@ function render_shopping_cart(cart1) {
     cart1.forEach(item => {
         const cart_item_content = `
         <div class="cart-item" id="cart-item-${item.id}">
-            <img src="${item.image_url}" alt="">
+            <img src="${item.img_url}" alt="">
             <div class="details">
                 <div class="cart-item-name">
                     ${item.name}
@@ -821,6 +889,7 @@ function render_shopping_cart(cart1) {
             </div>
         </div>
         `;
+        // calculate total pirce with the items in cart
         total_price_amount += item.count_in_user_cart * item.price;
         cart_item_wrapper.innerHTML += cart_item_content;
     });
@@ -831,6 +900,7 @@ function render_shopping_cart(cart1) {
     const all_cart_items = [...document.querySelectorAll('.cart-item')];
     all_cart_items.forEach(item => {
         // handling more btn in cart
+        // * same as more and less in the book page
         const more_btn = item.querySelector('.more');
         more_btn.addEventListener('click', (e) => {
             const classes = [...e.target.classList];
@@ -865,6 +935,7 @@ function render_shopping_cart(cart1) {
                 const id = parseInt(id_string.split("-")[2]);
                 update_quantity('cart', id, "-");
                 if (parseInt(quantity_wrapper.innerHTML) === 1) {
+                    // remove the item from cart after quantity becomes 0
                     e.target.parentElement.parentElement.remove();
                 }
                 else {
@@ -892,14 +963,18 @@ function render_shopping_cart(cart1) {
     });
 
     // updating curent place for map_handler method
+    /* 
+        ?  cause the cart item is accessible from all part of web app it needs to be stopped after 
+        ? one add in the address to here so I used the stop repatation function
+    */
     stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
 
+    // activating the back button
     const back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
         map_handler(address_to_here);
     });
 }
-
 
 // function to render wallet page
 function render_wallet(user) {
@@ -958,6 +1033,8 @@ function render_wallet(user) {
 }
 
 // function to render single book page
+// ? maybe it better to have this function as a modal instead of a complete page ( bea cause of action after a back btn )
+// ! reconsider maybe needed here
 function render_single_book(book) {
     const single_book_content = `
         <div class="single-prod-wrapper">
@@ -1012,9 +1089,11 @@ function render_single_book(book) {
             </div>
         </div>
     `;
+    // have the books content as the main content
     main_area.innerHTML = single_book_content;
+    // have the book ul as a wrapper for entring the details
     const details_DOM = document.querySelector('.book-details-ul');
-    // details bug
+    // reading each book details
     book.details.forEach(d => {
         const book_detail_content = `
             <li>
@@ -1024,7 +1103,7 @@ function render_single_book(book) {
         details_DOM.innerHTML += book_detail_content;
     });
 
-    //const single_book_footer = document.querySelectorAll('.single-prod-footer')
+    // * handling more and less btn like previuos parts
     const more_btn = document.querySelector('.more');
     more_btn.addEventListener('click', (e) => {
         const classes = [...e.target.classList];
@@ -1032,21 +1111,15 @@ function render_single_book(book) {
             const quantity_wrapper = e.target.nextElementSibling;
             quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
-            // changing the array quantity
-            //const id_string = e.target.parentElement.parentElement.id;
             const id = book.id;
             update_quantity('book', id, "+");
-            //update_total(total_price_HTML);
         }
         else if (classes[classes.length - 1] === "fa-plus") {
             const quantity_wrapper = e.target.parentElement.nextElementSibling;
             quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
-            // changing the array quantity
-            //const id_string = e.target.parentElement.parentElement.parentElement.id;
             const id = book.id;
             update_quantity('book', id, "+");
-            //update_total(total_price_HTML);
         }
     });
     const less_btn = document.querySelector('.less');
@@ -1054,18 +1127,15 @@ function render_single_book(book) {
         const classes = [...e.target.classList];
         if (classes[classes.length - 1] === "less") {
             const quantity_wrapper = e.target.previousSibling;
-            //const id_string = e.target.parentElement.parentElement.id;
             const id = book.id;
             update_quantity('cart', id, "-");
             if (parseInt(quantity_wrapper.innerHTML) === 0) {
-                //e.target.parentElement.parentElement.remove();
                 quantity_wrapper.innerHTML = 0;
             }
             else {
                 quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                 // changing the array quantity
             }
-            //update_total(total_price_HTML);
         }
         else if (classes[classes.length - 1] === "fa-minus") {
             const quantity_wrapper = e.target.parentElement.previousSibling;
@@ -1073,30 +1143,32 @@ function render_single_book(book) {
             const id = book.id;
             update_quantity('cart', id, "-");
             if (parseInt(quantity_wrapper.innerHTML) === 0) {
-                //e.target.parentElement.parentElement.parentElement.remove();
                 quantity_wrapper.innerHTML = 0;
             }
             else {
                 quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                 // changing the array quantity
             }
-            //update_total(total_price_HTML);
         }
     });
 
+    // * same as always having the back btn map the web app
     const back_btn = document.querySelector('.back');
     address_to_here = "home/book/single-book/";
     back_btn.addEventListener('click', () => {
         map_handler();
-    })
+    });
 }
 
 //function to render final stage of cart
 function render_final_stage_cart(cart_items, discount, url) {
+    // the sum for total price
     let total_price = 0;
+    // calculate total price
     cart_items.forEach(c => {
         total_price += c.count_in_user_cart * c.price;
     });
+    // calculating pay amount with user wallet and discount
     const pay_amount = total_price - (user.amount + discount)
     const final_cart_stage_content = `
     <div class="cart-final-stage-wrapper">
@@ -1195,23 +1267,26 @@ function render_final_stage_cart(cart_items, discount, url) {
     `;
     main_area.innerHTML = final_cart_stage_content;
 
+    // * same back btn logic 
     const back_btn = document.querySelector('.back');
     address_to_here += "finalStage/";
     back_btn.addEventListener('click', () => {
         map_handler();
     });
-    pay_btn_wrapper = document.querySelector('.pay-btn-wrapper');
-    pay_btn_wrapper.addEventListener('click', () => {
-        axios
-            .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
-            //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, cart.cart_items_ids)
-            .then(res => {
-                //console.log(res.data);
-                global_err = res.data;
-            })
-            .catch(err => global_err = err);
 
-    })
+    // ! note and test this part
+    // pay_btn_wrapper = document.querySelector('.pay-btn-wrapper');
+    // pay_btn_wrapper.addEventListener('click', () => {
+    //     axios
+    //         .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
+    //         //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, cart.cart_items_ids)
+    //         .then(res => {
+    //             //console.log(res.data);
+    //             global_err = res.data;
+    //         })
+    //         .catch(err => global_err = err);
+    // })
+    // the button that leads you back to the cart items review
     const view_btn = document.querySelector('.view-btn');
     view_btn.addEventListener("click", () => {
         map_handler();
@@ -1220,6 +1295,7 @@ function render_final_stage_cart(cart_items, discount, url) {
 
 
 // function to render sort by filter 
+// TODO : render by filter function 
 function render_sort_by_filter() {
     const sort_by_filter_content = `
 
@@ -1250,7 +1326,12 @@ function map_handler() {
     }
     // if we are in cart page from home
     else if ((address[len] === "cart" && address[len - 1] === "book") || (address[len] === "cart" && address[len - 1] === "single-book")) {
-        render_books(needed_books);
+        if (filtered_book.length === 0) {
+            render_books(needed_books);
+        }
+        else {
+            render_books(filtered_book);
+        }
         address_to_here = "home/book/";
     }
     // if we are in wallet page from home
@@ -1261,7 +1342,12 @@ function map_handler() {
     // if we were in single book page
     else if (address[len] === "single-book" && address[len - 1] === "book") {
         //render_loading();
-        render_books(needed_books);
+        if (filtered_book.length === 0) {
+            render_books(needed_books);
+        }
+        else {
+            render_books(filtered_book);
+        }
         address_to_here = "home/book/";
     }
     // if we were in single book page
@@ -1294,48 +1380,63 @@ function stop_repeatation_in_addres(word, my_string) {
     return !arr.includes(word);
 }
 
-
 //book clicked
 function book_clicked(e) {
     let clicked_book = "";
+    // check if the book contains class book
     if (e.target.id.includes("book-")) {
-        const splited = e.target.id.split("-")
+        const splited = e.target.id.split("-");
+        // turn the id from html id to an integer
         const id = parseInt(splited[splited.length - 1]);
+        // find the clicked book from books array
         clicked_book = books.find(book => {
             return book.id === id;
         });
+        // render the single book 
         render_single_book(clicked_book);
     }
 }
 
 // update quantity
 function update_quantity(type, id, sign) {
+
+    // the item which we want to have our chnages
     let item = [];
 
+    // check the cart to find the item is already there so we could do 2 things
+    /* 
+        ?  the item from api has 2 important things cart items and cart item ids
+        ? with these 2 items we need to know if they are included
+        ? it has important effect on the rendring and api calls
+    */
     if (!cart.cart_items_ids.includes(id)) {
+        // if is not included go to all books to find it
         item = books.find(c => {
             return c.id === id;
         });
     }
     else {
+        // if it is included search the cart items
         item = cart_items.find(c => {
             return c.id === id;
         });
-        // cart.cart_items_ids.push(id);
     }
     if ((type === "cart") && (sign === "+")) {
+        // increase count 
         item.count_in_user_cart += 1;
+        // push the id for api calls
+        cart.cart_items_ids.push(id);
     }
     else if ((type === "cart") && (sign === "-")) {
+        // check the quantity first first
         if (item.count_in_user_cart === 1) {
+            //delete the item with finding from the cart items and cart item ids
             item.count_in_user_cart -= 1;
             const index = cart_items.indexOf(item);
             cart_items.splice(index, 1);
             cart.cart_items_ids = cart.cart_items_ids.filter(ci => parseInt(ci) !== id);
         }
-        // else if (item.count_in_user_cart === 0) {
-        //     item.count_in_user_cart = 0;
-        // }
+        // otherwise just update the ids array
         else {
             item.count_in_user_cart -= 1;
             if (cart.cart_items_ids.includes(id)) {
@@ -1345,24 +1446,29 @@ function update_quantity(type, id, sign) {
 
     }
     else if ((type === "book") && (sign === "+")) {
-        // if (item.count_in_user_cart === 0) {
-        //     cart_items.push(item);
-        // }
+        // add the item if it hasn't been there before
         if (!cart.cart_items_ids.includes(id)) {
+            // use the new proprty for rendering 
             cart_items.push({ ...item, count_in_user_cart: 1 });
+            // update ids
             cart.cart_items_ids.push(id);
         }
+        // otherwise just update the ids for api calls
         else {
             cart.cart_items_ids.push(id);
         }
         item.count_in_user_cart += 1;
     }
+
+    // * this is used to do not have bug for disabling the next step button
     let curent_place = address_to_here.split('/')[address_to_here.split("/").length - 2];
-    //console.log(curent_place);
     if ((cart_items.length === 0) && (curent_place === "cart")) {
         document.querySelector('.cart-next-step').classList.add('disabled');
     }
+    // update the quantity in the footer label
     footer_cart_wrapper_HTML.innerHTML = cart_items.length;
+
+    // call the api for restoring the datas
     update_cart(cart.cart_items_ids);
 }
 //function to update total price
@@ -1373,44 +1479,55 @@ function update_total(el) {
     cart_items.forEach(c => {
         sum += c.count_in_user_cart * c.price;
     });
+    // check if the cart if empty or not
     if (sum != 0) {
+        // ready the styles for an empty cart
         cart_empty_HTML.style.display = "none";
         el.innerHTML = sum;
     }
     else {
+        // revert the styles for the a filled cart
         el.innerHTML = sum;
         cart_main_content.innerHTML = '';
         cart_main_content.appendChild(cart_empty_HTML);
         cart_empty_HTML.style.display = "flex";
     }
+    // update total price for use
     cart.cart_summary.total_price_of_items = sum;
     //console.log(cart);
 }
 
 // function for applying filters on books
 function adjust_books(state) {
+    // resets the filterd book every time
     filtered_book = [];
+    // having datas for filters sepratedly
     let filterd_by_pubs = []
     let filterd_by_sub = []
     let filtered_by_year = [];
+    // changing all the clicked proprty for css reasons
     publishers.map(p => p.clicked = false);
     subjects.map(s => s.clicked = false);
     grades.map(s => s.clicked = false);
+    // find all books with seleceted publishers
     clicked_publishers_ids.forEach(cp => {
         filterd_by_pubs = filterd_by_pubs.concat(books.filter(b => b.publisher === el_by_id(publishers, cp).name));
         let cliked_pub = publishers.filter(p => p.id == cp);
         cliked_pub.map(t => t.clicked = true);
     });
+    // find all books with selected subhject
     clicked_subjects.forEach(sub => {
         filterd_by_sub = filterd_by_sub.concat(books.filter(b => b.subject === el_by_id(subjects, sub).id));
         let clicked_sub = subjects.filter(s => s.id == sub);
         clicked_sub.map(t => t.clicked = true);
     });
+    // find all grades with selected grades
     clicked_grades.forEach(sub => {
         filtered_by_year = filtered_by_year.concat(books.filter(b => b.book_year === el_by_id(grades, sub).id));
         let clicked_sub = grades.filter(s => s.id == sub);
         clicked_sub.map(t => t.clicked = true);
     });
+    // extract the ids of found books by each filter
     let ids_by_pub = [];
     filterd_by_pubs.forEach(b => ids_by_pub.push(b.id));
     let ids_by_sub = [];
@@ -1418,9 +1535,10 @@ function adjust_books(state) {
     let ids_by_year = [];
     filtered_by_year.forEach(b => ids_by_year.push(b.id));
 
-    // operates as or
+    // gathering final ids
     let final_ids = ids_by_pub.concat(ids_by_sub, ids_by_year);
     //operating as and
+    // if all 3 are selected the id should be repeated 3 times
     if ((((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0)) && (ids_by_year.length !== 0))) {
         const my_count = {};
         final_ids.map(id => toString(id));
@@ -1438,6 +1556,7 @@ function adjust_books(state) {
             filtered_book = filtered_book.concat(books.filter(b => b.id === id));
         })
     }
+    // if two of the fields are selected the id should be repeated 2 times
     else {
         if (
             ((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0))
@@ -1463,6 +1582,7 @@ function adjust_books(state) {
                 filtered_book = filtered_book.concat(books.filter(b => b.id === id));
             })
         }
+        // if only one is clicked we should render according to the one set of ids which all are unique
         else if ((ids_by_pub.length !== 0) || (ids_by_sub.length !== 0) || (ids_by_year.length !== 0)) {
             final_ids.forEach(id => {
                 filtered_book = filtered_book.concat(books.filter(b => b.id === id));
@@ -1481,7 +1601,7 @@ function el_by_id(arr, id) {
     });
     return my_return;
 }
-
+// a function to send the datas back to the backend and get a response
 function update_cart(ids) {
     //console.log(cart);
     axios
@@ -1489,6 +1609,7 @@ function update_cart(ids) {
         //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
+            //console.log(cart);
         })
         .catch(err => {
             global_err = err;
