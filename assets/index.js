@@ -1276,6 +1276,10 @@ function render_final_stage_cart(cart_items, discount, url) {
     `;
     main_area.innerHTML = final_cart_stage_content;
 
+    const pay_btn = document.querySelector('.pay-btn-wrapper');
+    pay_btn.addEventListener('click', () => {
+        close_webapp();
+    });
     // * same back btn logic 
     const back_btn = document.querySelector('.back');
     address_to_here += "finalStage/";
