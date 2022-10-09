@@ -1257,7 +1257,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                             </div>
                         </div>
-                        <a href="${url}" class="pay-btn-wrapper">
+                        <a href="${url}" class="pay-btn-wrapper" target="_blank">
                             <span class="pay-amount">
                                 پرداخت
                                 <span class="amount">
@@ -1278,6 +1278,7 @@ function render_final_stage_cart(cart_items, discount, url) {
 
     const pay_btn = document.querySelector('.pay-btn-wrapper');
     pay_btn.addEventListener('click', () => {
+        //console.log('i am funcking clicked');
         close_webapp();
     });
     // * same back btn logic 
