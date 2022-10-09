@@ -88,6 +88,8 @@ let classes_btn = [];
 let books_wrapper = [];
 // the book page back btn (for now)
 let back_btn = [];
+// a consatant for the search icon
+let search_btn = [];
 // filter in book page about publishers
 let book_publisher = [];
 // filter in book page about subject of books
@@ -116,15 +118,17 @@ let pay_btn_wrapper = [];
 let global_err = "I am empty for now";
 // publishers filter is filled once (bad idea !)
 let is_filled = false;
+// search item is open
+let is_search_open = false;
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
-const us_id = window.Telegram.WebApp.initData;
+//const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-//const final_id = "341393410";
+//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+const final_id = "341393410";
 
-
+// ! loading complete method
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
@@ -147,6 +151,17 @@ document.addEventListener("DOMContentLoaded", () => {
             el_by_id(subjects, clicked_subjects[0]).clicked = true;
         })
         .catch((err) => console.log(err));
+    // getting books 
+    axios
+        .get("https://daryaftyar.ir/storeV2/books")
+        .then((res) => {
+            // filling the main books varibale
+            books = res.data;
+            // filling books according to the users data
+            needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
+            //render_books(needed_books);
+        })
+        .catch((err) => console.log(err));
     // getting users cart items (with the id we have)
     axios
         .get(`https://daryaftyar.ir/storeV2/cart/${final_id}`)
@@ -160,15 +175,6 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
-        })
-        .catch((err) => console.log(err));
-    axios
-        .get("https://daryaftyar.ir/storeV2/books")
-        .then((res) => {
-            // filling the main books varibale
-            books = res.data;
-            // filling books according to the users data
-            needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
         })
         .catch((err) => console.log(err));
     axios
@@ -327,6 +333,9 @@ function render_books(books) {
                 <div class="books-page-title">
                     کتاب ها
                 </div>
+                <div class="search-icon">
+                    <i class="fa fa-search"></i>
+                </div>
             </div>
             <div class="book-order">
                 <div class="order-by-wrapper">
@@ -379,6 +388,12 @@ function render_books(books) {
     back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
         map_handler();
+    });
+
+    // use the search btn to open search
+    search_btn = document.querySelector('.search-icon');
+    search_btn.addEventListener('click', () => {
+        search_books_opener();
     });
 
     //activating publishers filter
@@ -1396,6 +1411,17 @@ function book_clicked(e) {
         // render the single book 
         render_single_book(clicked_book);
     }
+    else if (e.target.id.includes('search-')) {
+        const splited = e.target.id.split("-");
+        // turn the id from html id to an integer
+        const id = parseInt(splited[splited.length - 1]);
+        // find the clicked book from books array
+        clicked_book = books.find(book => {
+            return book.id === id;
+        });
+        // render the single book 
+        render_single_book(clicked_book);
+    }
 }
 
 // update quantity
@@ -1645,6 +1671,64 @@ function activate_modal_single_book(state) {
             modal_wrapper.innerHTML = " ";
         }, 2000)
     }
+}
+
+// search method opener
+function search_books_opener() {
+    if (!is_search_open) {
+        const modal_for_search = document.createElement('div');
+        modal_for_search.classList.add('search-modal');
+        modal_for_search.innerHTML = `
+            <input type="text" class="search-books" placeholder="جستجو ..."/>
+            <div class="search-result">
+
+            </div>
+        `;
+        document.querySelector('body').appendChild(modal_for_search);
+        is_search_open = true;
+        //document.querySelector('body').style.overflowY = "hidden";
+        search_books();
+    }
+    else {
+        document.querySelector('.search-modal').remove();
+        //document.querySelector('body').style.overflowY = "scroll";
+        is_search_open = false;
+    }
+}
+// function to search and fill the search modal
+function search_books() {
+    const search_result = document.querySelector('.search-result');
+    const search_input = document.querySelector('.search-books');
+    search_input.addEventListener("input", ({ target }) => {
+        search_result.innerHTML = "نتایج یافت شده : <br />";
+        let searched_books = [];
+        if (target.value.length > 2) {
+            books.forEach(book => {
+                if (book.name.includes(target.value)) {
+                    searched_books.push(book);
+                }
+            });
+            searched_books.forEach(s => {
+                const result = `
+                    <div class="search-result-item" id="search-${s.id}">
+                        <img src="${s.img_url}" id="search-img-${s.id}"/>
+                        <span id="search-txt-${s.id}">
+                            ${s.name}
+                        </span>
+                    </div>
+                `;
+                search_result.innerHTML += result;
+            });
+            const all_searched_items = document.querySelectorAll(".search-result-item")
+            all_searched_items.forEach(si => {
+                si.addEventListener("click", (e) => {
+                    //console.log(e.target.id, is_filled);
+                    //search_books_opener();
+                    book_clicked(e);
+                });
+            })
+        }
+    });
 }
 // etc
 

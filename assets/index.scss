@@ -121,11 +121,59 @@ body {
     }
 }
 /* first page styles */
+.search-modal {
+    position: fixed;
+    top: 100px;
+    left: 2vw;
+    width: 96vw;
+    min-height: 100px;
+    max-height: calc(100vh - 150px);
+    overflow-y: scroll;
+    z-index: 99;
+    @include styler($mainColor , $extraColor1 , 15px, 50px);
+    padding: 20px 0;
+
+    input {
+        display: block;
+        margin: 0 auto 30px;
+        width: 80%;
+        height: 50px;
+        border: 2px solid $mainColor;
+        border-radius: 20px;
+        outline: none !important;
+        font-size: 15px;
+        font-family: "main-font";
+    }
+
+    .search-result {
+        position: relative;
+        @include flexMixin(column, center, center);
+    }
+
+    .search-result-item {
+        @include flexMixin(row, flex-start, center);
+        border-bottom: 1px solid $mainColor;
+        border-radius: 40px;
+        width: 90%;
+        padding: 0 30px;
+        margin: 20px 0px;
+        img {
+            width: 60px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0px 10px 15px 0 #00000080;
+        }
+        span {
+            margin-right: 20px;
+            font-size: 15px;
+        }
+
+    }
+}
 
 /* books page styles */
 
 .books-wrapper{
-    
     .books-header{
         position: relative;
         width: 100%;
@@ -144,6 +192,21 @@ body {
             right: -3px;
         }
     }
+    .search-icon{
+        position: absolute;
+        top: 0px;
+        left: 10px;
+        @include styler($mainColor, $background, 20px, 10px);
+        border: 2px solid;
+        width: 40px;
+        height: 40px;
+        @include flexMixin (row, center, center);
+        i {
+            position: relative;
+            right: 0px;
+        }
+    }
+    
     .books-page-title{
         font-size: 40px;
         text-align: center;
