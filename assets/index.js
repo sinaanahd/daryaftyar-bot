@@ -74,6 +74,8 @@ const footer_btn_cart = document.querySelector('.footer-menu.it-3');
 const footer_cart_wrapper_HTML = document.querySelector('.cart-item-number');
 //pause html
 const pause_wrapper = document.querySelector('.pause');
+//a place holder for loading the modals
+const modal_wrapper = document.querySelector('.modal-pacle-holder');
 // variable to know where where you lastly
 let address_to_here = "home/";
 // the variable for accssesing the wallet amount increasing
@@ -201,10 +203,6 @@ footer_btn_cart.addEventListener('click', () => {
 footer_btn_checkout.addEventListener('click', () => {
     // page is not ready so we have to render coming soon page
     render_coming_soon_page();
-    setTimeout(() => {
-        //console.log("sina");
-        window.Telegram.WebApp.close();
-    }, 1000)
 });
 
 // ! functions
@@ -1098,7 +1096,8 @@ function render_single_book(book) {
         </div>
     `;
     // have the books content as the main content
-    main_area.innerHTML = single_book_content;
+    modal_wrapper.innerHTML = single_book_content;
+    activate_modal_single_book("active");
     // have the book ul as a wrapper for entring the details
     const details_DOM = document.querySelector('.book-details-ul');
     // reading each book details
@@ -1161,9 +1160,11 @@ function render_single_book(book) {
     });
 
     // * same as always having the back btn map the web app
-    const back_btn = document.querySelector('.back');
+    const back_btn = document.querySelector('.modal-pacle-holder .back');
     address_to_here = "home/book/single-book/";
     back_btn.addEventListener('click', () => {
+        // disactive modal
+        activate_modal_single_book("disactive");
         map_handler();
     });
 }
@@ -1281,19 +1282,6 @@ function render_final_stage_cart(cart_items, discount, url) {
     back_btn.addEventListener('click', () => {
         map_handler();
     });
-
-    // ! note and test this part
-    // pay_btn_wrapper = document.querySelector('.pay-btn-wrapper');
-    // pay_btn_wrapper.addEventListener('click', () => {
-    //     axios
-    //         .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
-    //         //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, cart.cart_items_ids)
-    //         .then(res => {
-    //             //console.log(res.data);
-    //             global_err = res.data;
-    //         })
-    //         .catch(err => global_err = err);
-    // })
     // the button that leads you back to the cart items review
     const view_btn = document.querySelector('.view-btn');
     view_btn.addEventListener("click", () => {
@@ -1631,6 +1619,26 @@ function load_pause(state) {
     }
     else {
         pause_wrapper.style.display = "none";
+    }
+}
+// close webapp 
+function close_webapp() {
+    setTimeout(() => {
+        window.Telegram.WebApp.close();
+    }, 1000)
+}
+// function to prepare modal for single books
+function activate_modal_single_book(state) {
+    if (state === "active") {
+        modal_wrapper.style.zIndex = "999";
+        modal_wrapper.style.top = "0";
+    }
+    else {
+        modal_wrapper.style.top = "-100vh";
+        setTimeout(() => {
+            modal_wrapper.style.zIndex = "-1";
+            modal_wrapper.innerHTML = " ";
+        }, 2000)
     }
 }
 // etc

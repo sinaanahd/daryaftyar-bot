@@ -565,7 +565,18 @@ body {
 
 
 /* single prod page styles */
-
+.modal-pacle-holder{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    z-index: -1;
+    transition: all ease-in-out 0.5s;
+    background-color: $background;
+    overflow-y: scroll;
+    padding: 30px 10px;
+}
 .single-prod-wrapper{
     @include flexMixin(column, center, center);
     width: 100%;
