@@ -72,6 +72,8 @@ const footer_btn_home = document.querySelector('.footer-menu.it-2');
 const footer_btn_cart = document.querySelector('.footer-menu.it-3');
 //cart count wrapper
 const footer_cart_wrapper_HTML = document.querySelector('.cart-item-number');
+//pause html
+const pause_wrapper = document.querySelector('.pause');
 // variable to know where where you lastly
 let address_to_here = "home/";
 // the variable for accssesing the wallet amount increasing
@@ -118,6 +120,8 @@ let is_filled = false;
 const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
 const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+//const final_id = "341393410";
+
 
 //documnet load to render first page
 document.addEventListener("DOMContentLoaded", () => {
@@ -197,6 +201,10 @@ footer_btn_cart.addEventListener('click', () => {
 footer_btn_checkout.addEventListener('click', () => {
     // page is not ready so we have to render coming soon page
     render_coming_soon_page();
+    setTimeout(() => {
+        //console.log("sina");
+        window.Telegram.WebApp.close();
+    }, 1000)
 });
 
 // ! functions
@@ -1603,17 +1611,27 @@ function el_by_id(arr, id) {
 }
 // a function to send the datas back to the backend and get a response
 function update_cart(ids) {
-    //console.log(cart);
+    load_pause('active');
     axios
         .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, ids)
         //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
+            load_pause('disactive');
             //console.log(cart);
         })
         .catch(err => {
             global_err = err;
         })
+}
+// a function to disable webapp untill the datas return from backend
+function load_pause(state) {
+    if (state === "active") {
+        pause_wrapper.style.display = "flex";
+    }
+    else {
+        pause_wrapper.style.display = "none";
+    }
 }
 // etc
 

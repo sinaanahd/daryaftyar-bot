@@ -35,6 +35,27 @@ body {
     animation-iteration-count: infinite;
     animation-direction: alternate-reverse;
 }
+.pause{
+    width: 100vw;
+    height: 100vh;
+    color: $mainColor;
+    font-size : 90px;
+    @include flexMixin(row,center,center);
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: $background;
+    opacity: 0.6;
+    i{
+        animation-name: spinMF;
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        animation-direction: alternate-reverse;
+    }
+    z-index: 999999;
+    display: none;
+}
 .main-area{
     padding:30px 10px 0;
     margin-bottom: 100px;
