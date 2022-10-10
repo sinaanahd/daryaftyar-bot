@@ -123,10 +123,10 @@ let is_search_open = false;
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
-//const us_id = window.Telegram.WebApp.initData;
+const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-const final_id = "341393410";
+const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+//const final_id = "341393410";
 
 // ! loading complete method
 //documnet load to render first page
@@ -322,7 +322,8 @@ function render_first_page() {
 //render book page
 function render_books(books) {
     //map address
-    address_to_here += "book/";
+    address_to_here = stop_repeatation_in_addres("book", address_to_here) ? address_to_here + "book/" : address_to_here;
+    //address_to_here += "book/";
     // creating static contents of the book page
     const static_contents = `
      <div class="books-wrapper">
@@ -387,13 +388,21 @@ function render_books(books) {
     // activating back btn
     back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
-        map_handler();
+        if (!is_search_open) {
+            map_handler();
+        }
+        else {
+            //console.log(is_search_open)
+            search_books_opener();
+            //map_handler();
+        }
     });
 
     // use the search btn to open search
     search_btn = document.querySelector('.search-icon');
     search_btn.addEventListener('click', () => {
         search_books_opener();
+        //address_to_here += "search/";
     });
 
     //activating publishers filter
@@ -631,7 +640,8 @@ function publisher_filter(publishers) {
         });
     });
     // updatign the addres to have users place 
-    address_to_here = "home/book/filter/";
+    address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
+    //address_to_here += "filter/";
     // activating save and return button 
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
         map_handler();
@@ -662,7 +672,8 @@ function grade_filter(grades) {
             clicked_grades_identifier(e);
         });
     });
-    address_to_here = "home/book/filter/";
+    address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
+    //address_to_here += "filter/";
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
         map_handler();
     });
@@ -692,7 +703,8 @@ function subject_filter(subjects) {
             clicked_subjects_identifier(e);
         });
     });
-    address_to_here = "home/book/filter/";
+    address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
+    //address_to_here += "filter/";
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
         map_handler();
     });
@@ -791,7 +803,7 @@ function clear_stage(element) {
 // function to render shopping cart
 // ! the reason for the function value is cart1 is because of global variable with name of cart 
 function render_shopping_cart(cart1) {
-
+    address_to_here = stop_repeatation_in_addres("cart", address_to_here) ? address_to_here + "cart/" : address_to_here;
     // creating content for the shopping cart (HTML template)
     const shopping_cart_HTML = `
         <div class="cart-wrapper">
@@ -867,14 +879,15 @@ function render_shopping_cart(cart1) {
     const back_to_shop_btn = document.querySelector('.go-to-book-page');
     back_to_shop_btn.addEventListener("click", () => {
         // have the filter's results saved as an out come
-        if (filtered_book.length === 0) {
-            render_books(needed_books);
-        }
-        else {
-            render_books(filtered_book);
-        }
+        // if (filtered_book.length === 0) {
+        //     render_books(needed_books);
+        // }
+        // else {
+        //     render_books(filtered_book);
+        // }
+        map_handler();
         // have the address updated
-        address_to_here = "home/books/";
+        //address_to_here += "books/";
     });
 
 
@@ -988,12 +1001,12 @@ function render_shopping_cart(cart1) {
         ?  cause the cart item is accessible from all part of web app it needs to be stopped after 
         ? one add in the address to here so I used the stop repatation function
     */
-    stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
+    //stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
 
     // activating the back button
     const back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
-        map_handler(address_to_here);
+        map_handler();
     });
 }
 
@@ -1046,7 +1059,8 @@ function render_wallet(user) {
     `;
     main_area.innerHTML = wallet_content;
     const back_btn = document.querySelector('.back');
-    address_to_here = "home/wallet/";
+    address_to_here = stop_repeatation_in_addres("wallet", address_to_here) ? address_to_here + "wallet/" : address_to_here;
+    //address_to_here += "wallet/";
     back_btn.addEventListener('click', () => {
         map_handler();
     });
@@ -1176,7 +1190,8 @@ function render_single_book(book) {
 
     // * same as always having the back btn map the web app
     const back_btn = document.querySelector('.modal-pacle-holder .back');
-    address_to_here = "home/book/single-book/";
+    address_to_here = stop_repeatation_in_addres("single-book", address_to_here) ? address_to_here + "single-book/" : address_to_here;
+    //address_to_here += "single-book/";
     back_btn.addEventListener('click', () => {
         // disactive modal
         activate_modal_single_book("disactive");
@@ -1298,7 +1313,8 @@ function render_final_stage_cart(cart_items, discount, url) {
     });
     // * same back btn logic 
     const back_btn = document.querySelector('.back');
-    address_to_here += "finalStage/";
+    address_to_here = stop_repeatation_in_addres("finalStage", address_to_here) ? address_to_here + "finalStage/" : address_to_here;
+    //address_to_here += "finalStage/";
     back_btn.addEventListener('click', () => {
         map_handler();
     });
@@ -1323,17 +1339,49 @@ function render_sort_by_filter() {
 // function for redirecting the user to the required page
 function map_handler() {
     let address = address_to_here.split("/");
-
     let len = address.length - 2;
+    //console.log(address_to_here, address);
+    switch (address[len - 1]) {
+        case "book":
+            if (filtered_book.length === 0) {
+                render_books(needed_books);
+            }
+            else {
+                render_books(filtered_book);
+            }
+            address_to_here = address_to_here.replace((address[len] + "/"), "");
+            //console.log(address_to_here[len])
+            break;
+        case "cart":
+            render_shopping_cart(cart_items);
+            address_to_here = address_to_here.replace((address[len] + "/"), "");
+            break;
+        case "single-book":
+            if (filtered_book.length === 0) {
+                render_books(needed_books);
+            }
+            else {
+                render_books(filtered_book);
+            }
+            address_to_here = address_to_here.replace((address[len] + "/"), "");
+            break;
+        case "home":
+            render_first_page()
+            address_to_here = address_to_here.replace((address[len] + "/"), "");
+            break;
+    }
+    //console.log(address_to_here);
     // if we are in book page
+    /*
+    ! the old mapping method
     if (address[len] === "book" && address[len - 1] === "home") {
         render_first_page();
-        address_to_here = "home/"
+        address_to_here = address_to_here.replace('book/', "");
     }
     // if we are in filters and book page
     else if (address[len] === "filter" && address[len - 1] === "book") {
         render_books(filtered_book);
-        address_to_here = "home/book/";
+        address_to_here.replace('filter/', "");
     }
     // if we are in cart page from home
     else if (address[len] === "cart" && address[len - 1] === "home") {
@@ -1371,6 +1419,7 @@ function map_handler() {
         render_shopping_cart(cart_items);
         address_to_here = "home/cart/";
     }
+    */
 }
 
 // coming soon
@@ -1687,6 +1736,9 @@ function search_books_opener() {
         document.querySelector('body').appendChild(modal_for_search);
         is_search_open = true;
         //document.querySelector('body').style.overflowY = "hidden";
+        setTimeout(() => {
+            modal_for_search.style.top = "100px";
+        }, 100)
         search_books();
     }
     else {

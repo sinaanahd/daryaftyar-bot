@@ -1,6 +1,9 @@
 @import "variables";
 @import "mixins";
 @import url(./fonts/font.css);
+html {
+    scroll-behavior: smooth;
+}
 body {
     padding: 0;
     margin: 0;
@@ -21,7 +24,9 @@ body {
         padding: 0;
     }
 }
-
+a{
+    text-decoration: none!important;
+}
 
 .loading{
     width: 100vw;
@@ -60,7 +65,19 @@ body {
     padding:30px 10px 0;
     margin-bottom: 100px;
 }
+/* top btn */
+.move-to-top {
+    width: 60px;
+    height: 60px;
+    @include styler($background , $mainColor , 40px, 50%);
+    position: fixed;
+    right: 10px;
+    bottom: 60px;
+    z-index: 9999;
+    @include flexMixin(row, center, center);
+}
 
+/* top btn */
 /* first page styles */
 @keyframes spinMF {
     from{
@@ -121,9 +138,10 @@ body {
     }
 }
 /* first page styles */
+/* search modal */
 .search-modal {
     position: fixed;
-    top: 100px;
+    top: -100vh;
     left: 2vw;
     width: 96vw;
     min-height: 100px;
@@ -132,7 +150,7 @@ body {
     z-index: 99;
     @include styler($mainColor , $extraColor1 , 15px, 50px);
     padding: 20px 0;
-
+    transition: all ease-in-out 0.6s;
     input {
         display: block;
         margin: 0 auto 30px;
@@ -143,6 +161,7 @@ body {
         outline: none !important;
         font-size: 15px;
         font-family: "main-font";
+        padding: 10px;
     }
 
     .search-result {
@@ -170,6 +189,8 @@ body {
 
     }
 }
+/* search modal */
+
 
 /* books page styles */
 
