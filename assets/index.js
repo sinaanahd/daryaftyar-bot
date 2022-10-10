@@ -1738,13 +1738,16 @@ function search_books_opener() {
         //document.querySelector('body').style.overflowY = "hidden";
         setTimeout(() => {
             modal_for_search.style.top = "100px";
-        }, 100)
+        }, 100);
         search_books();
     }
     else {
-        document.querySelector('.search-modal').remove();
-        //document.querySelector('body').style.overflowY = "scroll";
         is_search_open = false;
+        document.querySelector('.search-modal').style.top = "-100vh";
+        setTimeout(() => {
+            document.querySelector('.search-modal').remove();
+        }, 700);
+        //document.querySelector('body').style.overflowY = "scroll";
     }
 }
 // function to search and fill the search modal

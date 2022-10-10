@@ -196,12 +196,17 @@ a{
 
 .books-wrapper{
     .books-header{
-        position: relative;
-        width: 100%;
+        position: fixed;
+        width: 100vw;
+        background-color: $background;
+        right: 0;
+        top: 0px;
+        padding-top: 40px;
+        z-index: 99;
     }
     .back{
         position: absolute;
-        top: 0px;
+        top: 40px;
         right:10px;
         @include styler($mainColor,$background,40px,10px);
         border: 2px solid;
@@ -215,7 +220,7 @@ a{
     }
     .search-icon{
         position: absolute;
-        top: 0px;
+        top: 40px;
         left: 10px;
         @include styler($mainColor, $background, 20px, 10px);
         border: 2px solid;
@@ -240,6 +245,7 @@ a{
         padding: 10px 20px;
         @include styler($background,unset,20px,50px);
         background-image: $gradiant;
+        margin: 100px 0 0;
     }
     .main-content{
         @include flexMixin(column,center,center);
@@ -759,7 +765,7 @@ a{
         @include flexMixin(row,space-between,center);
         width: 100%;
         text-align: center;
-        margin: 50px 0 50px;
+        margin: 50px 0 100px;
         *{
             flex: 1
         }

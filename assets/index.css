@@ -203,11 +203,16 @@ a {
 /* search modal */
 /* books page styles */
 .books-wrapper .books-header {
-  position: relative;
-  width: 100%; }
+  position: fixed;
+  width: 100vw;
+  background-color: #e8e8a6;
+  right: 0;
+  top: 0px;
+  padding-top: 40px;
+  z-index: 99; }
 .books-wrapper .back {
   position: absolute;
-  top: 0px;
+  top: 40px;
   right: 10px;
   color: #937602;
   background-color: #e8e8a6;
@@ -225,7 +230,7 @@ a {
     right: -3px; }
 .books-wrapper .search-icon {
   position: absolute;
-  top: 0px;
+  top: 40px;
   left: 10px;
   color: #937602;
   background-color: #e8e8a6;
@@ -257,7 +262,8 @@ a {
   background-color: unset;
   font-size: 20px;
   border-radius: 50px;
-  background-image: linear-gradient(to left, #a88b2d, #937600); }
+  background-image: linear-gradient(to left, #a88b2d, #937600);
+  margin: 100px 0 0; }
 .books-wrapper .main-content {
   display: flex;
   flex-direction: column;
@@ -774,7 +780,7 @@ a {
     align-items: center;
     width: 100%;
     text-align: center;
-    margin: 50px 0 50px; }
+    margin: 50px 0 100px; }
     .single-prod-wrapper .single-prod-footer * {
       flex: 1; }
     .single-prod-wrapper .single-prod-footer .more, .single-prod-wrapper .single-prod-footer .less, .single-prod-wrapper .single-prod-footer .quantity {
