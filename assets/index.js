@@ -1,3 +1,4 @@
+document.cookie = 'cookie2=value2; SameSite=None; Secure';
 // ! variables
 
 // user global variable 
@@ -116,10 +117,18 @@ let clicked_subjects = [];
 let pay_btn_wrapper = [];
 //global error for test
 let global_err = "I am empty for now";
-// publishers filter is filled once (bad idea !)
-let is_filled = false;
+// all filters is filled once (bad idea !)
+let is_filled_pub = false;
+let is_filled_sub = false;
+let is_filled_year = false;
+// filter is activated
+let filter_activated = false;
 // search item is open
 let is_search_open = false;
+// page count
+let curent_page = 1;
+// html documnet for pagination
+let pagination_HTML = [];
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
@@ -144,11 +153,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // render app first page
             render_first_page();
             // activating filters for the books page filter
-            clicked_grades.push(user.year);
-            clicked_subjects.push(user.subject);
+            //clicked_grades.push(user.year);
+            //clicked_subjects.push(user.subject);
             // making the first filter btn active
-            el_by_id(grades, clicked_grades[0]).clicked = true;
-            el_by_id(subjects, clicked_subjects[0]).clicked = true;
+            //el_by_id(grades, clicked_grades[0]).clicked = true;
+            //el_by_id(subjects, clicked_subjects[0]).clicked = true;
         })
         .catch((err) => console.log(err));
     // getting books 
@@ -158,7 +167,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // filling the main books varibale
             books = res.data;
             // filling books according to the users data
-            needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
+            //needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
+            needed_books = books.slice(0, 30);
+            //console.log(books.length);
+            //needed_books = books;
             //render_books(needed_books);
         })
         .catch((err) => console.log(err));
@@ -190,6 +202,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 // rendring first page via menu btn
 footer_btn_home.addEventListener('click', () => {
+    if (is_search_open) {
+        search_books_opener();
+    }
+    activate_modal_single_book("disactive");
     render_first_page();
 });
 //rendering cart via menu btn
@@ -198,7 +214,10 @@ footer_btn_cart.addEventListener('click', () => {
     clearPage();
     // calling render shopping cart via cart items filled with back end data
     render_shopping_cart(cart_items);
-
+    if (is_search_open) {
+        search_books_opener();
+    }
+    activate_modal_single_book("disactive")
     // checking the cart items length and calling the update total method for adjusting the situtaion
     if (cart_items.length === 0) {
         const total_price_HTML = document.querySelector('.price');
@@ -302,11 +321,11 @@ function render_first_page() {
     // adding event listener to books btn
     books_btn.addEventListener('click', () => {
         // if filters are active the main page should be loaded with filtered books
-        if (filtered_book.length === 0) {
-            render_books(needed_books);
+        if (filter_activated) {
+            render_books(needed_books.slice(0, 30));
         }
         else {
-            render_books(filtered_book);
+            render_books(needed_books);
         }
     });
 
@@ -320,7 +339,7 @@ function render_first_page() {
 }
 
 //render book page
-function render_books(books) {
+function render_books(books1) {
     //map address
     address_to_here = stop_repeatation_in_addres("book", address_to_here) ? address_to_here + "book/" : address_to_here;
     //address_to_here += "book/";
@@ -353,19 +372,19 @@ function render_books(books) {
                     <span class="filters fil-1">
                         انتشارات 
                         <span class="sub-filter">
-                            ${!is_filled ? "( همه )" : (clicked_publishers_ids.length === publishers.length) ? "( همه )" : " ( " + clicked_publishers_ids.length + " ) "}    
+                            ${!is_filled_pub ? "( همه )" : (clicked_publishers_ids.length === publishers.length) ? "( همه )" : " ( " + clicked_publishers_ids.length + " ) "}    
                         </span>
                     </span>
                     <span class="filters fil-2">
                         رشته 
                         <span class="sub-filter">
-                            ${clicked_subjects.length === subjects.length ? "( همه )" : " ( " + clicked_subjects.length + " ) "}    
+                            ${!is_filled_sub ? "( همه )" : (clicked_subjects.length === subjects.length) ? "( همه )" : " ( " + clicked_subjects.length + " ) "}    
                         </span>
                     </span>
                     <span class="filters fil-3">
                         پایه
                         <span class="sub-filter">
-                            ${clicked_grades.length === grades.length ? "( همه )" : " ( " + clicked_grades.length + " ) "}    
+                            ${!is_filled_year ? "( همه )" : (clicked_grades.length === grades.length) ? "( همه )" : " ( " + clicked_grades.length + " ) "}    
                         </span>
                     </span>
                 </div>
@@ -374,6 +393,8 @@ function render_books(books) {
                 <div class="books">
                    
                 </div>
+            </div>
+            <div class="page-count">
             </div>
         </div>
     `;
@@ -385,6 +406,14 @@ function render_books(books) {
     // having the books page main content html
     books_main_content = document.querySelector('.main-content')
 
+    // fill the pagination 
+    pagination_HTML = document.querySelector('.page-count');
+    if (filter_activated) {
+        render_pagination(needed_books);
+    }
+    else {
+        render_pagination(books);
+    }
     // activating back btn
     back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
@@ -464,9 +493,9 @@ function render_books(books) {
         render_coming_soon_page();
     });
     // check if the books are empty or not ( because of an error or th filters )
-    if (books.length !== 0) {
+    if (books1.length !== 0) {
         // read each book and render it to the app
-        books.forEach((book) => {
+        books1.forEach((book) => {
             const book_HTML = `
                     <div class="book-item" id="book-${book.id}">
                             <img src="${book.img_url}" alt="" class="book-img" id="book-img-${book.id}"/>
@@ -743,7 +772,7 @@ function clicked_publishers_identifier(e) {
          ? without having the force to fill the ids array
          ! maybe a refactor be necessary here
         */
-        is_filled = true;
+        is_filled_pub = true;
     }
     // fill the paranteses next to filter label in the html with clicked items length
     document.querySelector('.fil-1 .sub-filter').innerHTML = `( ${clicked_publishers_ids.length} )`;
@@ -768,6 +797,7 @@ function clicked_subjects_identifier(e) {
     }
     else {
         clicked_subjects.push(clicked_subject);
+        is_filled_sub = true;
     }
     document.querySelector('.fil-2 .sub-filter').innerHTML = `( ${clicked_subjects.length} )`;
     adjust_books("sub");
@@ -790,6 +820,7 @@ function clicked_grades_identifier(e) {
     }
     else {
         clicked_grades.push(clicked_grade);
+        is_filled_year = true;
     }
     document.querySelector('.fil-3 .sub-filter').innerHTML = `( ${clicked_grades.length} )`;
     adjust_books("year");
@@ -885,7 +916,13 @@ function render_shopping_cart(cart1) {
         // else {
         //     render_books(filtered_book);
         // }
-        map_handler();
+        //map_handler();
+        if (filter_activated) {
+            render_books(needed_books.slice(0, 30));
+        }
+        else {
+            render_books(needed_books);
+        }
         // have the address updated
         //address_to_here += "books/";
     });
@@ -1343,12 +1380,17 @@ function map_handler() {
     //console.log(address_to_here, address);
     switch (address[len - 1]) {
         case "book":
-            if (filtered_book.length === 0) {
-                render_books(needed_books);
+            //if (filtered_book.length === 0) {
+            if (filter_activated) {
+                render_books(needed_books.slice(0, 30));
             }
             else {
-                render_books(filtered_book);
+                render_books(needed_books);
             }
+            // }
+            // else {
+            //     render_books(filtered_book);
+            // }
             address_to_here = address_to_here.replace((address[len] + "/"), "");
             //console.log(address_to_here[len])
             break;
@@ -1357,12 +1399,18 @@ function map_handler() {
             address_to_here = address_to_here.replace((address[len] + "/"), "");
             break;
         case "single-book":
-            if (filtered_book.length === 0) {
-                render_books(needed_books);
+            //if (filtered_book.length === 0) {
+            if (filter_activated) {
+                render_books(needed_books.slice(0, 30));
             }
             else {
-                render_books(filtered_book);
+                render_books(needed_books);
             }
+            //render_books(needed_books);
+            //}
+            //else {
+            //  render_books(filtered_book);
+            //}
             address_to_here = address_to_here.replace((address[len] + "/"), "");
             break;
         case "home":
@@ -1575,6 +1623,8 @@ function update_total(el) {
 
 // function for applying filters on books
 function adjust_books(state) {
+    // for declaring the filter is used
+    filter_activated = true;
     // resets the filterd book every time
     filtered_book = [];
     // having datas for filters sepratedly
@@ -1665,6 +1715,11 @@ function adjust_books(state) {
             });
         }
     }
+    curent_page = 1;
+    needed_books = [...filtered_book];
+    if (needed_books.length === 0) {
+        filter_activated = false;
+    }
     //console.log(filtered_book);
 }
 
@@ -1735,7 +1790,7 @@ function search_books_opener() {
         `;
         document.querySelector('body').appendChild(modal_for_search);
         is_search_open = true;
-        //document.querySelector('body').style.overflowY = "hidden";
+        document.querySelector('body').style.overflowY = "hidden";
         setTimeout(() => {
             modal_for_search.style.top = "100px";
         }, 100);
@@ -1744,6 +1799,7 @@ function search_books_opener() {
     else {
         is_search_open = false;
         document.querySelector('.search-modal').style.top = "-100vh";
+        document.querySelector('body').style.overflowY = "unset";
         setTimeout(() => {
             document.querySelector('.search-modal').remove();
         }, 700);
@@ -1784,6 +1840,30 @@ function search_books() {
             })
         }
     });
+}
+function render_pagination(bookarr) {
+    //console.log(bookarr)
+    let book_len = Math.ceil(bookarr.length / 30);
+    for (let i = 0; i < book_len; i++) {
+        let page_num_content = `
+        <span class="page-number ${curent_page === i + 1 ? "active-page" : " "}" id="page-id-${i}">
+        ${i + 1}
+        </span>
+        `;
+        pagination_HTML.innerHTML += page_num_content;
+    }
+    let all_page_numbers = [...document.querySelectorAll(".page-number")];
+    all_page_numbers.forEach((pn) => {
+        pn.addEventListener('click', ({ target }) => {
+            let clicked_id = parseInt(target.id.split("-")[2]);
+            clicked_page_activator(clicked_id, bookarr)
+        });
+    });
+}
+function clicked_page_activator(id, bookarr) {
+    curent_page = id + 1;
+    bookarr = bookarr.slice(id * 30, id * 30 + 30);
+    render_books(bookarr);
 }
 // etc
 

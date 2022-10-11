@@ -274,18 +274,6 @@ a{
     }
     .active-filter{
         color: $greenColor;
-        // &::after{
-        //     display: block;
-        //     position: absolute;
-        //     width: 115px;
-        //     height: 35px;
-        //     border-radius: 10px;
-        //     background-color: $mainColor;
-        //     content: ' ';
-        //     z-index: -1;
-        //     top:10px;
-        //     right: 5px;
-        // }
     }
     .fil-2{
         border-right: 2px solid $mainColor;
@@ -299,54 +287,48 @@ a{
         margin-top: 40px;
     }
     .books{
-        @include flexMixin(column,center,center);
+        //@include flexMixin(column,center,center);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-row-gap: 20px;
+        column-gap: 10px;
         width: 100%;
         .book-item{
-            @include flexMixin(column,center,center);
+            @include flexMixin(column,space-between,center);
             position: relative;
             background-color: $extraColor1;
             padding: 90px 0 10px;
             border-radius: 20px;
             text-align: center;
-            width: 80%;
-            margin-top: 200px;
-            // &::after{
-            //     position: absolute;
-            //     width: 250px;
-            //     height: 100px;
-            //     content: '';
-            //     border-radius: 50px;
-            //     background-color: $mainColor;
-            //     z-index: 2;
-            //     margin: -250px 0px 0 0;
-            // }
+            width: 100%;
+            margin-top: 55px;
         }
         img{
-            width: 180px;
+            width: 100px;
             border-radius: 15px;
             position: absolute;
             z-index: 3;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
             box-shadow:0px 10px 15px 0 #00000080;
-            top: -170px;
+            top: -55px;
         }
         .publisher{
             font-size: 15px;
             color: #e8e8a6;
         }
         .book-name{
-            font-size: 25px;
-            margin:  0 0 20px ;
+            font-size: 16px;
+            margin: -10px 0 5px;
         }
         .book-price{
-            @include styler($mainColor,$background,20px,10px);
-            border: 2px solid;
-            padding: 5px 15px;
+            @include styler($mainColor,$background,15px,10px);
+            border: 1px solid;
+            padding: 0px 5px;
         }
         .action-btns{
             @include flexMixin(row,space-evenly,center);
-            width: 60%;
-            margin: 30px 0 10px;
+            width: 90%;
+            margin: 10px 0;
             *{
                 flex : 1;
             }
@@ -402,6 +384,25 @@ a{
     .disabled{
         &::before {
             background-color: $background!important;
+        }
+    }
+    .page-count{
+        display: grid;
+        grid-template-columns: repeat(10 , 1fr);
+        direction: ltr;
+        margin: 50px 0;
+        row-gap: 10px;
+        .page-number{
+            @include styler($mainColor , $background , 15px , 5px);
+            border: 1px solid $mainColor;
+            @include flexMixin(row,center,center);
+            width: 30px;
+            height: 30px;
+            padding-top: 4px;
+        }
+        .active-page{
+            color: $background;
+            background-color: $mainColor;
         }
     }
 }
