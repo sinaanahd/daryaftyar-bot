@@ -338,6 +338,8 @@ a {
     color: #e8e8a6; }
   .books-wrapper .books .book-name {
     font-size: 16px;
+    max-height: 35px;
+    overflow-y: scroll;
     margin: -10px 0 5px; }
   .books-wrapper .books .book-price {
     color: #937602;
