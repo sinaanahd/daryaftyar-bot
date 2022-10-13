@@ -205,7 +205,8 @@ footer_btn_home.addEventListener('click', () => {
     if (is_search_open) {
         search_books_opener();
     }
-    activate_modal_single_book("disactive");
+    // activate_modal_single_book("disactive");
+    disactive_modals();
     render_first_page();
 });
 //rendering cart via menu btn
@@ -217,7 +218,8 @@ footer_btn_cart.addEventListener('click', () => {
     if (is_search_open) {
         search_books_opener();
     }
-    activate_modal_single_book("disactive")
+    // activate_modal_single_book("disactive");
+    disactive_modals();
     // checking the cart items length and calling the update total method for adjusting the situtaion
     if (cart_items.length === 0) {
         const total_price_HTML = document.querySelector('.price');
@@ -227,6 +229,7 @@ footer_btn_cart.addEventListener('click', () => {
 //render checkout page via menu btn
 footer_btn_checkout.addEventListener('click', () => {
     // page is not ready so we have to render coming soon page
+    disactive_modals();
     render_coming_soon_page();
 });
 
@@ -340,6 +343,7 @@ function render_first_page() {
 
 //render book page
 function render_books(books1) {
+    disactive_modals();
     //map address
     address_to_here = stop_repeatation_in_addres("book", address_to_here) ? address_to_here + "book/" : address_to_here;
     //address_to_here += "book/";
@@ -442,6 +446,10 @@ function render_books(books1) {
         // calling the publisher filter render method
         publisher_filter(publishers);
 
+
+        // hiding the pagination
+        document.querySelector('.page-count').style.display = "none";
+
         //active-filter actions
 
         //selects all the filters and remove the active class
@@ -460,6 +468,9 @@ function render_books(books1) {
         // calling the subjects render method
         subject_filter(subjects);
 
+        // hiding the pagination
+        document.querySelector('.page-count').style.display = "none";
+
         //selects all the filters and remove the active class
         [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
         //adds active to only the clicked method
@@ -477,6 +488,9 @@ function render_books(books1) {
         clear_stage(books_main_content);
         // calling render grade filter methods
         grade_filter(grades);
+
+        // hiding the pagination
+        document.querySelector('.page-count').style.display = "none";
 
         //selects all the filters and remove the active class
         [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
@@ -1369,6 +1383,7 @@ function render_sort_by_filter() {
 }
 // function for redirecting the user to the required page
 function map_handler() {
+    disactive_modals();
     let address = address_to_here.split("/");
     let len = address.length - 2;
     //console.log(address_to_here, address);
@@ -1706,8 +1721,11 @@ function adjust_books(state) {
         }
     }
     curent_page = 1;
-    needed_books = [...filtered_book];
-    if (needed_books.length === 0) {
+    if (filtered_book.length !== 0) {
+        needed_books = [...filtered_book];
+        //filter_activated = false;
+    }
+    if (filtered_book.length === 0) {
         filter_activated = false;
     }
     //console.log(filtered_book);
@@ -1765,7 +1783,7 @@ function activate_modal_single_book(state) {
         setTimeout(() => {
             modal_wrapper.style.zIndex = "-1";
             modal_wrapper.innerHTML = " ";
-        }, 2000)
+        }, 700)
     }
 }
 // search method opener
@@ -1835,6 +1853,7 @@ function search_books() {
 // function to render paginations
 function render_pagination(bookarr) {
     //console.log(bookarr)
+    // hiding the pagination
     let book_len = Math.ceil(bookarr.length / 30);
     for (let i = 0; i < book_len; i++) {
         let page_num_content = `
@@ -1851,6 +1870,7 @@ function render_pagination(bookarr) {
             clicked_page_activator(clicked_id, bookarr)
         });
     });
+    document.querySelector('.page-count').style.display = "grid";
 }
 // function for active page result show
 function clicked_page_activator(id, bookarr) {
@@ -1874,7 +1894,7 @@ function open_cart_modal(state) {
         setTimeout(() => {
             modal_wrapper.style.zIndex = "-1";
             modal_wrapper.innerHTML = " ";
-        }, 2000)
+        }, 700)
     }
 }
 function render_cart_modal(cart1) {
@@ -2088,6 +2108,11 @@ function render_cart_modal(cart1) {
     back_btn.addEventListener('click', () => {
         open_cart_modal("disactive");
     });
+}
+// a function to disactive all modals 
+function disactive_modals() {
+    open_cart_modal('disactive');
+    activate_modal_single_book('disactive');
 }
 // etc
 
