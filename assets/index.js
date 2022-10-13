@@ -1046,7 +1046,6 @@ function render_shopping_cart(cart1) {
         map_handler();
     });
 }
-
 // function to render wallet page
 function render_wallet(user) {
     const wallet_content = `
@@ -1103,7 +1102,6 @@ function render_wallet(user) {
     });
 
 }
-
 // function to render single book page
 // ? maybe it better to have this function as a modal instead of a complete page ( bea cause of action after a back btn )
 // ! reconsider maybe needed here
@@ -1235,7 +1233,6 @@ function render_single_book(book) {
         map_handler();
     });
 }
-
 //function to render final stage of cart
 function render_final_stage_cart(cart_items, discount, url) {
     // the sum for total price
@@ -1361,8 +1358,6 @@ function render_final_stage_cart(cart_items, discount, url) {
         map_handler();
     })
 }
-
-
 // function to render sort by filter 
 // TODO : render by filter function 
 function render_sort_by_filter() {
@@ -1372,7 +1367,6 @@ function render_sort_by_filter() {
 
     books_main_content.innerHTML += " ";
 }
-
 // function for redirecting the user to the required page
 function map_handler() {
     let address = address_to_here.split("/");
@@ -1469,7 +1463,6 @@ function map_handler() {
     }
     */
 }
-
 // coming soon
 function render_coming_soon_page() {
     const coming_soon_content = `
@@ -1486,13 +1479,11 @@ function render_loading() {
     `;
     main_area.innerHTML = loading_HTML;
 }
-
 // a function to prevent multiple repeat in address
 function stop_repeatation_in_addres(word, my_string) {
     const arr = my_string.split('/');
     return !arr.includes(word);
 }
-
 //book clicked
 function book_clicked(e) {
     let clicked_book = "";
@@ -1520,7 +1511,6 @@ function book_clicked(e) {
         render_single_book(clicked_book);
     }
 }
-
 // update quantity
 function update_quantity(type, id, sign) {
 
@@ -1576,6 +1566,7 @@ function update_quantity(type, id, sign) {
             cart_items.push({ ...item, count_in_user_cart: 1 });
             // update ids
             cart.cart_items_ids.push(id);
+            open_cart_modal("active");
         }
         // otherwise just update the ids for api calls
         else {
@@ -1620,7 +1611,6 @@ function update_total(el) {
     cart.cart_summary.total_price_of_items = sum;
     //console.log(cart);
 }
-
 // function for applying filters on books
 function adjust_books(state) {
     // for declaring the filter is used
@@ -1722,7 +1712,6 @@ function adjust_books(state) {
     }
     //console.log(filtered_book);
 }
-
 // function to get el by id 
 function el_by_id(arr, id) {
     let my_return = "sina";
@@ -1765,10 +1754,13 @@ function close_webapp() {
 // function to prepare modal for single books
 function activate_modal_single_book(state) {
     if (state === "active") {
+        modal_wrapper.classList.remove("cart-pop-up");
         modal_wrapper.style.zIndex = "999";
         modal_wrapper.style.top = "0";
     }
     else {
+        document.querySelector('body').style.overflowY = "unset";
+        modal_wrapper.classList.remove("cart-pop-up");
         modal_wrapper.style.top = "-100vh";
         setTimeout(() => {
             modal_wrapper.style.zIndex = "-1";
@@ -1776,7 +1768,6 @@ function activate_modal_single_book(state) {
         }, 2000)
     }
 }
-
 // search method opener
 function search_books_opener() {
     if (!is_search_open) {
@@ -1841,6 +1832,7 @@ function search_books() {
         }
     });
 }
+// function to render paginations
 function render_pagination(bookarr) {
     //console.log(bookarr)
     let book_len = Math.ceil(bookarr.length / 30);
@@ -1860,10 +1852,242 @@ function render_pagination(bookarr) {
         });
     });
 }
+// function for active page result show
 function clicked_page_activator(id, bookarr) {
     curent_page = id + 1;
     bookarr = bookarr.slice(id * 30, id * 30 + 30);
     render_books(bookarr);
+}
+// function for having modal box be open for cart as a popup
+function open_cart_modal(state) {
+    if (state === "active") {
+        modal_wrapper.classList.add("cart-pop-up");
+        modal_wrapper.style.zIndex = "999";
+        modal_wrapper.style.top = "15vh";
+        render_cart_modal(cart_items);
+        document.querySelector('body').style.overflowY = "hidden";
+    }
+    else {
+        document.querySelector('body').style.overflowY = "unset";
+        modal_wrapper.classList.remove("cart-pop-up");
+        modal_wrapper.style.top = "-100vh";
+        setTimeout(() => {
+            modal_wrapper.style.zIndex = "-1";
+            modal_wrapper.innerHTML = " ";
+        }, 2000)
+    }
+}
+function render_cart_modal(cart1) {
+    const shopping_cart_HTML = `
+        <div class="cart-wrapper">
+            <div class="cart-header">
+                <div class="back">
+                    <i class="fa fa-caret-right"></i>
+                </div>
+                <div class="cart-page-title">
+                    سبد خرید
+                </div>
+            </div>
+            <div class="cart-main-content">
+                <div class="cart-is-empty">
+                    <div class="empty-text">
+                        سبد خرید شما خالی است!!!
+                    </div>
+                    <div class="go-to-book-page">
+                        رفتن به صفحه فروشگاه
+                    </div>
+                </div>
+                <div class="cart-items">
+                </div>
+                <div class="totalprice-wrapper">
+                    <div class="label">
+                        مجموع :
+                    </div>
+                    <div class="total-price">
+                        <span class="price">
+                        </span>
+                        تومان
+                    </div>
+                </div>
+            </div>
+            <div class="cart-next-step ${cart1.length === 0 ? "disabled" : " "}">
+                <span class="label">
+                    مرحله بعد
+                </span>
+                <i class="fa fa-caret-left"></i>
+            </div>
+        </div>
+    `;
+    modal_wrapper.innerHTML = shopping_cart_HTML;
+    //activating next step btn
+    const next_step_btn = document.querySelector('.cart-next-step');
+    // click action for cart next step
+    next_step_btn.addEventListener('click', () => {
+        // render final stage with cart items and dicount amount
+        // check if the cart isn't empty ro render final stage cart
+        if (cart1.length !== 0) {
+            // fill the discount value from api
+            let discount = cart.cart_summary.total_discount_of_items;
+            // get the pay url for the final step btn
+            open_cart_modal("disactive");
+            load_pause("active");
+            axios
+                .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                .then((res) => {
+                    const url = res.data;
+                    // render final stage cart with given parameters
+                    render_final_stage_cart(cart_items, discount, url.url_to_pay);
+                    load_pause('disactive');
+                })
+                .catch(err => {
+                    // ? we need a better way to handle the errors :)
+                    global_err = err;
+                    console.log(err);
+                })
+        }
+    });
+
+    // activating go to book page btn 
+    const back_to_shop_btn = document.querySelector('.go-to-book-page');
+    back_to_shop_btn.addEventListener("click", () => {
+        // have the filter's results saved as an out come
+        // if (filtered_book.length === 0) {
+        //     render_books(needed_books);
+        // }
+        // else {
+        //     render_books(filtered_book);
+        // }
+        //map_handler();
+        open_cart_modal("disactive")
+        if (filter_activated) {
+            render_books(needed_books.slice(0, 30));
+        }
+        else {
+            render_books(needed_books);
+        }
+        // have the address updated
+        //address_to_here += "books/";
+    });
+
+
+    const cart_item_wrapper = document.querySelector('.cart-items');
+    // to get total price wrapper
+    const total_price_HTML = document.querySelector('.price');
+    // a variable for calculating total price
+    let total_price_amount = 0;
+    // adding items in cart
+    cart1.forEach(item => {
+        const cart_item_content = `
+        <div class="cart-item" id="cart-item-${item.id}">
+            <img src="${item.img_url}" alt="">
+            <div class="details">
+                <div class="cart-item-name">
+                    ${item.name}
+                </div>
+                <div class="cart-item-price">
+                    <span class="price">
+                        ${item.price}
+                    </span>
+                    تومان
+                </div>
+            </div>
+            <div class="cart-item-actions">
+                <span class="more">
+                    <i class="fa fa-plus"></i>
+                </span><span class="quantity">
+                    ${item.count_in_user_cart}
+                </span><span class="less">
+                    <i class="fa fa-minus"></i>
+                </span>
+            </div>
+        </div>
+        `;
+        // calculate total pirce with the items in cart
+        total_price_amount += item.count_in_user_cart * item.price;
+        cart_item_wrapper.innerHTML += cart_item_content;
+    });
+    total_price_HTML.innerHTML = total_price_amount;
+
+
+    // get all the items in the cart for making events in the more or less
+    const all_cart_items = [...document.querySelectorAll('.cart-item')];
+    all_cart_items.forEach(item => {
+        // handling more btn in cart
+        // * same as more and less in the book page
+        const more_btn = item.querySelector('.more');
+        more_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "more") {
+                const quantity_wrapper = e.target.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "+");
+                update_total(total_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "fa-plus") {
+                const quantity_wrapper = e.target.parentElement.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "+");
+                update_total(total_price_HTML);
+            }
+        });
+        // decreament items in cart
+        const less_btn = item.querySelector('.less');
+        less_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "less") {
+                const quantity_wrapper = e.target.previousSibling;
+                const id_string = e.target.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 1) {
+                    // remove the item from cart after quantity becomes 0
+                    e.target.parentElement.parentElement.remove();
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                update_total(total_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "fa-minus") {
+                const quantity_wrapper = e.target.parentElement.previousSibling;
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 1) {
+                    e.target.parentElement.parentElement.parentElement.remove();
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                update_total(total_price_HTML);
+            }
+        });
+
+    });
+
+    // updating curent place for map_handler method
+    /* 
+        ?  cause the cart item is accessible from all part of web app it needs to be stopped after 
+        ? one add in the address to here so I used the stop repatation function
+    */
+    //stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
+
+    // activating the back button
+    const back_btn = document.querySelector('.cart-wrapper .back');
+    back_btn.addEventListener('click', () => {
+        open_cart_modal("disactive");
+    });
 }
 // etc
 

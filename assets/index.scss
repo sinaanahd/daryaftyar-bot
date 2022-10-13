@@ -668,6 +668,13 @@ a{
     overflow-y: scroll;
     padding: 30px 10px;
 }
+.cart-pop-up{
+    height: 70vh;
+    width: 94vw;
+    border-radius: 40px;
+    right: 3vw;
+    box-shadow: 0px 0px 10px 0px;
+}
 .single-prod-wrapper{
     @include flexMixin(column, center, center);
     width: 100%;
