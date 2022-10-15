@@ -129,6 +129,8 @@ let is_search_open = false;
 let curent_page = 1;
 // html documnet for pagination
 let pagination_HTML = [];
+// sorted by status
+let sorted_by = "هیچکدام";
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
@@ -144,14 +146,36 @@ document.addEventListener("DOMContentLoaded", () => {
     render_loading();
     // getting the user from api
     axios
+        .get("https://daryaftyar.ir/storeV2/books30")
+        .then((res) => {
+            // filling the main books varibale
+            needed_books = res.data;
+            //needed_books = books.slice(0, 30);
+        })
+        .catch((err) => console.log(err));
+    axios
+        .get("https://daryaftyar.ir/storeV2/books")
+        .then((res) => {
+            // filling the main books varibale
+            books = res.data;
+            render_first_page();
+            // filling books according to the users data
+            //needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
+            //needed_books = books.slice(0, 30);
+            //console.log(books.length);
+            //needed_books = books;
+            //render_books(needed_books);
+        })
+        .catch((err) => console.log(err));
+    axios
         .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
         .then((res) => {
             //console.log("user :", res.data);
             // filling user via the main data from api
             user = res.data;
+            //render_first_page();
             // render app first page
-            render_first_page();
             // activating filters for the books page filter
             //clicked_grades.push(user.year);
             //clicked_subjects.push(user.subject);
@@ -161,19 +185,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => console.log(err));
     // getting books 
-    axios
-        .get("https://daryaftyar.ir/storeV2/books")
-        .then((res) => {
-            // filling the main books varibale
-            books = res.data;
-            // filling books according to the users data
-            //needed_books = books.filter(b => ((b.subject === user.subject) && (b.book_year === user.year)));
-            needed_books = books.slice(0, 30);
-            //console.log(books.length);
-            //needed_books = books;
-            //render_books(needed_books);
-        })
-        .catch((err) => console.log(err));
     // getting users cart items (with the id we have)
     axios
         .get(`https://daryaftyar.ir/storeV2/cart/${final_id}`)
@@ -365,7 +376,7 @@ function render_books(books1) {
                 <div class="order-by-wrapper">
                     مرتب سازی بر اساس :
                     <span class="ordered-by">
-                        هیچکدام
+                        ${sorted_by}
                     </span>
                 </div>
                 <div class="filter-opener">
@@ -504,7 +515,7 @@ function render_books(books1) {
     sort_by_btn = document.querySelector('.filter-opener');
     sort_by_btn.addEventListener('click', () => {
         // this part is disactivated so ...
-        render_coming_soon_page();
+        render_filter_by();
     });
     // check if the books are empty or not ( because of an error or th filters )
     if (books1.length !== 0) {
@@ -2113,6 +2124,125 @@ function render_cart_modal(cart1) {
 function disactive_modals() {
     open_cart_modal('disactive');
     activate_modal_single_book('disactive');
+}
+// funciton to render filter by
+function render_filter_by() {
+    const static_contents = `
+        <div class="books-wrapper">
+            <div class="books-header">
+                <div class="back">
+                    <i class="fa fa-caret-right"></i>
+                </div>
+                <div class="books-page-title">
+                    کتاب ها
+                </div>
+                <div class="search-icon">
+                    <i class="fa fa-search"></i>
+                </div>
+            </div>
+            <div class="book-order">
+                <div class="order-by-wrapper">
+                    مرتب سازی بر اساس :
+                    <span class="ordered-by">
+                        ${sorted_by}
+                    </span>
+                </div>
+                <div class="filter-opener">
+                    <i class="fa fa-caret-left"></i>
+                </div>
+            </div>
+            <div class="sort-by-wrapper">
+                <div class="sort sorted-by-leastPrice ${sorted_by === "ارزانترین" ? " " : "disabled"}">
+                    ارزانترین
+                </div>
+                <div class="sort sorted-by-mostprice ${sorted_by === "گرانترین" ? " " : "disabled"}">
+                    گرانترین
+                </div>
+                <div class="sort sorted-by-alphabet ${sorted_by === "الفبایی" ? " " : "disabled"}">
+                    الفبایی
+                </div>
+                <div class="sort sorted-by-newest ${sorted_by === "جدیدترین" ? " " : "disabled"}">
+                    جدیدترین
+                </div>
+            </div>
+            <span span class="save_and_return_btn srt" >
+                ذخیره و بازگشت
+            </span >
+        </div>
+    `;
+    main_area.innerHTML = static_contents;
+    // map method modifications
+    address_to_here = stop_repeatation_in_addres("sort", address_to_here) ? address_to_here + "sort/" : address_to_here;
+    // activating back btn
+    back_btn = document.querySelector('.back');
+    back_btn.addEventListener('click', () => {
+        if (!is_search_open) {
+            map_handler();
+        }
+        else {
+            //console.log(is_search_open)
+            search_books_opener();
+            //map_handler();
+        }
+    });
+
+    // use the search btn to open search
+    search_btn = document.querySelector('.search-icon');
+    search_btn.addEventListener('click', () => {
+        search_books_opener();
+    });
+
+    // activating sort by
+    const sort_by_items = [...document.querySelectorAll('.sort')];
+    sort_by_items.forEach((si) => {
+        si.addEventListener("click", ({ target }) => {
+            switch (target.classList[1]) {
+                case "sorted-by-mostprice":
+                    sorted_by = "گرانترین";
+                    break;
+                case "sorted-by-leastPrice":
+                    sorted_by = "ارزانترین";
+                    break;
+                case "sorted-by-alphabet":
+                    sorted_by = "الفبایی";
+                    break;
+                case "sorted-by-newest":
+                    sorted_by = "جدیدترین";
+                    break;
+            }
+            active_sort();
+        })
+    });
+    // save and return btn
+    document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        map_handler();
+    });
+    sort_by_btn = document.querySelector('.filter-opener');
+    sort_by_btn.addEventListener("click", () => {
+        map_handler();
+    });
+}
+// function for having only 1 item active in sort by
+function active_sort() {
+    const order_label = document.querySelector(".ordered-by");
+    order_label.innerHTML = sorted_by;
+    [...document.querySelectorAll(".sort")].forEach((item) => {
+        item.classList.add("disabled");
+    })
+    switch (sorted_by) {
+        case "گرانترین":
+            document.querySelector(".sorted-by-mostprice").classList.remove("disabled");
+            break;
+        case "ارزانترین":
+            document.querySelector(".sorted-by-leastPrice").classList.remove("disabled");
+            break;
+        case "الفبایی":
+            document.querySelector(".sorted-by-alphabet").classList.remove("disabled");
+            break;
+        case "جدیدترین":
+            document.querySelector(".sorted-by-newest").classList.remove("disabled");
+            break;
+    }
 }
 // etc
 
