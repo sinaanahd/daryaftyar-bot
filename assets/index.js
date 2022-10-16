@@ -131,6 +131,8 @@ let curent_page = 1;
 let pagination_HTML = [];
 // sorted by status
 let sorted_by = "هیچکدام";
+// the array of the first books un touched
+let first_rendered_books = [];
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
@@ -150,6 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => {
             // filling the main books varibale
             needed_books = res.data;
+            first_rendered_books = res.data;
             //needed_books = books.slice(0, 30);
         })
         .catch((err) => console.log(err));
@@ -387,19 +390,19 @@ function render_books(books1) {
                     <span class="filters fil-1">
                         انتشارات 
                         <span class="sub-filter">
-                            ${!is_filled_pub ? "( همه )" : (clicked_publishers_ids.length === publishers.length) ? "( همه )" : " ( " + clicked_publishers_ids.length + " ) "}    
+                            ${(clicked_publishers_ids.length === 0) ? "( همه )" : (clicked_publishers_ids.length === publishers.length) ? "( همه )" : " ( " + clicked_publishers_ids.length + " ) "}    
                         </span>
                     </span>
                     <span class="filters fil-2">
                         رشته 
                         <span class="sub-filter">
-                            ${!is_filled_sub ? "( همه )" : (clicked_subjects.length === subjects.length) ? "( همه )" : " ( " + clicked_subjects.length + " ) "}    
+                            ${(clicked_subjects.length === 0) ? "( همه )" : (clicked_subjects.length === subjects.length) ? "( همه )" : " ( " + clicked_subjects.length + " ) "}    
                         </span>
                     </span>
                     <span class="filters fil-3">
                         پایه
                         <span class="sub-filter">
-                            ${!is_filled_year ? "( همه )" : (clicked_grades.length === grades.length) ? "( همه )" : " ( " + clicked_grades.length + " ) "}    
+                            ${(clicked_grades.length === 0) ? "( همه )" : (clicked_grades.length === grades.length) ? "( همه )" : " ( " + clicked_grades.length + " ) "}    
                         </span>
                     </span>
                 </div>
@@ -655,7 +658,9 @@ function render_books(books1) {
     else {
         const empty_content = `
             <div class="books-empty">
-                متاسفانه کتابی یافت نشد !!!
+                متاسفانه کتابی یافت نشد :(
+                <br />
+                فیلتر های انتخابی رو چک کنید و دوباره امتحان کنید :)
             </div>
         `;
         books_wrapper.innerHTML = empty_content;
@@ -1732,11 +1737,20 @@ function adjust_books(state) {
         }
     }
     curent_page = 1;
-    if (filtered_book.length !== 0) {
-        needed_books = [...filtered_book];
-        //filter_activated = false;
-    }
-    if (filtered_book.length === 0) {
+    // if (filtered_book.length !== 0) {
+    //     needed_books = [...filtered_book];
+    //     //filter_activated = false;
+    // }
+    // if (filtered_book.length === 0) {
+    //     needed_books = [...filtered_book];
+    //     //filter_activated = false;
+    // }
+    needed_books = [...filtered_book];
+    if ((clicked_publishers_ids.length === 0)
+        && (clicked_subjects.length === 0)
+        && (clicked_grades.length === 0)
+    ) {
+        needed_books = [...first_rendered_books];
         filter_activated = false;
     }
     //console.log(filtered_book);

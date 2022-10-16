@@ -460,6 +460,10 @@ a {
   display: block;
   width: 150px;
   text-align: center; }
+.books-wrapper .books-empty {
+  grid-column-start: 0;
+  grid-column-end: 1;
+  text-align: center; }
 
 /* books page styles */
 /* shopping cart styles */
