@@ -136,10 +136,10 @@ let first_rendered_books = [];
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
-const us_id = window.Telegram.WebApp.initData;
+//const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-//const final_id = "341393410";
+//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+const final_id = "341393410";
 
 // ! loading complete method
 //documnet load to render first page
@@ -1877,8 +1877,10 @@ function search_books() {
 }
 // function to render paginations
 function render_pagination(bookarr) {
-    //console.log(bookarr)
-    // hiding the pagination
+    pagination_HTML.innerHTML +=
+        `<span class="page-number previus-page" id="page-id-prev">
+            <i class="fa fa-angle-left" id="page-icon-prev"> </i>
+        </span>`;
     let book_len = Math.ceil(bookarr.length / 30);
     for (let i = 0; i < book_len; i++) {
         let page_num_content = `
@@ -1888,10 +1890,14 @@ function render_pagination(bookarr) {
         `;
         pagination_HTML.innerHTML += page_num_content;
     }
+    pagination_HTML.innerHTML +=
+        `<span class="page-number next-page" id="page-id-next">
+            <i class ="fa fa-angle-right" id="page-icon-next"> </i>
+        </span>`;
     let all_page_numbers = [...document.querySelectorAll(".page-number")];
     all_page_numbers.forEach((pn) => {
         pn.addEventListener('click', ({ target }) => {
-            let clicked_id = parseInt(target.id.split("-")[2]);
+            let clicked_id = target.id.split("-")[2];
             clicked_page_activator(clicked_id, bookarr)
         });
     });
@@ -1899,9 +1905,31 @@ function render_pagination(bookarr) {
 }
 // function for active page result show
 function clicked_page_activator(id, bookarr) {
-    curent_page = id + 1;
+    let books_len = Math.ceil(bookarr.length / 30);
+    if ((id === "next") && (curent_page !== books_len)) {
+        id = curent_page;
+        curent_page += 1
+    }
+    else if ((id === "next") && (curent_page === books_len)) {
+        id = books_len - 1;
+    }
+    else if ((id === "prev") && (curent_page !== 1)) {
+        id = curent_page - 2;
+        curent_page -= 1;
+    }
+    else if ((id === "prev") && (curent_page === 1)) {
+        id = 0;
+    }
+    else {
+        id = parseInt(id);
+        curent_page = id + 1;
+    }
     bookarr = bookarr.slice(id * 30, id * 30 + 30);
     render_books(bookarr);
+}
+// function to handle pagination in small amounts
+function render_needed_pagination() {
+
 }
 // function for having modal box be open for cart as a popup
 function open_cart_modal(state) {

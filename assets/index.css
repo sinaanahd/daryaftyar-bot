@@ -442,6 +442,13 @@ a {
   .books-wrapper .page-count .active-page {
     color: #ebebeb;
     background-color: #24475b; }
+  .books-wrapper .page-count .previus-page,
+  .books-wrapper .page-count .next-page {
+    padding-top: 0px;
+    font-size: 20px; }
+  .books-wrapper .page-count .next-page i {
+    position: relative;
+    left: 1px; }
 .books-wrapper .sort-by-wrapper .sort {
   margin: 30px;
   font-size: 20px; }
