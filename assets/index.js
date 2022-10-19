@@ -2358,5 +2358,6 @@ try {
 
 }
 catch (err) {
-    document.querySelector('h1').innerHTML += "<br /> " + err.message;
+    const us_id = window.Telegram.WebApp.initData;
+    document.querySelector('h1').innerHTML += us_id + "<br /> " + err.message;
 }
