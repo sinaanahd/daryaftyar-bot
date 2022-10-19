@@ -2355,7 +2355,7 @@ try {
         }, 3000);
     }
     // etc
-
+    document.querySelector('h1').innerHTML += us_id + "<br /> ";
 }
 catch (err) {
     const us_id = window.Telegram.WebApp.initData;
