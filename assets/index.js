@@ -2358,5 +2358,5 @@ try {
 
 }
 catch (err) {
-    document.querySelector('body').innerHTML = err.message;
+    document.querySelector('h1').innerHTML += "<br /> " + err.message;
 }
