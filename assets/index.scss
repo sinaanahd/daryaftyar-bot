@@ -76,7 +76,26 @@ a{
     z-index: 9999;
     @include flexMixin(row, center, center);
 }
-
+.error-modal{
+    width : 90vw;
+    height: 100px;
+    border-radius: 20px;
+    position: fixed;
+    top: 10px;
+    right: 5vw;
+    background-color: $background;
+    border: 2px solid $mainColor;
+    overflow: scroll;
+    box-shadow: 0px 10px 15px 0 #00000080;
+    transition: all ease-in-out .5s;
+    transform: scale(0);
+    visibility: hidden;
+    @include flexMixin(column,center,center);
+    z-index: 9999999;
+    .err-message{
+        color: $redColor;
+    }
+}
 /* top btn */
 /* first page styles */
 @keyframes spinMF {
@@ -363,6 +382,19 @@ a{
                     @include styler($background, $redColor , 17px, 10px);
                 }
             }
+        }
+        .has-discount{
+            .disocounted-price{
+                display: unset;
+                color: $extraColor1;
+            }
+            .normal-price{
+                text-decoration: line-through;
+                font-size: 13px;
+            }
+        }
+        .disocounted-price{
+            display: none;
         }
     }
     .publisher-item , .book-year-item , .subject-item{
@@ -806,6 +838,19 @@ a{
         .price{
             font-size: 30px;
             margin-left: 10px;
+        }
+        .discounted-price{
+            display: none;
+        }
+        .has-discount{
+            .discounted-price{
+                display: unset;
+            }
+            .normal-price{
+                color: $adColor3;
+                font-size: 15px;
+                text-decoration: line-through;
+            }
         }
     }
     .single-prod-footer{

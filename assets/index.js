@@ -1,6 +1,5 @@
 document.cookie = 'cookie2=value2; SameSite=None; Secure';
 // ! variables
-
 // user global variable 
 let user = {};
 // the main use of this array is to have all the books from api
@@ -77,6 +76,8 @@ const footer_cart_wrapper_HTML = document.querySelector('.cart-item-number');
 const pause_wrapper = document.querySelector('.pause');
 //a place holder for loading the modals
 const modal_wrapper = document.querySelector('.modal-pacle-holder');
+// the error wrapper place 
+const error_modal = document.querySelector(".error-modal");
 // variable to know where where you lastly
 let address_to_here = "home/";
 // the variable for accssesing the wallet amount increasing
@@ -136,10 +137,10 @@ let first_rendered_books = [];
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
-const us_id = window.Telegram.WebApp.initData;
+//const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-//const final_id = "341393410";
+//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+const final_id = "341393410";
 
 // ! loading complete method
 //documnet load to render first page
@@ -155,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
             first_rendered_books = res.data;
             //needed_books = books.slice(0, 30);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     axios
         .get("https://daryaftyar.ir/storeV2/books")
         .then((res) => {
@@ -167,9 +168,10 @@ document.addEventListener("DOMContentLoaded", () => {
             //needed_books = books.slice(0, 30);
             //console.log(books.length);
             //needed_books = books;
-            //render_books(needed_books);
+            //render_books(needed_books);\
+            //console.log(books.filter(b => b.id === 201411));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     axios
         .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
@@ -186,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
             //el_by_id(grades, clicked_grades[0]).clicked = true;
             //el_by_id(subjects, clicked_subjects[0]).clicked = true;
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     // getting books 
     // getting users cart items (with the id we have)
     axios
@@ -202,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     axios
         .get("https://daryaftyar.ir/storeV2/pubs")
         .then((res) => {
@@ -212,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 //clicked_publishers_ids.push(p.id)
             });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
 });
 // rendring first page via menu btn
 footer_btn_home.addEventListener('click', () => {
@@ -537,8 +539,13 @@ function render_books(books1) {
                                 ${book.name}
                             </div>
                             <div class="book-price">
-                                <span class="dynamic-price">
+                                <span class="dynamic-price ${(book.discounted_price !== book.price) ? "has-discount" : " "}">
+                                    <span class="normal-price">
                                     ${book.price}
+                                    </span>
+                                    <span class="disocounted-price">
+                                    ${book.discounted_price}
+                                    </span>
                                 </span>
                                 تومان
                             </div>
@@ -930,8 +937,7 @@ function render_shopping_cart(cart1) {
                 })
                 .catch(err => {
                     // ? we need a better way to handle the errors :)
-                    global_err = err;
-                    console.log(err);
+                    render_errors(err.message)
                 })
         }
     });
@@ -1148,10 +1154,16 @@ function render_single_book(book) {
             </div>
             <div class="main-content">
                 <div class="details">
-                    <div class="publisher-wrapper">
+                    <div class="pages-details-wrapper">
                         نویسنده : 
                         <span class="publisher">
                             ${book.author}
+                        </span>
+                    </div>
+                    <div class="pages-details-wrapper">
+                        انتشارات :
+                        <span class="pages-count">
+                            ${book.publisher}
                         </span>
                     </div>
                     <div class="pages-details-wrapper">
@@ -1160,6 +1172,18 @@ function render_single_book(book) {
                             ${book.pages_count}
                         </span>
                         صفحه
+                    </div>
+                    <div class="pages-details-wrapper">
+                        پایه :
+                        <span class="pages-count">
+                            ${el_by_id(grades, book.book_year).name}
+                        </span>
+                    </div>
+                    <div class="pages-details-wrapper">
+                        رشته :
+                        <span class="pages-count">
+                            ${el_by_id(subjects, book.subject).name}
+                        </span>
                     </div>
                     <div class="full-details-wrapper">
                         توضیحات :
@@ -1171,8 +1195,13 @@ function render_single_book(book) {
                 <div class="book-img-price-wrapper">
                     <img src="${book.img_url}" alt="">
                     <div class="price-wrapper">
-                        <span class="price">
-                            ${book.price}
+                        <span class="price ${(book.discounted_price !== book.price) ? "has-discount" : " "}">
+                            <span class="normal-price">
+                                ${book.price}
+                            </span> 
+                            <span class="discounted-price">
+                                ${book.discounted_price}
+                            </span>
                         </span>
                         تومان
                     </div>
@@ -1266,13 +1295,13 @@ function render_single_book(book) {
 //function to render final stage of cart
 function render_final_stage_cart(cart_items, discount, url) {
     // the sum for total price
-    let total_price = 0;
+    //console.log(cart);
     // calculate total price
-    cart_items.forEach(c => {
-        total_price += c.count_in_user_cart * c.price;
-    });
+    // cart_items.forEach(c => {
+    //     total_price += c.count_in_user_cart * c.price;
+    // });
     // calculating pay amount with user wallet and discount
-    const pay_amount = total_price - (user.amount + discount)
+    // const pay_amount = total_price - (user.amount + discount)
     const final_cart_stage_content = `
     <div class="cart-final-stage-wrapper">
                     <div class="cart-header">
@@ -1312,7 +1341,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${total_price}
+                                        ${cart.cart_summary.total_price_of_items}
                                     </span>
                                     تومان
                                 </span>
@@ -1323,7 +1352,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${discount}
+                                        ${cart.cart_summary.total_discount_of_items}
                                     </span>
                                     تومان
                                 </span>
@@ -1334,9 +1363,23 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${user.amount}
+                                        ${cart.cart_summary.credit_discount_final}
                                     </span>
                                     تومان
+                                </span>
+                            </div>
+                            <div class="cart-wallet">
+                                <span class="label">
+                                   هزینه پست : 
+                                </span>
+                                <span class="total-price">
+                                    <span class="price">
+                                        ${cart.cart_summary.post_cost === 0 ? "رایگان" : cart.cart_summary.post_cost}
+                                    </span>
+                                    <span>
+                                        ${cart.cart_summary.post_cost === 0 ? " " : "تومان"}
+                                    </span>
+                                    
                                 </span>
                             </div>
                             <div class="cart-final-pay">
@@ -1345,7 +1388,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${pay_amount}
+                                        ${cart.cart_summary.final_price}
                                     </span>
                                     تومان
                                 </span>
@@ -1355,7 +1398,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                             <span class="pay-amount">
                                 پرداخت
                                 <span class="amount">
-                                    ${pay_amount}
+                                    ${cart.cart_summary.final_price}
                                 </span>
                                 <span class="curency">
                                     تومان
@@ -1618,6 +1661,7 @@ function update_quantity(type, id, sign) {
     update_cart(cart.cart_items_ids);
 }
 //function to update total price
+// ! filter beshe 4 ta
 function update_total(el) {
     let sum = 0;
     const cart_empty_HTML = document.querySelector('.cart-is-empty');
@@ -1776,7 +1820,9 @@ function update_cart(ids) {
             //console.log(cart);
         })
         .catch(err => {
-            global_err = err;
+            //global_err = err;
+            //console.log(err)
+            render_errors(err.message);
         })
 }
 // a function to disable webapp untill the datas return from backend
@@ -1798,12 +1844,14 @@ function close_webapp() {
 function activate_modal_single_book(state) {
     if (state === "active") {
         modal_wrapper.classList.remove("cart-pop-up");
+        modal_wrapper.classList.add("single-modal");
         modal_wrapper.style.zIndex = "999";
         modal_wrapper.style.top = "0";
     }
     else {
         document.querySelector('body').style.overflowY = "unset";
         modal_wrapper.classList.remove("cart-pop-up");
+        modal_wrapper.classList.remove("single-modal");
         modal_wrapper.style.top = "-100vh";
         setTimeout(() => {
             modal_wrapper.style.zIndex = "-1";
@@ -1934,15 +1982,19 @@ function render_needed_pagination() {
 // function for having modal box be open for cart as a popup
 function open_cart_modal(state) {
     if (state === "active") {
-        modal_wrapper.classList.add("cart-pop-up");
-        modal_wrapper.style.zIndex = "999";
-        modal_wrapper.style.top = "15vh";
-        render_cart_modal(cart_items);
-        document.querySelector('body').style.overflowY = "hidden";
+        if (![...modal_wrapper.classList].includes("single-modal")) {
+            modal_wrapper.classList.add("cart-pop-up");
+            modal_wrapper.classList.remove("single-modal");
+            modal_wrapper.style.zIndex = "999";
+            modal_wrapper.style.top = "15vh";
+            render_cart_modal(cart_items);
+            document.querySelector('body').style.overflowY = "hidden";
+        }
     }
     else {
         document.querySelector('body').style.overflowY = "unset";
         modal_wrapper.classList.remove("cart-pop-up");
+        modal_wrapper.classList.remove("single-modal");
         modal_wrapper.style.top = "-100vh";
         setTimeout(() => {
             modal_wrapper.style.zIndex = "-1";
@@ -1951,6 +2003,7 @@ function open_cart_modal(state) {
     }
 }
 function render_cart_modal(cart1) {
+    address_to_here = stop_repeatation_in_addres("cart-modal", address_to_here) ? address_to_here + "cart-modal/" : address_to_here;
     const shopping_cart_HTML = `
         <div class="cart-wrapper">
             <div class="cart-header">
@@ -2015,8 +2068,7 @@ function render_cart_modal(cart1) {
                 })
                 .catch(err => {
                     // ? we need a better way to handle the errors :)
-                    global_err = err;
-                    console.log(err);
+                    render_errors(err.message)
                 })
         }
     });
@@ -2031,14 +2083,14 @@ function render_cart_modal(cart1) {
         // else {
         //     render_books(filtered_book);
         // }
-        //map_handler();
+        map_handler();
         open_cart_modal("disactive")
-        if (filter_activated) {
-            render_books(needed_books.slice(0, 30));
-        }
-        else {
-            render_books(needed_books);
-        }
+        // if (filter_activated) {
+        //     render_books(needed_books.slice(0, 30));
+        // }
+        // else {
+        //     render_books(needed_books);
+        // }
         // have the address updated
         //address_to_here += "books/";
     });
@@ -2285,6 +2337,21 @@ function active_sort() {
             document.querySelector(".sorted-by-newest").classList.remove("disabled");
             break;
     }
+}
+// function to render errors
+function render_errors(error) {
+    error_modal.innerHTML = `
+        متاسفانه ارور زیر رخ داده است :
+        <span class="err-message">
+        ${error}
+        </span>
+    `;
+    error_modal.style.visibility = "visible";
+    error_modal.style.transform = "scale(1)";
+    setTimeout(() => {
+        error_modal.style.visibility = "hidden";
+        error_modal.style.transform = "scale(0)";
+    }, 3000);
 }
 // etc
 
