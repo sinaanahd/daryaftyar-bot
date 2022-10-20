@@ -1,0 +1,119 @@
+@import "../assets/variables";
+@import "../assets/mixins";
+@import url(../assets/fonts/font.css);
+body {
+    padding: 0;
+    margin: 0;
+    direction: rtl;
+    overflow-x: hidden !important;
+    font-size: 20px;
+    font-family: "main-font";
+    color: $mainColor;
+    line-height: 35px;
+    width: 100% !important;
+    min-width: 300px;
+    background-color: $background;
+}
+body {
+    * {
+        box-sizing: border-box !important;
+        margin: 0;
+        padding: 0;
+    }
+}
+.main-area{
+    @include flexMixin(column , center , center);
+    width: 100%;
+    padding: 50px 30px;
+}
+.header{
+    color:$background;
+    background-color: $mainColor;
+    text-align: center;
+    font-size: 20px;
+    margin: 0 0 50px;
+    border: 1px solid $mainColor;
+    padding: 10px 30px;
+    border-radius: 30px;
+}
+.inputs-wrapper{
+    @include flexMixin(column , center ,center);
+    width: 100%;
+    border: 2px solid $mainColor;
+    background-color: $mainWhite;
+    padding: 20px;
+    border-radius: 30px;
+    .input-wrapper{
+        width: 100%;
+        .label-and-input{
+            @include flexMixin(row,space-between,center);
+            font-size: 15px;
+        }
+        .error-loader{
+            color: $redColor;
+            display: none;
+        }
+        margin: 0 0 20px;
+    }
+    input{
+        outline: none;
+        border: 1px solid $mainColor;
+        border-radius: 20px;
+        width: 180px;
+        height: 30px;
+        padding: 0 10px;
+        font-family: "main-font";
+        &:focus{
+            border-color: $greenColor;
+            box-shadow:0px  0px 10px -2px $greenColor;
+        }
+    }
+    .has-error{
+        border-color: $redColor;
+        box-shadow: 0px 0px 10px -2px $redColor;
+    }
+    textarea{
+        outline: none;
+        border: 1px solid $mainColor;
+        border-radius: 20px;
+        padding: 0 10px;
+        width: 200px;
+        font-family: "main-font";
+        resize: none;
+        &:focus {
+            border-color: $greenColor;
+            box-shadow: 0px 0px 10px -2px $greenColor;
+        }
+    }
+}
+.btns-wrapper{
+    margin: 50px 0;
+    width: 100%;
+    text-align: center;
+    .submit-user-data{
+        @include styler($background , $greenColor , 15px , 20px);
+        border: 1px solid $greenColor;
+        padding: 5px 10px;
+    }
+}
+.error-modal {
+    width: 90vw;
+    height: 100px;
+    border-radius: 20px;
+    position: fixed;
+    top: 10px;
+    right: 5vw;
+    background-color: $background;
+    border: 2px solid $mainColor;
+    overflow: scroll;
+    box-shadow: 0px 10px 15px 0 #00000080;
+    transition: all ease-in-out .5s;
+    transform: scale(0);
+    visibility: hidden;
+    @include flexMixin(column, center, center);
+    z-index: 9999999;
+
+    .err-message {
+        color: $redColor;
+    }
+}

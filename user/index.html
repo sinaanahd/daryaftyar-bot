@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>دریافت اطلاعات کاربری</title>
+</head>
+
+<body>
+    <section class="main-area">
+        <div class="header">
+            <h1>
+                ورود اطلاعات کاربر
+            </h1>
+        </div>
+        <div class="inputs-wrapper">
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <label for="user-name">
+                        نام
+                    :
+                    </label>
+                    <input name="user-name" type="text" id="user-name" />
+                </div>
+                <div class="error-loader">
+                    ارور پیش آمده
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <label for="user-last-name">
+                        نام خانوادگی
+                    :
+                    </label>
+                    <input name="user-last-name"type="text" id="user-last-name" />
+                </div>
+                <div class="error-loader">
+                    ارور پیش آمده
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <label for="user-mobile">
+                        شماره موبایل
+                    :
+                    </label>
+                    <input name="user-mobile"type="number" id="user-mobile" />
+                </div>
+                <div class="error-loader">
+                    ارور پیش آمده
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <label for="user-postal-code">
+                        کدپستی
+                    :
+                    </label>
+                    <input name="user-postal-code" type="number" id="user-postal-code" />
+                </div>
+                <div class="error-loader">
+                    ارور پیش آمده
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <label for="user-address">
+                    آدرس
+                   :
+                    </label>
+                    <textarea name="user-address" id="user-address" cols="30" rows="5"></textarea>
+                </div>
+                <div class="error-loader">
+                    ارور پیش آمده
+                </div>
+            </div>
+        </div>
+        <div class="btns-wrapper">
+            <span class="submit-user-data">
+                ثبت اطلاعات
+            </span>
+        </div>
+    </section>
+    <section class="error-modal">
+    </section>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script type="module" src="./index.js"></script>
+</body>
+
+</html>
