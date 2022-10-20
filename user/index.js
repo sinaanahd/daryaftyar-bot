@@ -1,10 +1,10 @@
 
 // ? variables
 
-//const us_id = window.Telegram.WebApp.initData;
+const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-const final_id = "341393410";
+const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+//const final_id = "341393410";
 const illigal_chars = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!",
     "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
     "[", "]", "{", "}", "|", " \ ", "/", "?", ".", ",", "۱", "۲", "۳",
