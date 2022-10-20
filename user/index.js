@@ -1,10 +1,10 @@
 
 // ? variables
 
-const us_id = window.Telegram.WebApp.initData;
+//const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-//const final_id = "341393410";
+//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+const final_id = "341393410";
 const illigal_chars = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!",
     "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
     "[", "]", "{", "}", "|", " \ ", "/", "?", ".", ",", "۱", "۲", "۳",
@@ -20,6 +20,9 @@ const postal_code_input = document.querySelector("#user-postal-code");
 const address_input = document.querySelector("#user-address");
 
 const submit_btn = document.querySelector(".submit-user-data");
+
+//pause html
+const pause_wrapper = document.querySelector('.pause');
 
 let user = [];
 
@@ -37,11 +40,12 @@ let error_for_address = document.querySelector(".err-address");
 document.addEventListener("DOMContentLoaded", () => {
     submit_btn.disabled = true;
     submit_btn.classList.add("dis");
+    load_pause("active");
     axios
         .get(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`)
         .then((res) => {
             user = res.data;
-            //console.log(user);
+            load_pause("disactive");
         })
         .catch((err) => render_errors(err.message));
 });
@@ -197,11 +201,12 @@ function check_situtation() {
 
 
 function update_user() {
+    load_pause("active");
     axios
         .patch(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`, user)
         .then((res) => {
             user = res.data;
-            console.log(user);
+            load_pause("disactive");
         })
         .catch((err) => {
             render_errors(err.message);
@@ -223,4 +228,13 @@ function render_errors(error) {
         error_modal.style.visibility = "hidden";
         error_modal.style.transform = "scale(0)";
     }, 3000);
+}
+
+function load_pause(state) {
+    if (state === "active") {
+        pause_wrapper.style.display = "flex";
+    }
+    else {
+        pause_wrapper.style.display = "none";
+    }
 }
