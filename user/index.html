@@ -24,33 +24,21 @@
                         نام
                     :
                     </label>
-                    <input name="user-name" type="text" id="user-name" />
+                    <input name="user-name" type="text" id="user-name" placeholder="مثال : احمد احمدی"/>
                 </div>
-                <div class="error-loader">
+                <div class="error-loader err-name">
                     ارور پیش آمده
                 </div>
             </div>
             <div class="input-wrapper">
                 <div class="label-and-input">
-                    <label for="user-last-name">
-                        نام خانوادگی
+                    <label for="user-phone">
+                        شماره منزل
                     :
                     </label>
-                    <input name="user-last-name"type="text" id="user-last-name" />
+                    <input name="user-phone"type="number" id="user-phone" placeholder="مثال : ۰۲۱۹۹۸۸۷۷۶۶"/>
                 </div>
-                <div class="error-loader">
-                    ارور پیش آمده
-                </div>
-            </div>
-            <div class="input-wrapper">
-                <div class="label-and-input">
-                    <label for="user-mobile">
-                        شماره موبایل
-                    :
-                    </label>
-                    <input name="user-mobile"type="number" id="user-mobile" />
-                </div>
-                <div class="error-loader">
+                <div class="error-loader err-phone">
                     ارور پیش آمده
                 </div>
             </div>
@@ -60,9 +48,9 @@
                         کدپستی
                     :
                     </label>
-                    <input name="user-postal-code" type="number" id="user-postal-code" />
+                    <input name="user-postal-code" type="number" id="user-postal-code" placeholder="مثال : ۱۲۳۴۵۶۷۸۹۰"/>
                 </div>
-                <div class="error-loader">
+                <div class="error-loader err-post">
                     ارور پیش آمده
                 </div>
             </div>
@@ -72,17 +60,17 @@
                     آدرس
                    :
                     </label>
-                    <textarea name="user-address" id="user-address" cols="30" rows="5"></textarea>
+                    <textarea name="user-address" id="user-address" cols="30" rows="5" placeholder="مثال : تهران ٬ خیابان اول ٬ کوچه دوم"></textarea>
                 </div>
-                <div class="error-loader">
+                <div class="error-loader err-address">
                     ارور پیش آمده
                 </div>
             </div>
         </div>
         <div class="btns-wrapper">
-            <span class="submit-user-data">
+            <button class="submit-user-data">
                 ثبت اطلاعات
-            </span>
+            </button>
         </div>
     </section>
     <section class="error-modal">
