@@ -292,17 +292,16 @@ a {
   justify-content: center;
   align-items: center; }
 .books-wrapper .filters-wrapper {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 10px;
+  row-gap: 10px;
   width: 100%;
-  border: 2px solid;
-  border-radius: 50px;
   padding: 0 10px;
   margin: 30px 0; }
-  .books-wrapper .filters-wrapper * {
-    flex: 1; }
+  .books-wrapper .filters-wrapper .fil-4 {
+    grid-column-start: 2;
+    grid-column-end: 3; }
 .books-wrapper .filters {
   display: flex;
   flex-direction: row;
@@ -312,15 +311,18 @@ a {
   display: inline-block;
   padding: 10px 0;
   height: 100%;
-  font-size: 15px;
   position: relative;
-  z-index: 5; }
+  z-index: 5;
+  color: #24475b;
+  background-color: #ebebeb;
+  font-size: 15px;
+  border-radius: 20px;
+  border: 1px solid #24475b; }
 .books-wrapper .active-filter {
-  color: #05a986; }
-.books-wrapper .fil-2 {
-  border-right: 2px solid #24475b;
-  border-left: 2px solid #24475b;
-  padding: 10px 10px; }
+  color: #ebebeb;
+  background-color: #24475b;
+  font-size: 15px;
+  border-radius: 20px; }
 .books-wrapper .save_and_return_btn {
   color: #24475b;
   background-color: #ebebeb;
@@ -434,10 +436,10 @@ a {
     font-size: 13px; }
   .books-wrapper .books .disocounted-price {
     display: none; }
-.books-wrapper .publisher-item, .books-wrapper .book-year-item, .books-wrapper .subject-item {
+.books-wrapper .publisher-item, .books-wrapper .book-year-item, .books-wrapper .subject-item, .books-wrapper .course-item {
   width: 80%;
   margin-bottom: 20px; }
-  .books-wrapper .publisher-item::before, .books-wrapper .book-year-item::before, .books-wrapper .subject-item::before {
+  .books-wrapper .publisher-item::before, .books-wrapper .book-year-item::before, .books-wrapper .subject-item::before, .books-wrapper .course-item::before {
     content: '';
     width: 20px;
     height: 20px;

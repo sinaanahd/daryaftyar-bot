@@ -58,6 +58,114 @@ const subjects = [
         name: "هنر"
     }
 ];
+// making courses array for books
+const courses = [
+    {
+        id: 1,
+        clicked: false,
+        name: "ادبیات فارسی"
+    },
+    {
+        id: 2,
+        clicked: false,
+        name: "عربی"
+    },
+    {
+        id: 3,
+        clicked: false,
+        name: "دین و زندگی"
+    },
+    {
+        id: 4,
+        clicked: false,
+        name: "زبان انگلیسی"
+    },
+    {
+        id: 5,
+        clicked: false,
+        name: "زیست شناسی"
+    },
+    {
+        id: 6,
+        clicked: false,
+        name: "ریاضیات تجربی"
+    },
+    {
+        id: 7,
+        clicked: false,
+        name: "هندسه و گسسته"
+    },
+    {
+        id: 8,
+        clicked: false,
+        name: "فیزیک"
+    },
+    {
+        id: 9,
+        clicked: false,
+        name: "شیمی"
+    },
+    {
+        id: 10,
+        clicked: false,
+        name: "فلسفه و منطق"
+    },
+    {
+        id: 11,
+        clicked: false,
+        name: "مشاوره"
+    },
+    {
+        id: 12,
+        clicked: false,
+        name: "زمین شناسی"
+    },
+    {
+        id: 13,
+        clicked: false,
+        name: "علوم فنون ادبی"
+    },
+    {
+        id: 14,
+        clicked: false,
+        name: "جامعه شناسی"
+    },
+    {
+        id: 15,
+        clicked: false,
+        name: "اقتصاد"
+    },
+    {
+        id: 16,
+        clicked: false,
+        name: "تاریخ و جغرافیا"
+    },
+    {
+        id: 17,
+        clicked: false,
+        name: "روانشناسی"
+    },
+    {
+        id: 18,
+        clicked: false,
+        name: "علوم اجتماعی"
+    },
+    {
+        id: 19,
+        clicked: false,
+        name: "سوالات متفرقه"
+    },
+    {
+        id: 20,
+        clicked: false,
+        name: "ریاضیات انسانی"
+    },
+    {
+        id: 21,
+        clicked: false,
+        name: "حسابان"
+    }
+];
 // making publisher array 
 // an array to have all publishers stored in a place
 let publishers = [];
@@ -99,6 +207,8 @@ let book_publisher = [];
 let book_subjects = [];
 // filter in book page about paye
 let book_year_of_study = [];
+// filter in book about course
+let book_course = [];
 // btn in the book page for sorting 
 let sort_by_btn = [];
 // books main content element
@@ -106,15 +216,19 @@ let books_main_content = [];
 //publishers dom element
 let publishers_DOM = [];
 //book year dom element
-let grades_DOM = []
+let grades_DOM = [];
 //subjects dom element
-let subjects_DOM = []
+let subjects_DOM = [];
+//subjects dom element
+let courses_DOM = [];
 // clicked publisher for filters
 let clicked_publishers_ids = [];
 // clicked book year for filter
 let clicked_grades = [];
 // clicked book year for filter
 let clicked_subjects = [];
+// clicked courses for filter
+let clicked_courses = [];
 // pay btn html
 let pay_btn_wrapper = [];
 //global error for test
@@ -123,6 +237,7 @@ let global_err = "I am empty for now";
 let is_filled_pub = false;
 let is_filled_sub = false;
 let is_filled_year = false;
+let is_filled_course = false;
 // filter is activated
 let filter_activated = false;
 // search item is open
@@ -138,10 +253,10 @@ let first_rendered_books = [];
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
-const us_id = window.Telegram.WebApp.initData;
+//const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-//const final_id = "341393410";
+//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+const final_id = "341393410";
 
 // ! loading complete method
 //documnet load to render first page
@@ -170,7 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
             //console.log(books.length);
             //needed_books = books;
             //render_books(needed_books);\
-            //console.log(books.filter(b => b.id === 201411));
+            //console.log(books[1]);
         })
         .catch((err) => render_errors(err.message));
     axios
@@ -408,6 +523,12 @@ function render_books(books1) {
                             ${(clicked_grades.length === 0) ? "( همه )" : (clicked_grades.length === grades.length) ? "( همه )" : " ( " + clicked_grades.length + " ) "}    
                         </span>
                     </span>
+                    <span class="filters fil-4">
+                        درس
+                        <span class="sub-filter">
+                            ${(clicked_courses.length === 0) ? "( همه )" : (clicked_courses.length === courses.length) ? "( همه )" : " ( " + clicked_courses.length + " ) "}    
+                        </span>
+                    </span>
                 </div>
             <div class="main-content">
                 
@@ -515,6 +636,25 @@ function render_books(books1) {
         book_year_of_study.classList.add('active-filter');
         //calling the method to fill the books acording to the active filters
         adjust_books("year");
+    });
+
+    book_course = document.querySelector('.fil-4');
+    book_course.addEventListener("click", () => {
+
+        // clearing html node content for the filters content
+        clear_stage(books_main_content);
+        // calling render grade filter methods
+        course_filter(courses);
+
+        // hiding the pagination
+        document.querySelector('.page-count').style.display = "none";
+
+        //selects all the filters and remove the active class
+        [...document.querySelectorAll('.filters')].forEach(item => item.classList.remove('active-filter'));
+        //adds active to only the clicked method
+        book_course.classList.add('active-filter');
+        //calling the method to fill the books acording to the active filters
+        adjust_books("course");
     });
 
     //activating sort by btn
@@ -777,6 +917,37 @@ function subject_filter(subjects) {
     });
 }
 
+// render courses filter
+function course_filter(courses) {
+    // * actions are the same as publishers filter
+
+    courses.forEach((course) => {
+        const course_HTML = `
+            <span class="course-item ${!course.clicked ? "disabled" : " "}" id="course-${course.id}">
+                ${course.name}
+            </span>
+        `;
+        books_main_content.innerHTML += course_HTML;
+    });
+    const save_and_return_btn_content = `
+            <span class="save_and_return_btn">
+            ذخیره و بازگشت
+            </span>
+        `;
+    books_main_content.innerHTML += save_and_return_btn_content;
+    courses_DOM = [...document.querySelectorAll('.course-item')];
+    courses_DOM.forEach(el => {
+        el.addEventListener('click', (e) => {
+            clicked_courses_identifier(e);
+        });
+    });
+    address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
+    //address_to_here += "filter/";
+    document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        map_handler();
+    });
+}
+
 // funnction for storing clicked publishers
 // * function gets clicked event as an argument
 function clicked_publishers_identifier(e) {
@@ -864,6 +1035,26 @@ function clicked_grades_identifier(e) {
     adjust_books("year");
 }
 
+function clicked_courses_identifier(e) {
+    if (![...e.target.classList].includes("disabled")) {
+        e.target.classList.add('disabled');
+    }
+    else {
+        e.target.classList.remove('disabled');
+    }
+    const clicked_course = parseInt(e.target.id.split("course-")[1]);
+    if (clicked_courses.includes(clicked_course)) {
+        clicked_courses = clicked_courses.filter(p => {
+            return p != clicked_course;
+        })
+    }
+    else {
+        clicked_courses.push(clicked_course);
+        is_filled_course = true;
+    }
+    document.querySelector('.fil-4 .sub-filter').innerHTML = `( ${clicked_courses.length} )`;
+    adjust_books("year");
+}
 // function to make book page ready for filters
 function clear_stage(element) {
     element.innerHTML = "";
@@ -928,6 +1119,7 @@ function render_shopping_cart(cart1) {
             // fill the discount value from api
             let discount = cart.cart_summary.total_discount_of_items;
             // get the pay url for the final step btn
+            load_pause('active');
             axios
                 .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
                 //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
@@ -935,6 +1127,7 @@ function render_shopping_cart(cart1) {
                     const url = res.data;
                     // render final stage cart with given parameters
                     render_final_stage_cart(cart_items, discount, url.url_to_pay);
+                    load_pause("disactive");
                 })
                 .catch(err => {
                     // ? we need a better way to handle the errors :)
@@ -1697,10 +1890,12 @@ function adjust_books(state) {
     let filterd_by_pubs = []
     let filterd_by_sub = []
     let filtered_by_year = [];
+    let filtered_by_course = [];
     // changing all the clicked proprty for css reasons
     publishers.map(p => p.clicked = false);
     subjects.map(s => s.clicked = false);
     grades.map(s => s.clicked = false);
+    courses.map(s => s.clicked = false);
     // find all books with seleceted publishers
     clicked_publishers_ids.forEach(cp => {
         filterd_by_pubs = filterd_by_pubs.concat(books.filter(b => b.publisher === el_by_id(publishers, cp).name));
@@ -1719,6 +1914,12 @@ function adjust_books(state) {
         let clicked_sub = grades.filter(s => s.id == sub);
         clicked_sub.map(t => t.clicked = true);
     });
+    // find all books with selected course
+    clicked_courses.forEach(course => {
+        filtered_by_course = filtered_by_course.concat(books.filter(b => b.course === el_by_id(courses, course).id));
+        let clicked_course = courses.filter(s => s.id == course);
+        clicked_course.map(t => t.clicked = true);
+    });
     // extract the ids of found books by each filter
     let ids_by_pub = [];
     filterd_by_pubs.forEach(b => ids_by_pub.push(b.id));
@@ -1726,12 +1927,52 @@ function adjust_books(state) {
     filterd_by_sub.forEach(b => ids_by_sub.push(b.id));
     let ids_by_year = [];
     filtered_by_year.forEach(b => ids_by_year.push(b.id));
+    let ids_by_course = [];
+    filtered_by_course.forEach(b => ids_by_course.push(b.id));
+    //console.log(ids_by_course);
 
     // gathering final ids
-    let final_ids = ids_by_pub.concat(ids_by_sub, ids_by_year);
+    let final_ids = ids_by_pub.concat(ids_by_sub, ids_by_year, ids_by_course);
+    //console.log(final_ids);
     //operating as and
-    // if all 3 are selected the id should be repeated 3 times
-    if ((((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0)) && (ids_by_year.length !== 0))) {
+    // if all 4 are selected the id should be repeated 3 times
+    if (
+        (
+            (ids_by_pub.length !== 0)
+            &&
+            (ids_by_sub.length !== 0)
+            &&
+            (ids_by_year.length !== 0)
+            &&
+            (ids_by_course.length !== 0)
+        )
+    ) {
+        const my_count = {};
+        final_ids.map(id => toString(id));
+        final_ids.forEach(element => {
+            my_count[element] = (my_count[element] || 0) + 1;
+        });
+        let obj_id = [];
+        for (const key in my_count) {
+            if (my_count[key] === 4) {
+                obj_id.push(key);
+            }
+        }
+        obj_id = obj_id.map(id => parseInt(id));
+        obj_id.forEach(id => {
+            filtered_book = filtered_book.concat(books.filter(b => b.id === id));
+        })
+    }
+    // if 3 fields are selected
+    else if (
+        (((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0)) && (ids_by_year.length !== 0))
+        ||
+        (((ids_by_pub.length !== 0) && (ids_by_sub.length !== 0)) && (ids_by_course.length !== 0))
+        ||
+        (((ids_by_course.length !== 0) && (ids_by_sub.length !== 0)) && (ids_by_year.length !== 0))
+        ||
+        (((ids_by_pub.length !== 0) && (ids_by_course.length !== 0)) && (ids_by_year.length !== 0))
+    ) {
         const my_count = {};
         final_ids.map(id => toString(id));
         final_ids.forEach(element => {
@@ -1756,6 +1997,12 @@ function adjust_books(state) {
             ((ids_by_year.length !== 0) && (ids_by_pub.length !== 0))
             ||
             ((ids_by_year.length !== 0) && (ids_by_sub.length !== 0))
+            ||
+            ((ids_by_year.length !== 0) && (ids_by_course.length !== 0))
+            ||
+            ((ids_by_course.length !== 0) && (ids_by_sub.length !== 0))
+            ||
+            ((ids_by_pub.length !== 0) && (ids_by_course.length !== 0))
         ) {
             const my_count = {};
             final_ids.map(id => toString(id));
@@ -1775,7 +2022,15 @@ function adjust_books(state) {
             })
         }
         // if only one is clicked we should render according to the one set of ids which all are unique
-        else if ((ids_by_pub.length !== 0) || (ids_by_sub.length !== 0) || (ids_by_year.length !== 0)) {
+        else if (
+            (ids_by_pub.length !== 0)
+            ||
+            (ids_by_sub.length !== 0)
+            ||
+            (ids_by_year.length !== 0)
+            ||
+            (ids_by_course.length !== 0)
+        ) {
             final_ids.forEach(id => {
                 filtered_book = filtered_book.concat(books.filter(b => b.id === id));
             });
@@ -1791,9 +2046,11 @@ function adjust_books(state) {
     //     //filter_activated = false;
     // }
     needed_books = [...filtered_book];
-    if ((clicked_publishers_ids.length === 0)
+    if (
+        (clicked_publishers_ids.length === 0)
         && (clicked_subjects.length === 0)
         && (clicked_grades.length === 0)
+        && (clicked_courses.length === 0)
     ) {
         needed_books = [...first_rendered_books];
         filter_activated = false;
