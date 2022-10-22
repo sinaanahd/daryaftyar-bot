@@ -253,10 +253,10 @@ let first_rendered_books = [];
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
-//const us_id = window.Telegram.WebApp.initData;
+const us_id = window.Telegram.WebApp.initData;
 // spiliting data to find the id of the user
-//const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
-const final_id = "341393410";
+const final_id = us_id.split("%22")[2].split("3A")[1].split("%")[0];
+//const final_id = "341393410";
 
 // ! loading complete method
 //documnet load to render first page
