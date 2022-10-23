@@ -46,6 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => {
             user = res.data;
             load_pause("disactive");
+            console.log(user);
+            name_input.value = user.real_name;
+            phone_input.value = user.real_home_number;
+            postal_code_input.value = user.real_postal_code;
+            address_input.value = user.real_address;
+            check_situtation();
         })
         .catch((err) => render_errors(err.message));
 });
@@ -78,6 +84,9 @@ function validate_name_input(target) {
     if (content.length > 50) {
         render_name_error("len", "active", target);
     }
+    else if (content.length < 3) {
+        render_name_error("short-len", "active", target);
+    }
     else if (invalid_char) {
         render_name_error("num", "active", target);
     }
@@ -85,37 +94,46 @@ function validate_name_input(target) {
         render_name_error("len", "disactive", target);
         user.real_name = content;
     }
-
+    check_situtation();
 }
 function validate_phone_input(target) {
     let content = target.value;
     if (content.length > 15) {
         render_phone_error("len", "active", target);
     }
+    else if (content.length < 10) {
+        render_phone_error("short-len", "active", target);
+    }
     else {
         render_phone_error("len", "disactive", target);
         user.real_home_number = content;
     }
+    check_situtation();
 }
 function validate_post_input(target) {
     let content = target.value;
-    if (content.length > 10) {
+    if (content.length !== 10) {
         render_post_error("len", "active", target);
     }
     else {
         render_post_error("len", "disactive", target);
         user.real_postal_code = content;
     }
+    check_situtation();
 }
 function validate_address_input(target) {
     let content = target.value;
     if (content.length > 250) {
         render_address_error("len", "active", target);
     }
+    else if (content.length === 0) {
+        render_address_error("zero", "active", target);
+    }
     else {
         render_address_error("len", "disactive", target);
         user.real_address = content;
     }
+    check_situtation();
 }
 function render_name_error(kind, state, target) {
     if ((kind === "len") && (state === "active")) {
@@ -123,6 +141,12 @@ function render_name_error(kind, state, target) {
         error_for_name.style.opacity = "1";
         error_for_name.style.height = "40px";
         error_for_name.innerHTML = "طول مجاز برای این فیلد حداکثر ۵۰ کاراکتر است";
+    }
+    else if ((kind === "short-len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_name.style.opacity = "1";
+        error_for_name.style.height = "40px";
+        error_for_name.innerHTML = "طول مجاز برای این فیلد حداقل ۳ کاراکتر است";
     }
     else if ((kind === "num") && (state === "active")) {
         target.classList.add('has-error');
@@ -135,7 +159,7 @@ function render_name_error(kind, state, target) {
         error_for_name.style.opacity = "0";
         error_for_name.style.height = "0px";
         error_for_name.innerHTML = " ";
-        check_situtation()
+        //check_situtation()
     }
 
 }
@@ -146,12 +170,18 @@ function render_phone_error(kind, state, target) {
         error_for_phone.style.height = "40px";
         error_for_phone.innerHTML = "طول مجاز برای این فیلد حداکثر ۱۵ کاراکتر است";
     }
+    else if ((kind === "short-len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_phone.style.opacity = "1";
+        error_for_phone.style.height = "40px";
+        error_for_phone.innerHTML = "طول مجاز برای این فیلد حداقل ۱۰ کاراکتر است";
+    }
     else if (state === "disactive") {
         target.classList.remove('has-error');
         error_for_phone.style.opacity = "0";
         error_for_phone.style.height = "0px";
         error_for_phone.innerHTML = " ";
-        check_situtation()
+        //check_situtation()
     }
 
 }
@@ -160,14 +190,14 @@ function render_post_error(kind, state, target) {
         target.classList.add('has-error');
         error_for_post.style.opacity = "1";
         error_for_post.style.height = "40px";
-        error_for_post.innerHTML = "طول مجاز برای این فیلد حداکثر ۱۰ کاراکتر است";
+        error_for_post.innerHTML = "طول مجاز برای این فیلد ۱۰ کاراکتر است";
     }
     else if (state === "disactive") {
         target.classList.remove('has-error');
         error_for_post.style.opacity = "0";
         error_for_post.style.height = "0px";
         error_for_post.innerHTML = " ";
-        check_situtation()
+        //check_situtation()
     }
 
 }
@@ -178,12 +208,18 @@ function render_address_error(kind, state, target) {
         error_for_address.style.height = "80px";
         error_for_address.innerHTML = "طول مجاز برای این فیلد حداکثر ۲۵۰ کاراکتر است";
     }
+    else if ((kind === "zero") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_address.style.opacity = "1";
+        error_for_address.style.height = "80px";
+        error_for_address.innerHTML = "این فیلد نمی تواند خالی باشد";
+    }
     else if (state === "disactive") {
         target.classList.remove('has-error');
         error_for_address.style.opacity = "0";
         error_for_address.style.height = "0px";
         error_for_address.innerHTML = " ";
-        check_situtation()
+        //check_situtation()
     }
 }
 
