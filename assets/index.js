@@ -408,7 +408,7 @@ function render_first_page() {
                     <div class="wallet-info">
                         <div class="wallet-amount-wrapper">
                             <span class="wallet-amount">
-                                ${user.amount}
+                                ${split_in_three(user.amount)}
                             </span>
                             <span class="wallet-curency">
                                 تومان 
@@ -417,7 +417,7 @@ function render_first_page() {
                         <span class="sperator">|</span>
                         <div class="wallet-exprie-details-wrapper">
                             <span class="expire-date">
-                                ${user.days_left} 
+                                ${split_in_three(user.days_left)} 
                             </span>
                             <span class="wallet-expire-text">
                                 روز مهلت تا استفاده
@@ -686,10 +686,10 @@ function render_books(books1) {
                             <div class="book-price">
                                 <span class="dynamic-price ${(book.discounted_price !== book.price) ? "has-discount" : " "}">
                                     <span class="normal-price">
-                                    ${book.price}
+                                    ${split_in_three(book.price)}
                                     </span>
                                     <span class="disocounted-price">
-                                    ${book.discounted_price}
+                                    ${split_in_three(book.discounted_price)}
                                     </span>
                                 </span>
                                 تومان
@@ -1098,7 +1098,7 @@ function render_shopping_cart(cart1) {
                         <span class="price">
                         </span>
                         <span class="discounted-price">
-                        ${cart.cart_summary.final_price}
+                        ${split_in_three(cart.cart_summary.final_price)}
                         </span>
                         تومان
                     </div>
@@ -1169,8 +1169,6 @@ function render_shopping_cart(cart1) {
     // to get total price wrapper
     const total_price_HTML = document.querySelector('.total-price .price');
     const discounted_price_HTML = document.querySelector('.discounted-price');
-    // a variable for calculating total price
-    let total_price_amount = 0;
     // adding items in cart
     cart1.forEach(item => {
         const cart_item_content = `
@@ -1182,7 +1180,7 @@ function render_shopping_cart(cart1) {
                 </div>
                 <div class="cart-item-price">
                     <span class="price">
-                        ${item.price}
+                        ${split_in_three(item.price)}
                     </span>
                     تومان
                 </div>
@@ -1199,10 +1197,10 @@ function render_shopping_cart(cart1) {
         </div>
         `;
         // calculate total pirce with the items in cart
-        total_price_amount += item.count_in_user_cart * item.price;
+        //total_price_amount += item.count_in_user_cart * item.price;
         cart_item_wrapper.innerHTML += cart_item_content;
     });
-    total_price_HTML.innerHTML = total_price_amount;
+    total_price_HTML.innerHTML = split_in_three(cart.cart_summary.total_price_of_items);
 
 
     // get all the items in the cart for making events in the more or less
@@ -1303,7 +1301,7 @@ function render_wallet(user) {
                 <div class="wallet-info">
                     <div class="wallet-amount">
                         <span class="price">
-                            ${user.amount}
+                            ${split_in_three(user.amount)}
                         </span>
                         تومان
                     </div>
@@ -1399,10 +1397,10 @@ function render_single_book(book) {
                     <div class="price-wrapper">
                         <span class="price ${(book.discounted_price !== book.price) ? "has-discount" : " "}">
                             <span class="normal-price">
-                                ${book.price}
+                                ${split_in_three(book.price)}
                             </span> 
                             <span class="discounted-price">
-                                ${book.discounted_price}
+                                ${split_in_three(book.discounted_price)}
                             </span>
                         </span>
                         تومان
@@ -1543,7 +1541,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${cart.cart_summary.total_price_of_items}
+                                        ${split_in_three(cart.cart_summary.total_price_of_items)}
                                     </span>
                                     تومان
                                 </span>
@@ -1554,7 +1552,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${cart.cart_summary.total_discount_of_items}
+                                        ${split_in_three(cart.cart_summary.total_discount_of_items)}
                                     </span>
                                     تومان
                                 </span>
@@ -1565,7 +1563,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${cart.cart_summary.credit_discount_final}
+                                        ${split_in_three(cart.cart_summary.credit_discount_final)}
                                     </span>
                                     تومان
                                 </span>
@@ -1576,7 +1574,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${cart.cart_summary.post_cost === 0 ? "رایگان" : cart.cart_summary.post_cost}
+                                        ${cart.cart_summary.post_cost === 0 ? "رایگان" : split_in_three(cart.cart_summary.post_cost)}
                                     </span>
                                     <span>
                                         ${cart.cart_summary.post_cost === 0 ? " " : "تومان"}
@@ -1590,7 +1588,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                                 </span>
                                 <span class="total-price">
                                     <span class="price">
-                                        ${cart.cart_summary.final_price}
+                                        ${split_in_three(cart.cart_summary.final_price)}
                                     </span>
                                     تومان
                                 </span>
@@ -1600,7 +1598,7 @@ function render_final_stage_cart(cart_items, discount, url) {
                             <span class="pay-amount">
                                 پرداخت
                                 <span class="amount">
-                                    ${cart.cart_summary.final_price}
+                                    ${split_in_three(cart.cart_summary.final_price)}
                                 </span>
                                 <span class="curency">
                                     تومان
@@ -1877,13 +1875,13 @@ function update_total(el, d_el) {
     if (sum != 0) {
         // ready the styles for an empty cart
         cart_empty_HTML.style.display = "none";
-        el.innerHTML = sum;
-        d_el.innerHTML = discounted_sum;
+        el.innerHTML = split_in_three(sum);
+        d_el.innerHTML = split_in_three(discounted_sum);
     }
     else {
         // revert the styles for the a filled cart
-        el.innerHTML = sum;
-        d_el.innerHTML = discounted_sum;
+        el.innerHTML = split_in_three(sum);
+        d_el.innerHTML = split_in_three(discounted_sum);
         cart_main_content.innerHTML = '';
         cart_main_content.appendChild(cart_empty_HTML);
         cart_empty_HTML.style.display = "flex";
@@ -2315,7 +2313,7 @@ function render_cart_modal(cart1) {
                         <span class="price">
                         </span>
                         <span class="discounted-price">
-                        ${cart.cart_summary.final_price}
+                        ${split_in_three(cart.cart_summary.final_price)}
                         </span>
                         تومان
                     </div>
@@ -2338,7 +2336,7 @@ function render_cart_modal(cart1) {
         // check if the cart isn't empty ro render final stage cart
         if (cart1.length !== 0) {
             // fill the discount value from api
-            let discount = cart.cart_summary.total_discount_of_items;
+            let discount = split_in_three(cart.cart_summary.total_discount_of_items);
             // get the pay url for the final step btn
             open_cart_modal("disactive");
             load_pause("active");
@@ -2385,8 +2383,6 @@ function render_cart_modal(cart1) {
     // to get total price wrapper
     const total_price_HTML = document.querySelector('.total-price .price');
     const discounted_price_HTML = document.querySelector('.discounted-price');
-    // a variable for calculating total price
-    let total_price_amount = 0;
     // adding items in cart
     cart1.forEach(item => {
         const cart_item_content = `
@@ -2398,7 +2394,7 @@ function render_cart_modal(cart1) {
                 </div>
                 <div class="cart-item-price">
                     <span class="price">
-                        ${item.price}
+                        ${split_in_three(item.price)}
                     </span>
                     تومان
                 </div>
@@ -2415,10 +2411,10 @@ function render_cart_modal(cart1) {
         </div>
         `;
         // calculate total pirce with the items in cart
-        total_price_amount += item.count_in_user_cart * item.price;
+        //total_price_amount += item.count_in_user_cart * item.price;
         cart_item_wrapper.innerHTML += cart_item_content;
     });
-    total_price_HTML.innerHTML = total_price_amount;
+    total_price_HTML.innerHTML = split_in_three(cart.cart_summary.total_price_of_items);;
 
 
     // get all the items in the cart for making events in the more or less
@@ -2649,4 +2645,16 @@ function modal_state() {
             changed_book.innerHTML = ci.count_in_user_cart;
         }
     });
+}
+// a function to seprate numbers bt 3 digits
+function split_in_three(number) {
+    let reversed_num = String(number).split("").reverse().join("");
+    let splited_number = "";
+    for (let i = 0; i < reversed_num.length; i++) {
+        if (i % 3 === 0 && i !== 0) {
+            splited_number += ",";
+        }
+        splited_number += reversed_num[i];
+    }
+    return splited_number.split("").reverse().join("");
 }
