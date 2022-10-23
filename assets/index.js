@@ -835,7 +835,7 @@ function publisher_filter(publishers) {
     });
     // create a button to adjust the changes and returns to the books page
     const save_and_return_btn_content = `
-            <span class="save_and_return_btn">
+            <span class="save_and_return_btn fixed-btn">
             ذخیره و بازگشت
             </span>
         `;
@@ -934,7 +934,7 @@ function course_filter(courses) {
         books_main_content.innerHTML += course_HTML;
     });
     const save_and_return_btn_content = `
-            <span class="save_and_return_btn">
+            <span class="save_and_return_btn fixed-btn">
             ذخیره و بازگشت
             </span>
         `;

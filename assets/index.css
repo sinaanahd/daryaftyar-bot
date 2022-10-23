@@ -323,6 +323,10 @@ a {
   background-color: #24475b;
   font-size: 15px;
   border-radius: 20px; }
+.books-wrapper .fixed-btn {
+  position: fixed;
+  top: 50vh;
+  left: 5vw; }
 .books-wrapper .save_and_return_btn {
   color: #24475b;
   background-color: #ebebeb;

@@ -300,6 +300,11 @@ a{
     //     border-left: 2px solid $mainColor;
     //     padding: 10px 10px;
     // }
+    .fixed-btn{
+        position: fixed;
+        top: 50vh;
+        left: 5vw;
+    }
     .save_and_return_btn{
         @include styler($mainColor , $background , 15px , 50px);
         border: 2px solid $mainColor;
