@@ -250,6 +250,8 @@ let pagination_HTML = [];
 let sorted_by = "هیچکدام";
 // the array of the first books un touched
 let first_rendered_books = [];
+// ! notice this method 
+let let_the_cart = false;
 // ! events
 // * ids with telegram object
 // filling the user via telegram object
@@ -284,8 +286,8 @@ document.addEventListener("DOMContentLoaded", () => {
             //needed_books = books.slice(0, 30);
             //console.log(books.length);
             //needed_books = books;
-            //render_books(needed_books);\
-            //console.log(books[1]);
+            //render_books(needed_books);
+            //console.log(books.filter(b => b.id === 125737));
         })
         .catch((err) => render_errors(err.message));
     axios
@@ -319,6 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
+            //console.log(cart);
         })
         .catch((err) => render_errors(err.message));
     axios
@@ -354,8 +357,9 @@ footer_btn_cart.addEventListener('click', () => {
     disactive_modals();
     // checking the cart items length and calling the update total method for adjusting the situtaion
     if (cart_items.length === 0) {
-        const total_price_HTML = document.querySelector('.price');
-        update_total(total_price_HTML);
+        const total_price_HTML = document.querySelector('.total-price .price');
+        const discounted_price_HTML = document.querySelector('.discounted-price');
+        update_total(total_price_HTML, discounted_price_HTML);
     }
 });
 //render checkout page via menu btn
@@ -731,7 +735,7 @@ function render_books(books1) {
                     const id = parseInt(id_string.split("-")[1]);
                     // calling the function for updating the quality
                     update_quantity('book', id, "+");
-                    //update_total(total_price_HTML);
+
                 }
                 // if you have clicked on the i tag instead of span
                 else if (classes[classes.length - 1] === "fa-plus") {
@@ -748,7 +752,7 @@ function render_books(books1) {
                     const id = parseInt(id_string.split("-")[1]);
                     // call the update quantity for the modifications
                     update_quantity('book', id, "+");
-                    //update_total(total_price_HTML);
+
                 }
             });
             // decreament items in book page
@@ -775,7 +779,7 @@ function render_books(books1) {
                         quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                         // changing the array quantity
                     }
-                    //update_total(total_price_HTML);
+
                 }
                 // if you have clicked on the i tag instead of span tag
                 else if (classes[classes.length - 1] === "fa-minus") {
@@ -796,7 +800,7 @@ function render_books(books1) {
                         quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                         // changing the array quantity
                     }
-                    //update_total(total_price_HTML);
+
                 }
             });
 
@@ -1090,8 +1094,11 @@ function render_shopping_cart(cart1) {
                     <div class="label">
                         مجموع :
                     </div>
-                    <div class="total-price">
+                    <div class="total-price ${cart.cart_summary.total_discount_of_items === 0 ? " " : "has-discount"}">
                         <span class="price">
+                        </span>
+                        <span class="discounted-price">
+                        ${cart.cart_summary.final_price}
                         </span>
                         تومان
                     </div>
@@ -1160,7 +1167,8 @@ function render_shopping_cart(cart1) {
 
     const cart_item_wrapper = document.querySelector('.cart-items');
     // to get total price wrapper
-    const total_price_HTML = document.querySelector('.price');
+    const total_price_HTML = document.querySelector('.total-price .price');
+    const discounted_price_HTML = document.querySelector('.discounted-price');
     // a variable for calculating total price
     let total_price_amount = 0;
     // adding items in cart
@@ -1213,7 +1221,7 @@ function render_shopping_cart(cart1) {
                 const id_string = e.target.parentElement.parentElement.id;
                 const id = parseInt(id_string.split("-")[2]);
                 update_quantity('cart', id, "+");
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
             else if (classes[classes.length - 1] === "fa-plus") {
                 const quantity_wrapper = e.target.parentElement.nextElementSibling;
@@ -1223,7 +1231,7 @@ function render_shopping_cart(cart1) {
                 const id_string = e.target.parentElement.parentElement.parentElement.id;
                 const id = parseInt(id_string.split("-")[2]);
                 update_quantity('cart', id, "+");
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
         });
         // decreament items in cart
@@ -1243,7 +1251,7 @@ function render_shopping_cart(cart1) {
                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                     // changing the array quantity
                 }
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
             else if (classes[classes.length - 1] === "fa-minus") {
                 const quantity_wrapper = e.target.parentElement.previousSibling;
@@ -1257,7 +1265,7 @@ function render_shopping_cart(cart1) {
                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                     // changing the array quantity
                 }
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
         });
 
@@ -1483,7 +1491,7 @@ function render_single_book(book) {
     back_btn.addEventListener('click', () => {
         // disactive modal
         activate_modal_single_book("disactive");
-        map_handler();
+        address_to_here = address_to_here.replace(("single-book/"), "");
     });
 }
 //function to render final stage of cart
@@ -1834,7 +1842,8 @@ function update_quantity(type, id, sign) {
             cart_items.push({ ...item, count_in_user_cart: 1 });
             // update ids
             cart.cart_items_ids.push(id);
-            open_cart_modal("active");
+            //open_cart_modal("active");
+            let_the_cart = true;
         }
         // otherwise just update the ids for api calls
         else {
@@ -1856,22 +1865,25 @@ function update_quantity(type, id, sign) {
 }
 //function to update total price
 // ! filter beshe 4 ta
-function update_total(el) {
-    let sum = 0;
+function update_total(el, d_el) {
+    let sum = cart.cart_summary.total_price_of_items;
+    let discounted_sum = cart.cart_summary.final_price;
     const cart_empty_HTML = document.querySelector('.cart-is-empty');
     const cart_main_content = document.querySelector('.cart-main-content');
-    cart_items.forEach(c => {
-        sum += c.count_in_user_cart * c.price;
-    });
+    // cart_items.forEach(c => {
+    //     sum += c.count_in_user_cart * c.price;
+    // });
     // check if the cart if empty or not
     if (sum != 0) {
         // ready the styles for an empty cart
         cart_empty_HTML.style.display = "none";
         el.innerHTML = sum;
+        d_el.innerHTML = discounted_sum;
     }
     else {
         // revert the styles for the a filled cart
         el.innerHTML = sum;
+        d_el.innerHTML = discounted_sum;
         cart_main_content.innerHTML = '';
         cart_main_content.appendChild(cart_empty_HTML);
         cart_empty_HTML.style.display = "flex";
@@ -2075,11 +2087,21 @@ function update_cart(ids) {
         .then((res) => {
             cart = res.data;
             load_pause('disactive');
-            //console.log(cart);
+            if (let_the_cart) {
+                open_cart_modal("active");
+                let_the_cart = false;
+                const total_price_HTML = document.querySelector('.total-price .price');
+                const discounted_price_HTML = document.querySelector('.discounted-price');
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+            else if (address_to_here.includes('cart-modal/') || address_to_here.includes('cart/')) {
+                const total_price_HTML = document.querySelector('.total-price .price');
+                const discounted_price_HTML = document.querySelector('.discounted-price');
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+            modal_state();
         })
         .catch(err => {
-            //global_err = err;
-            //console.log(err)
             render_errors(err.message);
         })
 }
@@ -2250,6 +2272,7 @@ function open_cart_modal(state) {
         }
     }
     else {
+        address_to_here = address_to_here.replace(("cart-modal/"), "");
         document.querySelector('body').style.overflowY = "unset";
         modal_wrapper.classList.remove("cart-pop-up");
         modal_wrapper.classList.remove("single-modal");
@@ -2257,11 +2280,12 @@ function open_cart_modal(state) {
         setTimeout(() => {
             modal_wrapper.style.zIndex = "-1";
             modal_wrapper.innerHTML = " ";
-        }, 700)
+        }, 700);
     }
 }
 function render_cart_modal(cart1) {
     address_to_here = stop_repeatation_in_addres("cart-modal", address_to_here) ? address_to_here + "cart-modal/" : address_to_here;
+    //console.log(cart);
     const shopping_cart_HTML = `
         <div class="cart-wrapper">
             <div class="cart-header">
@@ -2287,8 +2311,11 @@ function render_cart_modal(cart1) {
                     <div class="label">
                         مجموع :
                     </div>
-                    <div class="total-price">
+                    <div class="total-price ${cart.cart_summary.total_discount_of_items === 0 ? " " : "has-discount"}">
                         <span class="price">
+                        </span>
+                        <span class="discounted-price">
+                        ${cart.cart_summary.final_price}
                         </span>
                         تومان
                     </div>
@@ -2356,7 +2383,8 @@ function render_cart_modal(cart1) {
 
     const cart_item_wrapper = document.querySelector('.cart-items');
     // to get total price wrapper
-    const total_price_HTML = document.querySelector('.price');
+    const total_price_HTML = document.querySelector('.total-price .price');
+    const discounted_price_HTML = document.querySelector('.discounted-price');
     // a variable for calculating total price
     let total_price_amount = 0;
     // adding items in cart
@@ -2409,7 +2437,7 @@ function render_cart_modal(cart1) {
                 const id_string = e.target.parentElement.parentElement.id;
                 const id = parseInt(id_string.split("-")[2]);
                 update_quantity('cart', id, "+");
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
             else if (classes[classes.length - 1] === "fa-plus") {
                 const quantity_wrapper = e.target.parentElement.nextElementSibling;
@@ -2419,7 +2447,7 @@ function render_cart_modal(cart1) {
                 const id_string = e.target.parentElement.parentElement.parentElement.id;
                 const id = parseInt(id_string.split("-")[2]);
                 update_quantity('cart', id, "+");
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
         });
         // decreament items in cart
@@ -2439,7 +2467,7 @@ function render_cart_modal(cart1) {
                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                     // changing the array quantity
                 }
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
             else if (classes[classes.length - 1] === "fa-minus") {
                 const quantity_wrapper = e.target.parentElement.previousSibling;
@@ -2453,7 +2481,7 @@ function render_cart_modal(cart1) {
                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                     // changing the array quantity
                 }
-                update_total(total_price_HTML);
+                update_total(total_price_HTML, discounted_price_HTML);
             }
         });
 
@@ -2470,6 +2498,8 @@ function render_cart_modal(cart1) {
     const back_btn = document.querySelector('.cart-wrapper .back');
     back_btn.addEventListener('click', () => {
         open_cart_modal("disactive");
+        // map_handler();
+        address_to_here = address_to_here.replace(("cart-modal/"), "");
     });
 }
 // a function to disactive all modals 
@@ -2610,4 +2640,13 @@ function render_errors(error) {
         error_modal.style.visibility = "hidden";
         error_modal.style.transform = "scale(0)";
     }, 3000);
+}
+// function for modal state updates
+function modal_state() {
+    cart.cart_details.forEach(ci => {
+        let changed_book = document.querySelector(`#book-${ci.id} .book-quantity`);
+        if (changed_book !== null) {
+            changed_book.innerHTML = ci.count_in_user_cart;
+        }
+    });
 }
