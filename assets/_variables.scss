@@ -1,24 +1,25 @@
 // $background : #e8e8a6;
-//$background : #f8f8f8;
+$background1 : #f8f8f8;
 $background : #ebebeb;
 
-// $mainColor : #937602;
-//$mainColor : #3f51b5;
+//$mainColor : #937602;
+$mainColor1 : #3f51b5;
 $mainColor : #24475b;
 $mainBlack : #000;
 
 //$secondaryColor : #AB8A00;
-//$secondaryColor : #ffaa5a;
+//$secondaryColor1 : #ffaa5a;
+$secondaryColor1 :#F5A623;
 $secondaryColor : #009591;
 
 // $extraColor1 : #c7be6e;
-//$extraColor1 : #ffd0a4;
+$extraColor11 : #ffd0a4;
 $extraColor1 : #2ed18e;
 
-//$adColor1 : #888efc;
+$adColor11 : #888efc;
 $adColor1 : #00c6af;
 
-//$adColor2 : #01328f;
+$adColor21 : #01328f;
 $adColor2 : #073650;
 
 $adColor3 : #fff7d6;
@@ -37,3 +38,5 @@ $greenColor : #05a986;
 $gradiant : linear-gradient(to left, #24475b, #24475bc9);
 
 $transition: all ease-in-out 0.3s;
+
+$boxShadow : 4px 4px 8px 1px rgba(0, 0, 0, 0.05);
