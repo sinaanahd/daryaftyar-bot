@@ -5,14 +5,14 @@ html {
     scroll-behavior: smooth;
 }
 body {
-    padding: 0 0 50px 0;
+    padding: 0 ;
     margin: 0;
     direction: rtl;
     overflow-x: hidden !important;
     font-size: 15px;
     font-family: "main-font";
     color: $mainColor1;
-    line-height: 35px;
+    line-height: unset!important;
     width: 100% !important;
     min-width: 300px;
     background-color: $background1;
@@ -36,11 +36,150 @@ img{
     height: 100vh;
     background-color: $background1;
 }
+.loading {
+    width: 100vw;
+    height: 100vh;
+    @include flexMixin(row, center, center);
+    font-size: 100px;
+    color: $mainColor1;
+    animation-name: spinMF;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+}
+@keyframes spinMF {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+.pause {
+    width: 100vw;
+    height: 100vh;
+    color: $mainColor1;
+    font-size: 90px;
+    @include flexMixin(row, center, center);
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: $background;
+    opacity: 0.6;
+
+    i {
+        animation-name: spinMF;
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        animation-direction: alternate-reverse;
+    }
+
+    z-index: 999999;
+    display: none;
+}
+.error-modal {
+    width: 90vw;
+    height: 100px;
+    border-radius: 20px;
+    position: fixed;
+    top: 10px;
+    right: 5vw;
+    background-color: $background1;
+    border: 2px solid $mainColor1;
+    overflow: scroll;
+    box-shadow: 0px 10px 15px 0 #00000080;
+    transition: all ease-in-out .5s;
+    transform: scale(0);
+    visibility: hidden;
+    @include flexMixin(column, center, center);
+    z-index: 9999999;
+
+    .err-message {
+        color: $redColor;
+    }
+}
+.welcome {
+
+    footer,
+    .move-to-top {
+        display: none !important;
+    }
+}
+.move-to-top {
+    width: 60px;
+    height: 60px;
+    @include styler($background1 , $mainColor1 , 40px, 50%);
+    position: fixed;
+    right: 10px;
+    bottom: 90px;
+    z-index: 9999;
+    box-shadow: $boxShadow;
+    @include flexMixin(row, center, center);
+}
+.search-modal {
+    position: fixed;
+    top: -100vh;
+    left: 2vw;
+    width: 96vw;
+    min-height: 100px;
+    max-height: calc(100vh - 150px);
+    overflow-y: scroll;
+    z-index: 99;
+    @include styler($mainColor , $extraColor1 , 15px, 50px);
+    padding: 20px 0;
+    transition: all ease-in-out 0.6s;
+
+    input {
+        display: block;
+        margin: 0 auto 30px;
+        width: 80%;
+        height: 50px;
+        border: 2px solid $mainColor;
+        border-radius: 20px;
+        outline: none !important;
+        font-size: 15px;
+        font-family: "main-font";
+        padding: 10px;
+    }
+
+    .search-result {
+        position: relative;
+        @include flexMixin(column, center, center);
+    }
+
+    .search-result-item {
+        @include flexMixin(row, flex-start, center);
+        border-bottom: 1px solid $mainColor;
+        border-radius: 40px;
+        width: 90%;
+        padding: 0 30px;
+        margin: 20px 0px;
+
+        img {
+            width: 60px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0px 10px 15px 0 #00000080;
+        }
+
+        span {
+            margin-right: 20px;
+            font-size: 15px;
+        }
+
+    }
+}
+/* welcome wrapper styles */
 .welcome-wrapper{
     width: 100%;
     height: 100%;
     background-color: $mainColor1;
     color: $background1;
+    transition: $transition;
+    transform: scale(0);
     .header{
         @include flexMixin(row,flex-start , center);
     }
@@ -71,7 +210,7 @@ img{
         font-size: 16px;
         width: 100%;
         height: 20vh;
-        @include flexMixin(row,center,flex-end);
+        @include flexMixin(column,flex-end,center);
     }
     .gif-wrapper{
         width: 100%;
@@ -98,9 +237,14 @@ img{
         }
     }
 }
+/* welcome wrapper styles */
+
+/* styles for main page */
 .main-page{
     width: 100%;
+    transition: $transition;
     @include flexMixin(column , flex-start , center);
+    transform: scale(0);
     .header{
         width: 100%;
         padding: 20px 40px;
@@ -115,6 +259,7 @@ img{
         @include styler($background1 , $mainColor1 , 16px ,20px);
         padding: 20px 40px;
         box-shadow: $boxShadow;
+        margin: 20px 0 0;
         .wallet-title{
             width: 100%;
             text-align: center;
@@ -188,6 +333,197 @@ img{
         }
     }
 }
+/* styles for main page */
+.books-page-wrapper{
+    width: 100%;
+    transition: $transition;
+    //transform: scale(0);
+    .header {
+        position: fixed;
+        width: 100vw;
+        background-color: $background1;
+        right: 0;
+        top: 0px;
+        padding: 30px 0 10px;
+        z-index: 14;
+        border-radius: 20px;
+        //box-shadow: $boxShadow;
+    }
+    .back {
+        position: absolute;
+        top: 20px;
+        right: 10px;
+        @include styler($mainColor, $secondaryColor1, 40px, 10px);
+        width: 40px;
+        height: 40px;
+        @include flexMixin (row, center, center);
+        img {
+            width: 20px;
+            transform: rotateY(180deg);
+            left: 1px;
+            position: relative;
+        }
+    }
+
+    .search-icon {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        @include styler($background1, $secondaryColor1, 17px, 10px);
+        border: 2px solid;
+        width: 40px;
+        height: 40px;
+        @include flexMixin (row, center, center);
+        i {
+            position: relative;
+            right: 0px;
+        }
+    }
+
+    .books-page-title {
+        font-size: 24px;
+        text-align: center;
+        width: fit-content;
+        display: block;
+        margin: 0 auto;
+        position: relative;
+        top: -4px;
+    }
+    .main-content{
+        width: 100%;
+        @include flexMixin(column,flex-start,center);
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: $boxShadow;
+        padding: 20px;
+        padding: 100px 0 0;
+    }
+    .sort-by-wrapper{
+        width: 90%;
+        @include flexMixin(row,space-between,center);
+        .content{
+            @include styler($mainBlack , #F1F2F2 , 16px , 10px);
+            @include flexMixin(row,flex-start,center);
+            padding: 0 15px 0 30px;
+            height: 50px;
+        }
+        .go-to-sort-by{
+            @include styler($mainColor1 , $secondaryColor1 , 16px , 10px);
+            width: 40px;
+            height: 40px;
+            @include flexMixin(row,center,center);
+        }
+        img{
+            width: 20px;
+        }
+    }
+    .filters-wrapper{
+        margin: 20px 0;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        grid-template-columns: repeat(4 ,1fr);
+        width: 90%;
+        column-gap: 10px;
+        text-align: center;
+        .filter{
+            @include styler(#fff , $secondaryColor1 , 14px , 20px);
+            border: 1px solid $secondaryColor1;
+            padding: 15px 0;
+        }
+    }
+    .books-wrapper{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        column-gap: 25px;
+        row-gap: 25px;
+    }
+    .book{
+        padding: 15px 12px;
+        box-shadow: $boxShadow;
+        color: $mainBlack;
+        @include flexMixin(column,space-between,center);
+        border-radius: 20px;
+        img{
+            border-radius: 10px;
+            width: 136px;
+        }
+        .title{
+            font-size: 24px;
+        }
+        .publisher{
+            font-size: 8px;
+            margin-bottom: 5px;
+        }
+        .prices-wrapper{
+            font-size: 8px;
+            @include flexMixin(column,center,center);
+            margin-bottom: 10px;
+        }
+        .btns-wrapper{
+            @include flexMixin(row,center,center);
+            .add-book,.book-quantity,.decrment-book{
+                width: 30px;
+                height: 30px;
+                @include flexMixin(row,center,center);
+                border-radius: 10px;
+                font-size: 15px;
+                color: $mainWhite;
+                text-align: center;
+            }
+            .add-book{
+                background-color: $greenColor;
+            }
+            .decrment-book{
+                background-color: $redColor;
+            }
+            .book-quantity{
+                border: 1px solid;
+                color: $mainBlack;
+                margin: 10px;
+                padding: 2px 0 0 0;
+            }
+            *{
+                flex: 1;
+            }
+        }
+    }
+    .page-count {
+        display: grid;
+        grid-template-columns: repeat(10, 1fr);
+        direction: ltr;
+        margin: 20px 0 120px;
+        row-gap: 10px;
+        width: 90%;
+        .page-number {
+            @include styler($mainColor1 , #fff , 15px, 5px);
+            border: 1px solid $mainColor1;
+            @include flexMixin(row, center, center);
+            width: 30px;
+            height: 30px;
+            padding-top: 4px;
+        }
+
+        .active-page {
+            color: #FFF;
+            background-color: $mainColor1;
+        }
+
+        .previus-page,
+        .next-page {
+            padding-top: 0px;
+            font-size: 20px;
+        }
+
+        .next-page {
+            i {
+                position: relative;
+                left: 1px;
+            }
+        }
+    }
+}
+
 footer{
     width: 100%;
     position: fixed;

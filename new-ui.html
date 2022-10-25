@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/index.css">
     <link rel="stylesheet" href="assets/new-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>فروشگاه دریافت یار</title>
@@ -12,105 +13,19 @@
 
 <body>
     <section class="root">
-        <!-- <div class="welcome-wrapper">
-            <div class="header">
-                <div class="close-wrapper">
-                    <div class="close-right"></div>
-                    <div class="close-left"></div>
-                </div>
-            </div>
-            <div class="welcome-text">
-                به فروشگاه دریافت یار خوش اومدی
-            </div>
-            <div class="gif-wrapper">
-                <img src="/assets/images/welcome-photo.png" alt="به ربات دریافت یار خوش آمدید" class="welcome-img">
-            </div>
-            <div class="start-btn">
-                <div class="content">
-                    شروع
-                </div>
-            </div>
-        </div> -->
-        <div class="main-page">
-            <div class="header">
-                <div class="user-wrapper">
-                    سلام
-                    <span class="user-name">
-                        user
-                    </span>
-                </div>
-                <div class="welcome-to-shop">
-                    به فروشگاه دریافت یار خوش اومدی
-                </div>
-            </div>
-            <div class="wallet-wrapper">
-                <div class="wallet-title">
-                    اعتبار کیف پول
-                </div>
-                <div class="amount-wrapper">
-                    <span class="amount">
-                        73,000
-                    </span>
-                    تومان اعتبار
-                </div>
-                <div class="days-left-wrapper">
-                    <span class="days-left">
-                        10
-                    </span>
-                    روز مهلت استفاده
-                </div>
-            </div>
-            <div class="more-credit-wrapper">
-                <div class="plus-wrapper">
-                    <span class="plus-vertical"></span>
-                    <span class="plus-horizontal"></span>
-                </div>
-                <div class="credit-text">
-                افزایش اعتبار
-                </div>
-            </div>
-            <div class="books-and-class-btn-wrapper">
-                <div class="box-btn books-wrapper">
-                    کتاب ها
-                    <img src="./assets/images/box-icon-2.png" alt="" class="box-icon">
-                </div>
-                <div class="box-btn class-wrapper">
-                    کلاس ها
-                    <img src="./assets/images/box-icon-1.png" alt="" class="box-icon">
-                </div>
-            </div>
-            <div class="best-of-wrapper">
-                <div class="best-of-box best-of-1">
-                        بهترین های 
-                    <span class="best-of-title">
-                        شیمی
-                    </span>
-                </div>
-                <div class="best-of-box best-of-2">
-                    بهترین های 
-                    <span class="best-of-title">
-                        ریاضی
-                    </span>
-                </div>
-                <div class="best-of-box best-of-3">
-                    بهترین های 
-                    <span class="best-of-title">
-                        ادبیات
-                    </span>
-                </div>
-            </div>
-        </div>
+        
     </section>
     <footer>
-        <div class="footer-col footer-col-">
+        <div class="footer-col footer-col-1">
             <span class="icon-footer">
                 <img src="./assets/images/footer-1.png" alt="" class="footer-icon-img">
             </span>
             <span class="footer-title">
                 سبد خرید
             </span>
+            <span class="cart-item-number" style="display:none;"></span>
         </div>
-        <div class="footer-col footer-col-">
+        <div class="footer-col footer-col-2">
             <span class="icon-footer">
                 <img src="./assets/images/footer-2.png" alt="" class="footer-icon-img">
             </span>
@@ -118,7 +33,7 @@
                 خانه
             </span>
         </div>
-        <div class="footer-col footer-col-">
+        <div class="footer-col footer-col-3">
             <span class="icon-footer">
                 <img src="./assets/images/footer-3.png" alt="" class="footer-icon-img">
             </span>
@@ -127,12 +42,19 @@
             </span>
         </div>
     </footer>
+    <section class="error-modal">
+    </section>
+    <section class="modal-pacle-holder">
+    </section>
+    <a href="#top" class="move-to-top">
+        <i class="fa fa-angle-double-up"></i>
+    </a>
+    <section class="pause">
+        <i class="fa fa-spinner"></i>
+    </section>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-   <!--
-
-       <script type="module" src="./assets/index.js"></script>
-   --> 
+    <script type="module" src="./assets/app.js"></script>
 </body>
 
 </html>
