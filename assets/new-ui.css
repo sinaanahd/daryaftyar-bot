@@ -676,6 +676,8 @@ img {
     margin: 40px auto; }
 
 .cart-page-wrapper {
+  transition: all ease-in-out 0.3s;
+  transform: scale(0);
   width: 100%;
   padding: 20px 20px 330px; }
   .cart-page-wrapper .cart-map-btns {
@@ -814,6 +816,126 @@ img {
     align-items: center;
     height: 58px;
     margin: 25px 0; }
+
+.single-prod-page-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+  .single-prod-page-wrapper .single-prod-header {
+    width: 100%;
+    position: relative;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; }
+    .single-prod-page-wrapper .single-prod-header .single-prod-page-title {
+      font-size: 24px;
+      color: #3f51b5; }
+    .single-prod-page-wrapper .single-prod-header .back {
+      background-color: #F5A623;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      position: absolute;
+      top: 15px;
+      left: 30px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center; }
+      .single-prod-page-wrapper .single-prod-header .back img {
+        width: 20px; }
+  .single-prod-page-wrapper .main-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 30px;
+    height: 100vh; }
+    .single-prod-page-wrapper .main-content .book-img-price-wrapper {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%; }
+      .single-prod-page-wrapper .main-content .book-img-price-wrapper img {
+        width: 150px;
+        border-radius: 20px;
+        margin-right: 15px; }
+      .single-prod-page-wrapper .main-content .book-img-price-wrapper * {
+        flex: 1; }
+    .single-prod-page-wrapper .main-content .price-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      text-align: left;
+      color: #000;
+      font-size: 17px; }
+    .single-prod-page-wrapper .main-content .has-discount .normal-price {
+      text-decoration: line-through;
+      font-size: 14px; }
+  .single-prod-page-wrapper .details {
+    margin: 30px 0 0;
+    font-size: 16px;
+    line-height: 35px; }
+    .single-prod-page-wrapper .details .full-details-wrapper {
+      margin: 20px 0 0; }
+    .single-prod-page-wrapper .details .title {
+      font-size: 25px; }
+  .single-prod-page-wrapper .add-to-cart-text {
+    color: #F5A623;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    margin: 20px 0 0; }
+    .single-prod-page-wrapper .add-to-cart-text .q-0 {
+      display: none; }
+    .single-prod-page-wrapper .add-to-cart-text .q-1 {
+      display: block; }
+  .single-prod-page-wrapper .add-to-cart-text.not-in-cart .q-0 {
+    display: block; }
+  .single-prod-page-wrapper .add-to-cart-text.not-in-cart .q-1 {
+    display: none; }
+  .single-prod-page-wrapper .single-prod-footer {
+    width: 50%;
+    margin: 20px 0 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center; }
+    .single-prod-page-wrapper .single-prod-footer .more, .single-prod-page-wrapper .single-prod-footer .quantity, .single-prod-page-wrapper .single-prod-footer .less {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center; }
+      .single-prod-page-wrapper .single-prod-footer .more img, .single-prod-page-wrapper .single-prod-footer .quantity img, .single-prod-page-wrapper .single-prod-footer .less img {
+        width: 20px; }
+    .single-prod-page-wrapper .single-prod-footer .more {
+      background-color: #05a986;
+      border-color: #05a986; }
+    .single-prod-page-wrapper .single-prod-footer .less {
+      background-color: #ec5d63;
+      border-color: #ec5d63; }
+    .single-prod-page-wrapper .single-prod-footer .quantity {
+      font-size: 16px;
+      border-color: #393F45;
+      margin: 0 5px; }
+  .single-prod-page-wrapper .quan-0 .less, .single-prod-page-wrapper .quan-0 .quantity {
+    display: none !important; }
+
+.single-modal {
+  padding: 0 !important; }
 
 footer {
   width: 100%;
