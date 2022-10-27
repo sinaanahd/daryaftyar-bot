@@ -49,6 +49,9 @@ img{
         animation-iteration-count: infinite;
         animation-direction: alternate-reverse;
     }
+    position: relative;
+    z-index: 99999;
+    background-color: #fff;
 }
 @keyframes spinMF {
     from {
@@ -503,10 +506,12 @@ img{
         grid-template-columns: repeat(2,1fr);
         column-gap: 25px;
         row-gap: 25px;
+        padding: 0 10px;
     }
     .filters-are-activated{
         grid-template-columns: repeat(1, 1fr)!important;
         width: 85%;
+        padding: 0 0 140px;
     }
     .book{
         padding: 15px 12px;
@@ -514,9 +519,18 @@ img{
         color: $mainBlack;
         @include flexMixin(column,space-between,center);
         border-radius: 20px;
+        .img-wrapper{
+            height: 181px;
+            background-color: #00000010;
+            width: 136px;
+            overflow: hidden;
+            border-radius: 10px;
+            @include flexMixin(row,center,center);
+        }
         img{
             border-radius: 10px;
             width: 136px;
+            height: auto;
         }
         .title{
             font-size: 14px;
@@ -783,7 +797,7 @@ img{
         width: 100%;
         position: relative;
         padding: 20px 30px; 
-        @include flexMixin(row,center,center);
+        @include flexMixin(row,flex-start,center);
         .single-prod-page-title{
             font-size: 24px;
             color: $mainColor1;
@@ -902,6 +916,67 @@ img{
 }
 .single-modal{
     padding: 0!important;
+}
+.cart-final-stage-page-wrapper{
+    width: 100%;
+    transition: $transition;
+    padding: 20px 30px;
+    @include flexMixin(column,center,center);
+    .cart-header{
+        width: 100%;
+        @include flexMixin(row-reverse,space-between,center);
+        .back {
+            background-color: $secondaryColor1;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            @include flexMixin(row, center, center);
+            img {
+                width: 20px;
+            }
+        }
+        .cart-page-title{
+            font-size: 24px;
+            color: $grayColor;
+        }
+    }
+    .main-content{
+        width: 100%;
+        @include styler($grayColor , #fff , 16px , 16px);
+        box-shadow: $boxShadow;
+        padding: 30px 15px;
+        margin: 50px 0;
+        .cart-items-details{
+            div{
+                margin: 0 0 25px;
+                @include flexMixin(row,flex-start , center);
+            }
+            .label{
+                color: $mainColor1;
+                margin-left : 10px;
+            }
+        }
+    }
+    .cart-details{
+        width: 100%;
+        @include flexMixin(row,space-between,center);
+        .prods-incart-text{
+            color: $mainColor1;
+        }
+        .view-btn{
+            width: 114px;
+            height: 32px;
+            @include flexMixin(row,center,center);
+            @include styler(#fff , $secondaryColor1 , 16px , 20px);
+        }
+    }
+    a{
+        @include flexMixin(row,center,center);
+        width: 100%;
+        @include styler(#fff , $mainColor1 , 24px , 20px);
+        height: 58px;
+        margin: 20px 0 0;
+    }
 }
 footer{
     width: 100%;

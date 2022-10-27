@@ -41,7 +41,10 @@ img {
   justify-content: center;
   align-items: center;
   font-size: 100px;
-  color: #3f51b5; }
+  color: #3f51b5;
+  position: relative;
+  z-index: 99999;
+  background-color: #fff; }
   .loading i {
     animation-name: spinMF;
     animation-duration: 1s;
@@ -549,10 +552,12 @@ img {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     column-gap: 25px;
-    row-gap: 25px; }
+    row-gap: 25px;
+    padding: 0 10px; }
   .books-page-wrapper .filters-are-activated {
     grid-template-columns: repeat(1, 1fr) !important;
-    width: 85%; }
+    width: 85%;
+    padding: 0 0 140px; }
   .books-page-wrapper .book {
     padding: 15px 12px;
     box-shadow: 4px 4px 8px 1px rgba(0, 0, 0, 0.05);
@@ -562,9 +567,20 @@ img {
     justify-content: space-between;
     align-items: center;
     border-radius: 20px; }
+    .books-page-wrapper .book .img-wrapper {
+      height: 181px;
+      background-color: #00000010;
+      width: 136px;
+      overflow: hidden;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center; }
     .books-page-wrapper .book img {
       border-radius: 10px;
-      width: 136px; }
+      width: 136px;
+      height: auto; }
     .books-page-wrapper .book .title {
       font-size: 14px;
       margin-top: 10px; }
@@ -829,7 +845,7 @@ img {
     padding: 20px 30px;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center; }
     .single-prod-page-wrapper .single-prod-header .single-prod-page-title {
       font-size: 24px;
@@ -936,6 +952,84 @@ img {
 
 .single-modal {
   padding: 0 !important; }
+
+.cart-final-stage-page-wrapper {
+  width: 100%;
+  transition: all ease-in-out 0.3s;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+  .cart-final-stage-page-wrapper .cart-header {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center; }
+    .cart-final-stage-page-wrapper .cart-header .back {
+      background-color: #F5A623;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center; }
+      .cart-final-stage-page-wrapper .cart-header .back img {
+        width: 20px; }
+    .cart-final-stage-page-wrapper .cart-header .cart-page-title {
+      font-size: 24px;
+      color: #393F45; }
+  .cart-final-stage-page-wrapper .main-content {
+    width: 100%;
+    color: #393F45;
+    background-color: #fff;
+    font-size: 16px;
+    border-radius: 16px;
+    box-shadow: 4px 4px 8px 1px rgba(0, 0, 0, 0.05);
+    padding: 30px 15px;
+    margin: 50px 0; }
+    .cart-final-stage-page-wrapper .main-content .cart-items-details div {
+      margin: 0 0 25px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center; }
+    .cart-final-stage-page-wrapper .main-content .cart-items-details .label {
+      color: #3f51b5;
+      margin-left: 10px; }
+  .cart-final-stage-page-wrapper .cart-details {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center; }
+    .cart-final-stage-page-wrapper .cart-details .prods-incart-text {
+      color: #3f51b5; }
+    .cart-final-stage-page-wrapper .cart-details .view-btn {
+      width: 114px;
+      height: 32px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      background-color: #F5A623;
+      font-size: 16px;
+      border-radius: 20px; }
+  .cart-final-stage-page-wrapper a {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #fff;
+    background-color: #3f51b5;
+    font-size: 24px;
+    border-radius: 20px;
+    height: 58px;
+    margin: 20px 0 0; }
 
 footer {
   width: 100%;

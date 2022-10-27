@@ -282,7 +282,10 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((res) => {
             // filling the main books varibale
             books = res.data;
-            render_welcome();
+            clearPage();
+            setTimeout(() => {
+                render_books(needed_books);
+            }, 200);
         })
         .catch((err) => console.log(err));
     axios
@@ -290,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
         .then((res) => {
             user = res.data;
+            render_welcome();
         })
         .catch((err) => console.log(err));
     axios
@@ -393,22 +397,22 @@ function render_welcome() {
                </div>
             </div>
             <div class="gif-wrapper">
-                <img src="/assets/images/welcome-photo.png" alt="به ربات دریافت یار خوش آمدید" class="welcome-img">
+                <img src="./assets/images/welcome-photo.png" alt="به ربات دریافت یار خوش آمدید" class="welcome-img">
             </div>
-            <div class="start-btn">
+            <!--<div class="start-btn">
                 <div class="content">
                     شروع
                 </div>
-            </div>
+            </div>-->
         </div>
     `;
     main_area.innerHTML = welcome_content;
     const welcome = document.querySelector(".welcome-wrapper");
     render_now(welcome);
-    const start_btn = document.querySelector(".start-btn");
-    start_btn.addEventListener("click", () => {
-        render_first_page();
-    });
+    // const start_btn = document.querySelector(".start-btn");
+    // start_btn.addEventListener("click", () => {
+    //     render_first_page();
+    // });
     body.classList.add("welcome");
 }
 
@@ -875,7 +879,9 @@ function render_books(books1) {
             // `;
             const book_content = `
                     <div class="book" id="book-${book.id}">
-                        <img src="${book.img_url}" alt="${book.name}" id="book-img-${book.id}">
+                        <div class="img-wrapper"  id="book-imgWrapper-${book.id}">
+                            <img src="${book.img_url}" alt="${book.name}" id="book-img-${book.id}">
+                        </div>
                         <div class="title" id="book-name-${book.id}">
                             ${book.name}
                         </div>
@@ -1816,6 +1822,7 @@ function render_single_book(book) {
         <div class="single-prod-page-wrapper" id="single-${book.id}">
             <div class="single-prod-header">
                 <div class="single-prod-page-title">
+                <br>
                     ${book.name}
                 </div>
                 <div class="back">
@@ -2092,7 +2099,95 @@ function render_final_stage_cart(cart_items, discount, url) {
                     </div>
                 </div>
     `;
-    main_area.innerHTML = final_cart_stage_content;
+    const final_cart_content = `
+        <div class="cart-final-stage-page-wrapper">
+            <div class="cart-header">
+                <div class="back">
+                    <img src="./assets/images/back-forward-btn.png" alt="" class="back-img">
+                </div>
+                <div class="cart-page-title">
+                    سبد خرید
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="cart-items-details">
+                    <div class="cart-total-price">
+                        <span class="label">
+                            مجموع مبلغ سبد خرید شما :
+                        </span>
+                        <span class="total-price">
+                            <span class="price">
+                                ${split_in_three(cart.cart_summary.total_price_of_items)}
+                            </span>
+                            تومان
+                        </span>
+                    </div>
+                    <div class="cart-discount">
+                        <span class="label">
+                            تخفیف :
+                        </span>
+                        <span class="total-price">
+                            <span class="price">
+                                ${split_in_three(cart.cart_summary.total_discount_of_items)}
+                            </span>
+                            تومان
+                        </span>
+                    </div>
+                    <div class="cart-wallet">
+                        <span class="label">
+                            اعتبار کیف پول :
+                        </span>
+                        <span class="total-price">
+                            <span class="price">
+                                ${split_in_three(cart.cart_summary.credit_discount_final)}
+                            </span>
+                            تومان
+                        </span>
+                    </div>
+                    <div class="cart-wallet">
+                        <span class="label">
+                            هزینه پست :
+                        </span>
+                        <span class="total-price">
+                            <span class="price">
+                                ${cart.cart_summary.post_cost === 0 ? "رایگان" : split_in_three(cart.cart_summary.post_cost)}
+                            </span>
+                            <span>
+                                ${cart.cart_summary.post_cost === 0 ? " " : "تومان"}
+                            </span>
+        
+                        </span>
+                    </div>
+                    <div class="cart-final-pay">
+                        <span class="label">
+                            قابل پرداخت :
+                        </span>
+                        <span class="total-price">
+                            <span class="price">
+                                ${split_in_three(cart.cart_summary.final_price)}
+                            </span>
+                            تومان
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="cart-details">
+                <div class="prods-incart-text">
+                    <span class="number">
+                        ${cart_items.length}
+                    </span>
+                    محصول در سبد خرید شما موجود است :
+                </div>
+                <div class="view-btn">
+                    مشاهده
+                </div>
+            </div>
+            <a href="${url}" class="pay-btn-wrapper" target="_blank">
+                    پرداخت
+            </a>
+        </div>
+    `;
+    main_area.innerHTML = final_cart_content;
 
     const pay_btn = document.querySelector('.pay-btn-wrapper');
     pay_btn.addEventListener('click', () => {
