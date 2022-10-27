@@ -31,12 +31,13 @@ a {
   justify-content: center;
   align-items: center;
   font-size: 100px;
-  color: #24475b;
-  animation-name: spinMF;
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse; }
+  color: #24475b; }
+  .loading i {
+    animation-name: spinMF;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse; }
 
 .pause {
   width: 100vw;

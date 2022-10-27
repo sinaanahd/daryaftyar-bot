@@ -34,11 +34,13 @@ a{
     @include flexMixin(row,center,center);
     font-size: 100px;
     color: $mainColor;
-    animation-name: spinMF;
-    animation-duration: 1s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-direction: alternate-reverse;
+    i{
+        animation-name: spinMF;
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        animation-direction: alternate-reverse;
+    }
 }
 .pause{
     width: 100vw;
@@ -911,7 +913,6 @@ a{
         }
     }
 }
-
 
 /* single prod page styles */
 

@@ -41,12 +41,13 @@ img {
   justify-content: center;
   align-items: center;
   font-size: 100px;
-  color: #3f51b5;
-  animation-name: spinMF;
-  animation-duration: 1s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  animation-direction: alternate-reverse; }
+  color: #3f51b5; }
+  .loading i {
+    animation-name: spinMF;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse; }
 
 @keyframes spinMF {
   from {
@@ -170,6 +171,76 @@ img {
       margin-right: 20px;
       font-size: 15px; }
 
+.modal-pacle-holder {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  z-index: -1;
+  transition: all ease-in-out 0.5s;
+  background-color: #ebebeb;
+  overflow-y: scroll;
+  padding: 30px 10px; }
+
+.filter-by-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: scale(0);
+  top: 0 !important;
+  background-color: #00000042 !important; }
+  .filter-by-modal .wrapper-sort-by {
+    width: 80%;
+    background-color: #fff;
+    border: 2px solid #F5A623;
+    color: #3f51b5;
+    background-color: #fff;
+    font-size: 24px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 50vh; }
+    .filter-by-modal .wrapper-sort-by .sort-by-wrapper {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center; }
+    .filter-by-modal .wrapper-sort-by .sort {
+      width: 65%;
+      text-align: center;
+      margin: 0 0 30px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center; }
+      .filter-by-modal .wrapper-sort-by .sort::before {
+        margin-left: 15px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        content: ' ';
+        border: 1px solid #3f51b5;
+        background-color: #3f51b5; }
+    .filter-by-modal .wrapper-sort-by .disabled::before {
+      background-color: #fff !important; }
+    .filter-by-modal .wrapper-sort-by .save_and_return_btn.srt {
+      color: #fff;
+      background-color: #3f51b5;
+      font-size: 23px;
+      border-radius: 50px;
+      padding: 5px 10px;
+      border: 1px solid #3f51b5;
+      width: 80%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center; }
+
 /* welcome wrapper styles */
 .welcome-wrapper {
   width: 100%;
@@ -177,7 +248,11 @@ img {
   background-color: #3f51b5;
   color: #f8f8f8;
   transition: all ease-in-out 0.3s;
-  transform: scale(0); }
+  transform: scale(0);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
   .welcome-wrapper .header {
     display: flex;
     flex-direction: row;
@@ -204,10 +279,9 @@ img {
   .welcome-wrapper .welcome-text {
     font-size: 16px;
     width: 100%;
-    height: 20vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center; }
   .welcome-wrapper .gif-wrapper {
     width: 100%;
@@ -227,7 +301,6 @@ img {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin: 150px 0;
     width: 100%; }
     .welcome-wrapper .start-btn .content {
       width: 90%;
@@ -470,6 +543,9 @@ img {
     grid-template-columns: repeat(2, 1fr);
     column-gap: 25px;
     row-gap: 25px; }
+  .books-page-wrapper .filters-are-activated {
+    grid-template-columns: repeat(1, 1fr) !important;
+    width: 85%; }
   .books-page-wrapper .book {
     padding: 15px 12px;
     box-shadow: 4px 4px 8px 1px rgba(0, 0, 0, 0.05);
@@ -521,6 +597,8 @@ img {
         padding: 2px 0 0 0; }
       .books-page-wrapper .book .btns-wrapper * {
         flex: 1; }
+    .books-page-wrapper .book .quan-0 .book-quantity, .books-page-wrapper .book .quan-0 .decrment-book {
+      display: none; }
   .books-page-wrapper .page-count {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
@@ -551,6 +629,40 @@ img {
     .books-page-wrapper .page-count .next-page i {
       position: relative;
       left: 1px; }
+  .books-page-wrapper .publisher-item,
+  .books-page-wrapper .book-year-item,
+  .books-page-wrapper .subject-item,
+  .books-page-wrapper .course-item {
+    width: 100%;
+    margin-bottom: 0px; }
+    .books-page-wrapper .publisher-item::before,
+    .books-page-wrapper .book-year-item::before,
+    .books-page-wrapper .subject-item::before,
+    .books-page-wrapper .course-item::before {
+      content: '';
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      background-color: #3f51b5;
+      border-radius: 50%;
+      border: 1px solid;
+      position: relative;
+      top: 5px;
+      margin-left: 11px; }
+  .books-page-wrapper .disabled::before {
+    background-color: #fff !important; }
+  .books-page-wrapper .fixed-btn {
+    position: fixed;
+    top: 50vh;
+    left: 5vw; }
+  .books-page-wrapper .save_and_return_btn {
+    color: #3f51b5;
+    background-color: #fff;
+    font-size: 15px;
+    border-radius: 50px;
+    border: 2px solid #3f51b5;
+    padding: 5px 20px;
+    margin: 40px auto; }
 
 footer {
   width: 100%;

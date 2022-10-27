@@ -42,11 +42,13 @@ img{
     @include flexMixin(row, center, center);
     font-size: 100px;
     color: $mainColor1;
-    animation-name: spinMF;
-    animation-duration: 1s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-direction: alternate-reverse;
+    i{
+        animation-name: spinMF;
+        animation-duration: 1s;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+        animation-direction: alternate-reverse;
+    }
 }
 @keyframes spinMF {
     from {
@@ -172,6 +174,63 @@ img{
 
     }
 }
+.modal-pacle-holder {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    z-index: -1;
+    transition: all ease-in-out 0.5s;
+    background-color: $background;
+    overflow-y: scroll;
+    padding: 30px 10px;
+}
+.filter-by-modal{
+    @include flexMixin(column , center , center);
+    transform: scale(0);
+    top: 0!important;
+    background-color: #00000042!important;
+    .wrapper-sort-by {
+        width: 80%;
+        background-color: #fff;
+        border: 2px solid $secondaryColor1;
+        @include styler($mainColor1 , #fff, 24px, 20px);
+        @include flexMixin(column, center, center);
+        height: 50vh;
+        .sort-by-wrapper{
+            width: 100%;
+            @include flexMixin(column,center,center);
+        }
+        .sort {
+            width: 65%;
+            text-align: center;
+            margin: 0 0 30px;
+            @include flexMixin(row,flex-start,center);
+            &::before{
+                margin-left: 15px;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                content: ' ';
+                border: 1px solid $mainColor1;
+                background-color: $mainColor1;
+            }
+        }
+        .disabled{
+            &::before{
+                background-color: #fff!important;
+            }
+        }
+        .save_and_return_btn.srt{
+            @include styler(#fff , $mainColor1 , 23px , 50px);
+            padding: 5px 10px;
+            border: 1px solid $mainColor1;
+            width: 80%;
+            @include flexMixin(row,center,center);
+        }
+    }
+}
 /* welcome wrapper styles */
 .welcome-wrapper{
     width: 100%;
@@ -180,6 +239,7 @@ img{
     color: $background1;
     transition: $transition;
     transform: scale(0);
+    @include flexMixin(column , center , center);
     .header{
         @include flexMixin(row,flex-start , center);
     }
@@ -209,8 +269,7 @@ img{
     .welcome-text{
         font-size: 16px;
         width: 100%;
-        height: 20vh;
-        @include flexMixin(column,flex-end,center);
+        @include flexMixin(column,flex-start,center);
     }
     .gif-wrapper{
         width: 100%;
@@ -226,7 +285,7 @@ img{
     }
     .start-btn{
         @include flexMixin(row,center,center);
-        margin: 150px 0;
+        //margin: 150px 0;
         width: 100%;
         .content{
             width: 90%;
@@ -438,6 +497,10 @@ img{
         column-gap: 25px;
         row-gap: 25px;
     }
+    .filters-are-activated{
+        grid-template-columns: repeat(1, 1fr)!important;
+        width: 85%;
+    }
     .book{
         padding: 15px 12px;
         box-shadow: $boxShadow;
@@ -487,6 +550,11 @@ img{
                 flex: 1;
             }
         }
+        .quan-0{
+            .book-quantity , .decrment-book{
+                display: none;
+            }
+        }
     }
     .page-count {
         display: grid;
@@ -521,6 +589,41 @@ img{
                 left: 1px;
             }
         }
+    }
+    .publisher-item,
+    .book-year-item,
+    .subject-item,
+    .course-item {
+        width: 100%;
+        margin-bottom: 0px;
+        &::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            background-color: $mainColor1;
+            border-radius: 50%;
+            border: 1px solid;
+            position: relative;
+            top: 5px;
+            margin-left: 11px;
+        }
+    }
+    .disabled {
+        &::before {
+            background-color: #fff !important;
+        }
+    }
+    .fixed-btn {
+        position: fixed;
+        top: 50vh;
+        left: 5vw;
+    }
+    .save_and_return_btn {
+        @include styler($mainColor1 , #fff , 15px, 50px);
+        border: 2px solid $mainColor1;
+        padding: 5px 20px;
+        margin: 40px auto;
     }
 }
 

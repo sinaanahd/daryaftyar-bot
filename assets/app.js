@@ -255,7 +255,7 @@ let curent_page = 1;
 // html documnet for pagination
 let pagination_HTML = [];
 // sorted by status
-let sorted_by = "هیچکدام";
+let sorted_by = "هیچ کدام";
 // the array of the first books un touched
 let first_rendered_books = [];
 // ! notice this method 
@@ -751,7 +751,7 @@ function render_books(books1) {
     book_publisher = document.querySelector('.fil-1');
     book_publisher.addEventListener("click", () => {
         // clear the main content for having the place to load filters content
-        clear_stage(books_main_content);
+        clear_stage(books_wrapper);
         // calling the publisher filter render method
         publisher_filter(publishers);
 
@@ -773,7 +773,7 @@ function render_books(books1) {
     book_subjects = document.querySelector('.fil-2');
     book_subjects.addEventListener("click", () => {
         // clear the html node for new content
-        clear_stage(books_main_content);
+        clear_stage(books_wrapper);
         // calling the subjects render method
         subject_filter(subjects);
 
@@ -794,7 +794,7 @@ function render_books(books1) {
     book_year_of_study.addEventListener("click", () => {
 
         // clearing html node content for the filters content
-        clear_stage(books_main_content);
+        clear_stage(books_wrapper);
         // calling render grade filter methods
         grade_filter(grades);
 
@@ -813,7 +813,7 @@ function render_books(books1) {
     book_course.addEventListener("click", () => {
 
         // clearing html node content for the filters content
-        clear_stage(books_main_content);
+        clear_stage(books_wrapper);
         // calling render grade filter methods
         course_filter(courses);
 
@@ -832,7 +832,8 @@ function render_books(books1) {
     sort_by_btn = document.querySelector('.go-to-sort-by');
     sort_by_btn.addEventListener('click', () => {
         // this part is disactivated so ...
-        render_filter_by();
+        //render_filter_by();
+        open_filter_by("active");
     });
     // check if the books are empty or not ( because of an error or th filters )
     if (books1.length !== 0) {
@@ -889,7 +890,7 @@ function render_books(books1) {
                                 ${split_in_three(book.price)}
                             </span>
                         </div>
-                        <div class="btns-wrapper">
+                        <div class="btns-wrapper ${cart.cart_items_ids.includes(book.id) ? " " : "quan-0"}">
                             <span class="add-book">
                                 <i class="fa fa-plus"></i>
                             </span><span class="book-quantity">
@@ -969,10 +970,11 @@ function render_books(books1) {
                     if (parseInt(quantity_wrapper.innerHTML) === 0) {
                         // make the item stays on zero not a negative number
                         quantity_wrapper.innerHTML = 0;
+
                     }
                     else {
-                        quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                         // changing the array quantity
+                        quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                     }
 
                 }
@@ -1018,6 +1020,7 @@ function render_books(books1) {
 
 // render publisher filter 
 function publisher_filter(publishers) {
+    books_wrapper.classList.add("filters-are-activated");
     // render and read each publisher
     // check the clicked status
     publishers.forEach((publisher) => {
@@ -1027,7 +1030,7 @@ function publisher_filter(publishers) {
             </span>
         `;
         // add the html content to the dom 
-        books_main_content.innerHTML += publisher_HTML;
+        books_wrapper.innerHTML += publisher_HTML;
     });
     // create a button to adjust the changes and returns to the books page
     const save_and_return_btn_content = `
@@ -1036,7 +1039,7 @@ function publisher_filter(publishers) {
             </span>
         `;
     // add the btn content to the bottom of the publishers
-    books_main_content.innerHTML += save_and_return_btn_content;
+    books_wrapper.innerHTML += save_and_return_btn_content;
     // select all publishers
     publishers_DOM = [...document.querySelectorAll('.publisher-item')];
     // adding events for all the publishers clicks
@@ -1049,14 +1052,16 @@ function publisher_filter(publishers) {
     // updatign the addres to have users place 
     address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
     //address_to_here += "filter/";
-    // activating save and return button 
+    //activating save and return button 
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        books_wrapper.classList.remove("filters-are-activated");
         map_handler();
     });
 }
 
 // render book year filter 
 function grade_filter(grades) {
+    books_wrapper.classList.add("filters-are-activated");
     // * actions are the same as publishers filter
 
     grades.forEach((grade) => {
@@ -1065,14 +1070,14 @@ function grade_filter(grades) {
                 ${grade.name}
             </span>
         `;
-        books_main_content.innerHTML += grade_HTML;
+        books_wrapper.innerHTML += grade_HTML;
     });
     const save_and_return_btn_content = `
             <span class="save_and_return_btn">
             ذخیره و بازگشت
             </span>
         `;
-    books_main_content.innerHTML += save_and_return_btn_content;
+    books_wrapper.innerHTML += save_and_return_btn_content;
     grades_DOM = [...document.querySelectorAll('.book-year-item')];
     grades_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -1082,12 +1087,14 @@ function grade_filter(grades) {
     address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
     //address_to_here += "filter/";
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        books_wrapper.classList.remove("filters-are-activated");
         map_handler();
     });
 }
 
 // render subjects filter 
 function subject_filter(subjects) {
+    books_wrapper.classList.add("filters-are-activated");
     // * actions are the same as publishers filter
 
     subjects.forEach((subject) => {
@@ -1096,14 +1103,14 @@ function subject_filter(subjects) {
                 ${subject.name}
             </span>
         `;
-        books_main_content.innerHTML += subject_HTML;
+        books_wrapper.innerHTML += subject_HTML;
     });
     const save_and_return_btn_content = `
             <span class="save_and_return_btn">
             ذخیره و بازگشت
             </span>
         `;
-    books_main_content.innerHTML += save_and_return_btn_content;
+    books_wrapper.innerHTML += save_and_return_btn_content;
     subjects_DOM = [...document.querySelectorAll('.subject-item')];
     subjects_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -1113,12 +1120,14 @@ function subject_filter(subjects) {
     address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
     //address_to_here += "filter/";
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        books_wrapper.classList.remove("filters-are-activated");
         map_handler();
     });
 }
 
 // render courses filter
 function course_filter(courses) {
+    books_wrapper.classList.add("filters-are-activated");
     // * actions are the same as publishers filter
 
     courses.forEach((course) => {
@@ -1127,14 +1136,14 @@ function course_filter(courses) {
                 ${course.name}
             </span>
         `;
-        books_main_content.innerHTML += course_HTML;
+        books_wrapper.innerHTML += course_HTML;
     });
     const save_and_return_btn_content = `
             <span class="save_and_return_btn fixed-btn">
             ذخیره و بازگشت
             </span>
         `;
-    books_main_content.innerHTML += save_and_return_btn_content;
+    books_wrapper.innerHTML += save_and_return_btn_content;
     courses_DOM = [...document.querySelectorAll('.course-item')];
     courses_DOM.forEach(el => {
         el.addEventListener('click', (e) => {
@@ -1144,6 +1153,7 @@ function course_filter(courses) {
     address_to_here = stop_repeatation_in_addres("filter", address_to_here) ? address_to_here + "filter/" : address_to_here;
     //address_to_here += "filter/";
     document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+        books_wrapper.classList.remove("filters-are-activated");
         map_handler();
     });
 }
@@ -1184,7 +1194,7 @@ function clicked_publishers_identifier(e) {
         is_filled_pub = true;
     }
     // fill the paranteses next to filter label in the html with clicked items length
-    document.querySelector('.fil-1 .sub-filter').innerHTML = `( ${clicked_publishers_ids.length} )`;
+    //document.querySelector('.fil-1 .sub-filter').innerHTML = `( ${clicked_publishers_ids.length} )`;
     // pass the value for the adjust books and fill the filtered book method
     adjust_books("pub");
 }
@@ -1208,7 +1218,7 @@ function clicked_subjects_identifier(e) {
         clicked_subjects.push(clicked_subject);
         is_filled_sub = true;
     }
-    document.querySelector('.fil-2 .sub-filter').innerHTML = `( ${clicked_subjects.length} )`;
+    //document.querySelector('.fil-2 .sub-filter').innerHTML = `( ${clicked_subjects.length} )`;
     adjust_books("sub");
 }
 
@@ -1231,7 +1241,7 @@ function clicked_grades_identifier(e) {
         clicked_grades.push(clicked_grade);
         is_filled_year = true;
     }
-    document.querySelector('.fil-3 .sub-filter').innerHTML = `( ${clicked_grades.length} )`;
+    //document.querySelector('.fil-3 .sub-filter').innerHTML = `( ${clicked_grades.length} )`;
     adjust_books("year");
 }
 
@@ -1252,7 +1262,7 @@ function clicked_courses_identifier(e) {
         clicked_courses.push(clicked_course);
         is_filled_course = true;
     }
-    document.querySelector('.fil-4 .sub-filter').innerHTML = `( ${clicked_courses.length} )`;
+    //document.querySelector('.fil-4 .sub-filter').innerHTML = `( ${clicked_courses.length} )`;
     adjust_books("year");
 }
 // function to make book page ready for filters
@@ -1827,15 +1837,6 @@ function render_final_stage_cart(cart_items, discount, url) {
         map_handler();
     })
 }
-// function to render sort by filter 
-// TODO : render by filter function 
-function render_sort_by_filter() {
-    const sort_by_filter_content = `
-
-    `;
-
-    books_main_content.innerHTML += " ";
-}
 // function for redirecting the user to the required page
 function map_handler() {
     disactive_modals();
@@ -2012,6 +2013,9 @@ function update_quantity(type, id, sign) {
             const index = cart_items.indexOf(item);
             cart_items.splice(index, 1);
             cart.cart_items_ids = cart.cart_items_ids.filter(ci => parseInt(ci) !== id);
+            if (!address_to_here.includes('cart')) {
+                document.querySelector(`#book-${id} .btns-wrapper`).classList.add("quan-0");
+            }
         }
         // otherwise just update the ids array
         else {
@@ -2031,6 +2035,8 @@ function update_quantity(type, id, sign) {
             cart.cart_items_ids.push(id);
             //open_cart_modal("active");
             let_the_cart = true;
+
+            document.querySelector(`#book-${id} .btns-wrapper`).classList.remove("quan-0");
         }
         // otherwise just update the ids for api calls
         else {
@@ -2692,102 +2698,92 @@ function disactive_modals() {
     open_cart_modal('disactive');
     activate_modal_single_book('disactive');
 }
+// function to open filter by modal
+function open_filter_by(state) {
+    if (state === "active") {
+        modal_wrapper.classList.add('filter-by-modal');
+        modal_wrapper.style.transform = "scale(1)";
+        modal_wrapper.style.zIndex = "999";
+        render_filter_by();
+    }
+    else {
+        modal_wrapper.classList.remove('filter-by-modal');
+    }
+}
 // funciton to render filter by
 function render_filter_by() {
+    console.log(sorted_by === "هیچ کدام")
     const static_contents = `
-        <div class="books-wrapper">
-            <div class="books-header">
-                <div class="back">
-                    <i class="fa fa-caret-right"></i>
-                </div>
-                <div class="books-page-title">
-                    کتاب ها
-                </div>
-                <div class="search-icon">
-                    <i class="fa fa-search"></i>
-                </div>
-            </div>
-            <div class="book-order">
-                <div class="order-by-wrapper">
-                    مرتب سازی بر اساس :
-                    <span class="ordered-by">
-                        ${sorted_by}
-                    </span>
-                </div>
-                <div class="filter-opener">
-                    <i class="fa fa-caret-left"></i>
-                </div>
-            </div>
+    <div class="wrapper-sort-by">
             <div class="sort-by-wrapper">
-                <div class="sort sorted-by-leastPrice ${sorted_by === "ارزانترین" ? " " : "disabled"}">
-                    ارزانترین
+                <div class="sort sorted-by-none ${sorted_by === "هیچ کدام" ? " " : "disabled"}">
+                    هیچکدام
                 </div>
-                <div class="sort sorted-by-mostprice ${sorted_by === "گرانترین" ? " " : "disabled"}">
-                    گرانترین
+                <div class="sort sorted-by-leastPrice ${sorted_by === "ارزان ترین" ? " " : "disabled"}">
+                    ارزان ترین
                 </div>
-                <div class="sort sorted-by-alphabet ${sorted_by === "الفبایی" ? " " : "disabled"}">
-                    الفبایی
+                <div class="sort sorted-by-mostprice ${sorted_by === "گران ترین" ? " " : "disabled"}">
+                    گران ترین
                 </div>
-                <div class="sort sorted-by-newest ${sorted_by === "جدیدترین" ? " " : "disabled"}">
-                    جدیدترین
+                <div class="sort sorted-by-popularity ${sorted_by === "محبوب ترین" ? " " : "disabled"}">
+                    محبوب ترین
                 </div>
             </div>
             <span span class="save_and_return_btn srt" >
                 ذخیره و بازگشت
             </span >
-        </div>
+    </div>
     `;
-    main_area.innerHTML = static_contents;
+    modal_wrapper.innerHTML = static_contents;
     // map method modifications
     address_to_here = stop_repeatation_in_addres("sort", address_to_here) ? address_to_here + "sort/" : address_to_here;
     // activating back btn
-    back_btn = document.querySelector('.back');
-    back_btn.addEventListener('click', () => {
-        if (!is_search_open) {
-            map_handler();
-        }
-        else {
-            //console.log(is_search_open)
-            search_books_opener();
-            //map_handler();
-        }
-    });
+    // back_btn = document.querySelector('.back');
+    // back_btn.addEventListener('click', () => {
+    //     if (!is_search_open) {
+    //         map_handler();
+    //     }
+    //     else {
+    //         search_books_opener();
+    //     }
+    // });
 
     // use the search btn to open search
-    search_btn = document.querySelector('.search-icon');
-    search_btn.addEventListener('click', () => {
-        search_books_opener();
-    });
+    // search_btn = document.querySelector('.search-icon');
+    // search_btn.addEventListener('click', () => {
+    //     search_books_opener();
+    // });
 
     // activating sort by
     const sort_by_items = [...document.querySelectorAll('.sort')];
     sort_by_items.forEach((si) => {
         si.addEventListener("click", ({ target }) => {
             switch (target.classList[1]) {
+                case "sorted-by-none":
+                    sorted_by = "هیچ کدام";
+                    break;
                 case "sorted-by-mostprice":
-                    sorted_by = "گرانترین";
+                    sorted_by = "گران ترین";
                     break;
                 case "sorted-by-leastPrice":
-                    sorted_by = "ارزانترین";
+                    sorted_by = "ارزان ترین";
                     break;
-                case "sorted-by-alphabet":
-                    sorted_by = "الفبایی";
-                    break;
-                case "sorted-by-newest":
-                    sorted_by = "جدیدترین";
+                case "sorted-by-popularity":
+                    sorted_by = "محبوب ترین";
                     break;
             }
             active_sort();
         })
     });
     // save and return btn
-    document.querySelector('.save_and_return_btn').addEventListener("click", () => {
+    document.querySelector('.wrapper-sort-by .save_and_return_btn').addEventListener("click", () => {
+        open_filter_by("disactive");
         map_handler();
     });
-    sort_by_btn = document.querySelector('.filter-opener');
-    sort_by_btn.addEventListener("click", () => {
-        map_handler();
-    });
+    // sort_by_btn = document.querySelector('.filter-opener');
+    // sort_by_btn.addEventListener("click", () => {
+    //     map_handler();
+    // });
 }
 // function for having only 1 item active in sort by
 function active_sort() {
@@ -2795,20 +2791,50 @@ function active_sort() {
     order_label.innerHTML = sorted_by;
     [...document.querySelectorAll(".sort")].forEach((item) => {
         item.classList.add("disabled");
-    })
+    });
+    let order_by_status;
     switch (sorted_by) {
-        case "گرانترین":
+        case "هیچ کدام":
+            document.querySelector(".sorted-by-none").classList.remove("disabled");
+            order_by_status = "none";
+            break;
+        case "گران ترین":
             document.querySelector(".sorted-by-mostprice").classList.remove("disabled");
+            order_by_status = "-price";
             break;
-        case "ارزانترین":
+        case "ارزان ترین":
             document.querySelector(".sorted-by-leastPrice").classList.remove("disabled");
+            order_by_status = "price"
             break;
-        case "الفبایی":
-            document.querySelector(".sorted-by-alphabet").classList.remove("disabled");
+        case "محبوب ترین":
+            document.querySelector(".sorted-by-popularity").classList.remove("disabled");
+            order_by_status = "-buys_count"
             break;
-        case "جدیدترین":
-            document.querySelector(".sorted-by-newest").classList.remove("disabled");
-            break;
+    }
+    order_book(order_by_status);
+}
+// function for requesting the ordered by books
+function order_book(status) {
+    load_pause("active");
+    if (status === "none") {
+        axios
+            .get("https://daryaftyar.ir/storeV2/books")
+            .then((res) => {
+                books = res.data;
+                needed_books = books.slice(0, 30);
+                load_pause("disactive");
+            })
+            .catch((err) => render_errors(err.message));
+    }
+    else {
+        axios
+            .get(`https://daryaftyar.ir/storeV2/sortbooks/${status}`)
+            .then((res) => {
+                books = res.data.books;
+                needed_books = books.slice(0, 30);
+                load_pause("disactive");
+            })
+            .catch((err) => render_errors(err.message))
     }
 }
 // function to render errors
