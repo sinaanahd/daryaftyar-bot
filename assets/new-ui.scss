@@ -20,7 +20,59 @@ body {
             box-sizing: border-box !important;
             margin: 0;
             padding: 0;
+    }
+    .search-modal {
+        position: fixed;
+        top: -100vh;
+        left: 0;
+        width: 100vw;
+        height: calc(100vh - 100px);
+        padding-bottom: 100px;
+        // max-height: calc(100vh - 150px);
+        overflow-y: scroll;
+        z-index: 99;
+        @include styler($mainBlack , #DCDCDC , 16px, 0);
+        padding: 20px 0;
+        transition: all ease-in-out 0.6s;
+        .search-result {
+            width: 100%;
+            position: relative;
+            @include flexMixin(column, center, center);
+            padding: 0 15px 0 0;
         }
+        .search-result-item {
+            width: 100%;
+            @include flexMixin(row, flex-start, center);
+            background-color: #fff;
+            border-radius: 0px 20px 20px 0px;
+            padding: 24px 13px;
+            margin: 20px 0px;
+            border: 0px;
+            img {
+                width: 80px;
+                border-radius: 15px;
+                box-shadow: 4px 4px 4px 2px rgba(0, 0, 0, 0.05);
+            }
+        }
+        .book-details{
+            @include flexMixin(column,flex-start,flex-start);
+            flex:0 0 250px;
+            .prices{
+                .discounted-price{
+                    display: none;
+                }
+            }
+            .has-discount{
+                .normal-price{
+                    text-decoration: line-through;
+                    font-size: 13px;
+                }
+                .discounted-price {
+                    display: unset;
+                }
+            }
+        }
+    }
 }
 a {
     text-decoration: none !important;
@@ -413,12 +465,73 @@ img{
         background-color: $background1;
         right: 0;
         top: 0px;
-        padding: 30px 0 10px;
+        padding: 30px 30px 10px;
         z-index: 14;
         border-radius: 20px;
+        @include flexMixin(row,space-between,center);
         //box-shadow: $boxShadow;
+        .coin-wrapper , .wallet-wrapper{
+            position: relative;
+            top: -15px;
+            img{
+                width : 30px;
+            }
+        }
+        .coin-count{
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            @include styler(#fff , $mainColor1 , 8px , 50%);
+            top: 15px;
+            right: 12px;
+            @include flexMixin(row,center,center);
+        }
+        .wallet-count{
+            min-width: 60px;
+            @include flexMixin(row,center,center);
+            position: absolute;
+            top: 17px;
+            left: 15px;
+            @include styler(#fff, $mainColor1 , 8px, 8px);
+        }
     }
-    .back {
+    .search-back-wrapper{
+        width: 100%;
+        padding: 0 20px;
+        margin: 0 0 20px;
+        @include flexMixin(row,center,center);
+        .search-wrapper{
+            position: relative;
+            width: 100%;
+            @include flexMixin(row,flex-start,center);
+            input{
+                font-family: "main-font";
+                width: 95%;
+                height: 40px;
+                border-radius: 8px;
+                border: 1px solid #C9C9C9;
+                background-color: $background1;
+                padding: 0 5px 0 30px;
+            }
+            img{
+                position: absolute;
+                width: 20px;
+                top: 9px;
+                left: 25px;
+            }
+        }
+        .back{
+            @include styler($mainColor, $secondaryColor1, 40px, 10px);
+            width: 40px;
+            height: 40px;
+            @include flexMixin (row, center, center);
+            flex: 0 0 40px;
+            img {
+                width: 20px;           
+            }
+        }
+    }
+    /*.back {
         position: absolute;
         top: 20px;
         right: 10px;
@@ -448,7 +561,7 @@ img{
             right: 0px;
         }
     }
-
+*/
     .books-page-title {
         font-size: 24px;
         text-align: center;
@@ -469,21 +582,20 @@ img{
     }
     .sort-by-wrapper{
         width: 90%;
-        @include flexMixin(row,space-between,center);
+        @include flexMixin(row,flex-start,center);
         .content{
-            @include styler($mainBlack , #F1F2F2 , 16px , 10px);
-            @include flexMixin(row,flex-start,center);
-            padding: 0 15px 0 30px;
-            height: 50px;
+            color: $mainColor1;
+            margin-left: 5px;
+            font-size: 16px;
         }
         .go-to-sort-by{
-            @include styler($mainColor1 , $secondaryColor1 , 16px , 10px);
-            width: 40px;
-            height: 40px;
-            @include flexMixin(row,center,center);
+            width: 20px;
+            height: 20px;
         }
         img{
-            width: 20px;
+            width: 15px;
+            position: relative;
+            top: 5px;
         }
     }
     .filters-wrapper{
@@ -506,7 +618,8 @@ img{
         grid-template-columns: repeat(2,1fr);
         column-gap: 25px;
         row-gap: 25px;
-        padding: 0 10px;
+        width: 100%;
+        padding: 0 20px;
     }
     .filters-are-activated{
         grid-template-columns: repeat(1, 1fr)!important;
@@ -514,11 +627,12 @@ img{
         padding: 0 0 140px;
     }
     .book{
-        padding: 15px 12px;
+        position: relative;
+        padding: 5px;
         box-shadow: $boxShadow;
         color: $mainBlack;
         @include flexMixin(column,space-between,center);
-        border-radius: 20px;
+        border-radius: 8px;
         .img-wrapper{
             height: 181px;
             background-color: #00000010;
@@ -552,6 +666,24 @@ img{
             }
         }
         .btns-wrapper{
+            position: absolute;
+            background-color: $mainColor1;
+            z-index: 13;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            @include flexMixin(row,center,center);
+            top: 5px;
+            right: 10px;
+            transition: $transition;
+            img{
+                width: 14px;
+            }
+        }
+        .quan-0{
+            display: none!important;
+        }
+        /*.btns-wrapper{
             @include flexMixin(row,center,center);
             .add-book,.book-quantity,.decrment-book{
                 width: 30px;
@@ -582,7 +714,7 @@ img{
             .book-quantity , .decrment-book{
                 display: none;
             }
-        }
+        }*/
     }
     .page-count {
         display: grid;
@@ -773,6 +905,10 @@ img{
             color: #8A8A8A;
         }
         .total-price-amount{
+            color: $mainBlack;
+        }
+        .toman{
+            font-size: 8px;
             color: $mainBlack;
         }
     }
@@ -976,6 +1112,65 @@ img{
         @include styler(#fff , $mainColor1 , 24px , 20px);
         height: 58px;
         margin: 20px 0 0;
+    }
+}
+.wallet-wrapper-page{
+    width: 100%;
+    padding: 30px;
+    transition: $transition;
+    transform: scale(0);
+    @include flexMixin(column,flex-start,center);
+    .wallet-header{
+        width: 100%;
+        @include flexMixin(row,flex-end,center);
+    }
+    .back {
+        background-color: $secondaryColor1;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        @include flexMixin(row, center, center);
+        img {
+            width: 20px;
+        }
+    }
+    .wallet-page-title {
+        width: 100%;
+        @include flexMixin(row, flex-start, center);
+        font-size: 24px;
+        color: $mainBlack;
+        margin: 0 0 30px;
+    }
+    .main-content{
+        width: 100%;
+        @include flexMixin(column,center,flex-start);
+        padding: 15px;
+        @include styler(#fff,$mainColor1,24px,16px);
+        .wallet-title{
+            width: 100%;
+            @include flexMixin(row,space-between,center);
+            margin: 0 0 10px;
+        }
+        .img-wrapper{
+            @include flexMixin(row,flex-end,center);
+            flex: 0 0 22px;
+        }
+        img{
+            width: 22px;
+            float: left;
+        }
+    }
+    .increase-title{
+        width: 100%;
+        text-align: right;
+        margin: 30px 0 10px;
+        font-size: 16px;
+        color: $secondaryColor1;
+    }
+    .way-to-increase-wrapper{
+        @include styler(#000 , #fff , 16px , 16px);
+        padding: 25px 20px;
+        box-shadow: $boxShadow;
     }
 }
 footer{

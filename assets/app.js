@@ -293,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
         .then((res) => {
             user = res.data;
+            console.log(user)
             render_welcome();
         })
         .catch((err) => console.log(err));
@@ -387,10 +388,11 @@ function render_welcome() {
         <div class="welcome-wrapper">
         <div class="welcome-text">
             <div class="welcome-info">
-            سلام 
             <span>
                 ${user.name}
             </span>
+            ,
+            سلام 
             </div>
                <div class="static-text">
                  به فروشگاه دریافت یار خوش اومدی
@@ -668,29 +670,95 @@ function render_books(books1) {
     //         </div>
     //     </div>
     // `;
+    // const books_content = `
+    //     <div class="books-page-wrapper">
+    //         <div class="header">
+    //             <div class="back">
+    //                 <img src="./assets/images/back-forward-btn.png" alt="back-img" class="back-img" loading="lazy">
+    //             </div>
+    //             <div class="books-page-title">
+    //                 کتاب ها
+    //             </div>
+    //             <div class="search-icon">
+    //                 <i class="fa fa-search"></i>
+    //             </div>
+    //         </div>
+    //         <div class="main-content">
+    //             <div class="sort-by-wrapper">
+    //                 <div class="content">
+    //                     مرتب سازی بر اساس : 
+    //                     <span class="ordered-by">
+    //                         ${sorted_by}
+    //                     </span>
+    //                 </div>
+    //                 <div class="go-to-sort-by">
+    //                     <img src="./assets/images/back-forward-btn.png" alt="sort-by-img">
+    //                 </div>
+    //             </div>
+    //             <div class="filters-wrapper">
+    //                 <span class="filter fil-1">
+    //                     انتشارات
+    //                 </span>
+    //                 <span class="filter fil-2">
+    //                     رشته
+    //                 </span>
+    //                 <span class="filter fil-3">
+    //                     پایه
+    //                 </span>
+    //                 <span class="filter fil-4">
+    //                     درس
+    //                 </span>
+    //             </div>
+    //             <div class="books-wrapper">
+
+    //             </div>
+    //             <div class="page-count">
+    //             </div>
+    //         </div>
+    //     </div>
+    // `;
     const books_content = `
         <div class="books-page-wrapper">
             <div class="header">
-                <div class="back">
-                    <img src="./assets/images/back-forward-btn.png" alt="back-img" class="back-img" loading="lazy">
+                <div class="coin-wrapper">
+                    <img src="./assets/images/coin-icon.png" alt="coin-img" class="coin-img" loading="lazy">
+                    <span class="coin-count">
+                        32
+                    </span>
                 </div>
                 <div class="books-page-title">
                     کتاب ها
                 </div>
-                <div class="search-icon">
-                    <i class="fa fa-search"></i>
+                <div class="wallet-wrapper">
+                    <img src="./assets/images/wallet-icon.png" alt="wallet-img" class="wallet-img" loading="lazy">
+                    <span class="wallet-count">
+                        T
+                        &nbsp;
+                        <bdi>
+                            ${split_in_three(user.amount)}
+                        </bdi>
+                    </span>
                 </div>
             </div>
             <div class="main-content">
+                <div class="search-back-wrapper">
+                    <div class="search-wrapper">
+                        <input type="text" class="search-books" placeholder="جستجو ..." />
+                        <img src="./assets/images/magnifier-icon.png" alt="search-icon" class="search-icon">
+                    </div>
+                    <div class="back">
+                        <img src="./assets/images/back-forward-btn.png" alt="back-btn" class="back-img">
+                    </div>
+                </div>
                 <div class="sort-by-wrapper">
                     <div class="content">
-                        مرتب سازی بر اساس : 
-                        <span class="ordered-by">
+                        دسته بندی  بر اساس
+                        <!-- <span class="ordered-by">
                             ${sorted_by}
-                        </span>
+                        </span> -->
                     </div>
                     <div class="go-to-sort-by">
-                        <img src="./assets/images/back-forward-btn.png" alt="sort-by-img">
+                        <img src="./assets/images/down-icon.png" alt="sort-by-img">
                     </div>
                 </div>
                 <div class="filters-wrapper">
@@ -708,7 +776,6 @@ function render_books(books1) {
                     </span>
                 </div>
                 <div class="books-wrapper">
-                    
                 </div>
                 <div class="page-count">
                 </div>
@@ -718,6 +785,10 @@ function render_books(books1) {
     // appending the static contents
     main_area.innerHTML = books_content;
 
+    let search_input = document.querySelector('.search-books');
+    search_input.addEventListener("focus", () => {
+        search_books_opener();
+    });
     // filling the books wrapper html
     books_wrapper = document.querySelector('.books-wrapper');
     // having the books page main content html
@@ -847,7 +918,7 @@ function render_books(books1) {
             //         <div class="book-item" id="book-${book.id}">
             //                 <img src="${book.img_url}" alt="" class="book-img" id="book-img-${book.id}"/>
             //                 <div class="publisher">
-            //                     انتشارات : 
+            //                     انتشارات :
             //                     <span class="publisher-name">
             //                         ${book.publisher}
             //                     </span>
@@ -877,9 +948,39 @@ function render_books(books1) {
             //                 </div>
             //             </div>
             // `;
+            // const book_content = `
+            //         <div class="book" id="book-${book.id}">
+            //             <div class="img-wrapper"  id="book-imgWrapper-${book.id}">
+            //                 <img src="${book.img_url}" alt="${book.name}" id="book-img-${book.id}">
+            //             </div>
+            //             <div class="title" id="book-name-${book.id}">
+            //                 ${book.name}
+            //             </div>
+            //             <div class="publisher">
+            //                 ${book.publisher}
+            //             </div>
+            //             <div class="prices-wrapper ${(book.discounted_price !== book.price) ? "has-discount" : " "}" >
+            //                 <span class="discounted">
+            //                     ${split_in_three(book.discounted_price)}
+            //                 </span>
+            //                 <span class="price">
+            //                     ${split_in_three(book.price)}
+            //                 </span>
+            //             </div>
+            //             <div class="btns-wrapper ${cart.cart_items_ids.includes(book.id) ? " " : "quan-0"}">
+            //                 <span class="add-book">
+            //                     <i class="fa fa-plus"></i>
+            //                 </span><span class="book-quantity">
+            //                     ${el_by_id(cart_items, book.id).count_in_user_cart || 0}
+            //                 </span><span class="decrment-book">
+            //                     <i class="fa fa-minus"></i>
+            //                 </span>
+            //             </div>
+            //         </div>
+            // `;
             const book_content = `
-                    <div class="book" id="book-${book.id}">
-                        <div class="img-wrapper"  id="book-imgWrapper-${book.id}">
+                <div class="book" id="book-${book.id}">
+                        <div class="img-wrapper" id="book-imgWrapper-${book.id}">
                             <img src="${book.img_url}" alt="${book.name}" id="book-img-${book.id}">
                         </div>
                         <div class="title" id="book-name-${book.id}">
@@ -888,22 +989,16 @@ function render_books(books1) {
                         <div class="publisher">
                             ${book.publisher}
                         </div>
-                        <div class="prices-wrapper ${(book.discounted_price !== book.price) ? "has-discount" : " "}" >
-                            <span class="discounted">
-                                ${split_in_three(book.discounted_price)}
-                            </span>
+                        <div class="prices-wrapper ${(book.discounted_price !== book.price) ? " has-discount" : " "}">
                             <span class="price">
                                 ${split_in_three(book.price)}
                             </span>
-                        </div>
-                        <div class="btns-wrapper ${cart.cart_items_ids.includes(book.id) ? " " : "quan-0"}">
-                            <span class="add-book">
-                                <i class="fa fa-plus"></i>
-                            </span><span class="book-quantity">
-                                ${el_by_id(cart_items, book.id).count_in_user_cart || 0}
-                            </span><span class="decrment-book">
-                                <i class="fa fa-minus"></i>
+                            <span class="discounted">
+                                ${split_in_three(book.discounted_price)}
                             </span>
+                        </div>
+                        <div class="btns-wrapper ${cart.cart_items_ids.includes(book.id) ? "quan-0" : " "}" id="add-${book.id}">
+                            <img src="./assets/images/plus-white.png" alt="" id="img-${book.id}">
                         </div>
                     </div>
             `;
@@ -918,94 +1013,102 @@ function render_books(books1) {
                 book_clicked(e);
             });
             // handling more btn in book page
-            const add_book_btn = item.querySelector('.add-book');
-            add_book_btn.addEventListener('click', (e) => {
+            const add_book_btn = item.querySelector('.btns-wrapper');
+            add_book_btn.addEventListener('click', ({ target }) => {
+                if (target.id.split('-')[0] === "img") {
+                    target.parentElement.style.transform = "scale(0)";
+                }
+                else if (target.id.split('-')[0] === "add") {
+                    target.style.transform = "scale(0)";
+                }
+                let id = parseInt(target.id.split('-')[1]);
+                update_quantity('book', id, "+");
                 //reading the clicked class
-                const classes = [...e.target.classList];
-                // if the span is clicked
-                if (classes[classes.length - 1] === "add-book") {
-                    // reading quantity wrapper from HTML DOM
-                    const quantity_wrapper = e.target.nextElementSibling;
-                    // increase the amount of the html node 
-                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+                // const classes = [...e.target.classList];
+                // // if the span is clicked
+                // if (classes[classes.length - 1] === "add-book") {
+                //     // reading quantity wrapper from HTML DOM
+                //     const quantity_wrapper = e.target.nextElementSibling;
+                //     // increase the amount of the html node
+                //     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
-                    // changing the array quantity
+                //     // changing the array quantity
 
-                    //finding the book id via wrapper element's id
-                    const id_string = e.target.parentElement.parentElement.id;
-                    //turn it into a number for use of id
-                    const id = parseInt(id_string.split("-")[1]);
-                    // calling the function for updating the quality
-                    update_quantity('book', id, "+");
+                //     //finding the book id via wrapper element's id
+                //     const id_string = e.target.parentElement.parentElement.id;
+                //     //turn it into a number for use of id
+                //     const id = parseInt(id_string.split("-")[1]);
+                //     // calling the function for updating the quality
+                //     update_quantity('book', id, "+");
 
-                }
-                // if you have clicked on the i tag instead of span
-                else if (classes[classes.length - 1] === "fa-plus") {
-                    // finding the quantity wrapper on the DOM
-                    const quantity_wrapper = e.target.parentElement.nextElementSibling;
-                    // increasing the quantity on the HTML Live view 
-                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+                // }
+                // // if you have clicked on the i tag instead of span
+                // else if (classes[classes.length - 1] === "fa-plus") {
+                //     // finding the quantity wrapper on the DOM
+                //     const quantity_wrapper = e.target.parentElement.nextElementSibling;
+                //     // increasing the quantity on the HTML Live view
+                //     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
-                    // changing the array quantity
+                //     // changing the array quantity
 
-                    // finding the modified book id from html 
-                    const id_string = e.target.parentElement.parentElement.parentElement.id;
-                    //turn it to a number
-                    const id = parseInt(id_string.split("-")[1]);
-                    // call the update quantity for the modifications
-                    update_quantity('book', id, "+");
+                //     // finding the modified book id from html
+                //     const id_string = e.target.parentElement.parentElement.parentElement.id;
+                //     //turn it to a number
+                //     const id = parseInt(id_string.split("-")[1]);
+                //     // call the update quantity for the modifications
+                //     update_quantity('book', id, "+");
 
-                }
+                // }
             });
             // decreament items in book page
-            const less_btn = item.querySelector('.decrment-book');
-            less_btn.addEventListener('click', (e) => {
-                // geting all the class for checking
-                const classes = [...e.target.classList];
-                // if you clicked on the span tag
-                if (classes[classes.length - 1] === "decrment-book") {
-                    // find quantity wrapper on the HTML
-                    const quantity_wrapper = e.target.previousSibling;
-                    //find id via wrappers id
-                    const id_string = e.target.parentElement.parentElement.id;
-                    // turn id to a number and delete the prefix
-                    const id = parseInt(id_string.split("-")[1]);
-                    // call the update method fot modifications
-                    update_quantity('cart', id, "-");
-                    // if items quantity is 0 this condition prevents the number to be a negative value
-                    if (parseInt(quantity_wrapper.innerHTML) === 0) {
-                        // make the item stays on zero not a negative number
-                        quantity_wrapper.innerHTML = 0;
+            // const less_btn = item.querySelector('.decrment-book');
+            // less_btn.addEventListener('click', (e) => {
+            //     // geting all the class for checking
+            //     const classes = [...e.target.classList];
+            //     // if you clicked on the span tag
+            //     if (classes[classes.length - 1] === "decrment-book") {
+            //         // find quantity wrapper on the HTML
+            //         const quantity_wrapper = e.target.previousSibling;
+            //         //find id via wrappers id
+            //         const id_string = e.target.parentElement.parentElement.id;
+            //         // turn id to a number and delete the prefix
+            //         const id = parseInt(id_string.split("-")[1]);
+            //         // call the update method fot modifications
+            //         update_quantity('cart', id, "-");
+            //         // if items quantity is 0 this condition prevents the number to be a negative value
+            //         if (parseInt(quantity_wrapper.innerHTML) === 0) {
+            //             // make the item stays on zero not a negative number
+            //             quantity_wrapper.innerHTML = 0;
 
-                    }
-                    else {
-                        // changing the array quantity
-                        quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
-                    }
+            //         }
+            //         else {
+            //             // changing the array quantity
+            //             quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+            //         }
 
-                }
-                // if you have clicked on the i tag instead of span tag
-                else if (classes[classes.length - 1] === "fa-minus") {
-                    // find quantity wrapper on the HTML
-                    const quantity_wrapper = e.target.parentElement.previousSibling;
-                    //find id via wrappers id
-                    const id_string = e.target.parentElement.parentElement.parentElement.id;
-                    // turn id to a number and delete the prefix
-                    const id = parseInt(id_string.split("-")[1]);
-                    // call the update method fot modifications
-                    update_quantity('cart', id, "-");
-                    // if items quantity is 0 this condition prevents the number to be a negative value
-                    if (parseInt(quantity_wrapper.innerHTML) === 0) {
-                        // make the item stays on zero not a negative number
-                        quantity_wrapper.innerHTML = 0;
-                    }
-                    else {
-                        quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
-                        // changing the array quantity
-                    }
+            //     }
+            //     // if you have clicked on the i tag instead of span tag
+            //     else if (classes[classes.length - 1] === "fa-minus") {
+            //         // find quantity wrapper on the HTML
+            //         const quantity_wrapper = e.target.parentElement.previousSibling;
+            //         //find id via wrappers id
+            //         const id_string = e.target.parentElement.parentElement.parentElement.id;
+            //         // turn id to a number and delete the prefix
+            //         const id = parseInt(id_string.split("-")[1]);
+            //         // call the update method fot modifications
+            //         update_quantity('cart', id, "-");
+            //         // if items quantity is 0 this condition prevents the number to be a negative value
+            //         if (parseInt(quantity_wrapper.innerHTML) === 0) {
+            //             // make the item stays on zero not a negative number
+            //             quantity_wrapper.innerHTML = 0;
+            //         }
+            //         else {
+            //             quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+            //             // changing the array quantity
+            //         }
 
-                }
-            });
+            //     }
+            // });
 
         });
     }
@@ -1366,10 +1469,13 @@ function render_shopping_cart(cart1) {
                         <span class="discounted-price">
                         ${split_in_three(cart.cart_summary.final_price)}
                         </span>
+                        <span class="toman">
+                        تومان
+                        </span>
                     </div>
                 </div>
                 <div class="checkout-btn">
-                    پرداخت
+                    ادامه فرآیند خرید
                 </div>
             </div>
         </div>
@@ -1729,7 +1835,57 @@ function render_wallet(user) {
             </div>
         </div>
     `;
-    main_area.innerHTML = wallet_content;
+    const wallet_new_content = `
+        <div class="wallet-wrapper-page">
+            <div class="wallet-header">
+                <div class="back">
+                    <img src="./assets/images/back-forward-btn.png" alt="" class="back-img">
+                </div>
+            </div>
+            <div class="wallet-page-title">
+                کیف پول
+            </div>
+            <div class="main-content">
+                <div class="wallet-title">
+                    <span class="text">
+                        اعتبار کیف پول
+                    </span>
+                    <span class="img-wrapper">
+                        <img src="./assets/images/check-icon.png" alt="">
+                    </span>
+                </div>
+                <div class="wallet-info">
+                    <div class="wallet-amount">
+                        <span class="price">
+                            ${split_in_three(user.amount)}
+                        </span>
+                        تومان
+                    </div>
+                    <div class="wallet-days-left">
+                        <span class="days">${user.days_left}</span>
+                        روز مهلت استفاده
+                    </div>
+                </div>
+            </div>
+            <div class="increase-title">
+                راه های افزایش اعتبار کیف پول
+            </div>
+            <div class="way-to-increase-wrapper">
+                <div class="way-to-increase-title">
+                    دوست خوبم تو از راه های زیر میتونی اعتبار کسب کنی و در خرید از این فروشگاه ازش استفاده کنی :
+                </div>
+                <div class="ways-to-increase">
+                    <p>
+                        1 -با هربار جواب صحیح دادن به سوال دوستات در پرسشکده ربات ،
+                        میتونی 500 تومان اعتبار جمع کنی !
+                    </p>
+                </div>
+            </div>
+        </div> 
+    `;
+    main_area.innerHTML = wallet_new_content;
+    const wallet_wrapper = document.querySelector('.wallet-wrapper-page');
+    render_now(wallet_wrapper);
     const back_btn = document.querySelector('.back');
     address_to_here = stop_repeatation_in_addres("wallet", address_to_here) ? address_to_here + "wallet/" : address_to_here;
     //address_to_here += "wallet/";
@@ -2714,7 +2870,6 @@ function search_books_opener() {
         const modal_for_search = document.createElement('div');
         modal_for_search.classList.add('search-modal');
         modal_for_search.innerHTML = `
-            <input type="text" class="search-books" placeholder="جستجو ..."/>
             <div class="search-result">
 
             </div>
@@ -2723,7 +2878,7 @@ function search_books_opener() {
         is_search_open = true;
         document.querySelector('body').style.overflowY = "hidden";
         setTimeout(() => {
-            modal_for_search.style.top = "100px";
+            modal_for_search.style.top = "150px";
         }, 100);
         search_books();
     }
@@ -2754,9 +2909,22 @@ function search_books() {
                 const result = `
                     <div class="search-result-item" id="search-${s.id}">
                         <img src="${s.img_url}" id="search-img-${s.id}"/>
-                        <span id="search-txt-${s.id}">
-                            ${s.name}
-                        </span>
+                        <div class="book-details">
+                            <span id="search-txt-${s.id}">
+                                ${s.name}
+                            </span>
+                            <span class="search-book-publisher">
+                                ${s.publisher}
+                            </span>
+                            <span class="prices ${(s.discounted_price !== s.price) ? " has-discount" : " "}">
+                                <span class="normal-price">
+                                    ${split_in_three(s.price)}
+                                </span>
+                                <span class="discounted-price">
+                                    ${split_in_three(s.discounted_price)}
+                                </span>
+                            </span>
+                        </div>
                     </div>
                 `;
                 search_result.innerHTML += result;
@@ -3088,7 +3256,6 @@ function open_filter_by(state) {
 }
 // funciton to render filter by
 function render_filter_by() {
-    console.log(sorted_by === "هیچ کدام")
     const static_contents = `
     <div class="wrapper-sort-by">
             <div class="sort-by-wrapper">
@@ -3163,8 +3330,8 @@ function render_filter_by() {
 }
 // function for having only 1 item active in sort by
 function active_sort() {
-    const order_label = document.querySelector(".ordered-by");
-    order_label.innerHTML = sorted_by;
+    // const order_label = document.querySelector(".ordered-by");
+    // order_label.innerHTML = sorted_by;
     [...document.querySelectorAll(".sort")].forEach((item) => {
         item.classList.add("disabled");
     });
