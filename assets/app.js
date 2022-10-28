@@ -1126,7 +1126,7 @@ function render_books(books1) {
         books_wrapper.innerHTML = empty_content;
     }
     const book_HTML = document.querySelector('.books-page-wrapper');
-    //render_now(book_HTML);
+    render_width(book_HTML);
 }
 // render publisher filter 
 function publisher_filter(publishers) {
@@ -1679,7 +1679,8 @@ function render_shopping_cart(cart1) {
     */
     //stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
     const cart_page_wrapper = document.querySelector('.cart-page-wrapper');
-    render_now(cart_page_wrapper);
+    //render_now(cart_page_wrapper);
+    render_width(cart_page_wrapper)
     // activating the back button
     const back_btn = document.querySelector('.back');
     back_btn.addEventListener('click', () => {
@@ -3156,7 +3157,7 @@ function render_cart_modal(cart1) {
     modal_wrapper.innerHTML = shopping_cart_content;
 
     //activating next step btn
-    const next_step_btn = document.querySelector('.checkout-btn');
+    const next_step_btn = document.querySelector('.modal .checkout-btn');
     // click action for cart next step
     next_step_btn.addEventListener('click', () => {
         open_cart_modal("disactive");
@@ -3545,4 +3546,10 @@ function split_in_three(number) {
         splited_number += reversed_num[i];
     }
     return splited_number.split("").reverse().join("");
+}
+// function for scale and fixed position problem
+function render_width(el) {
+    setTimeout(() => {
+        el.style.opacity = "1";
+    }, 100);
 }

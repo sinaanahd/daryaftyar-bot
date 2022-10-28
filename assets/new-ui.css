@@ -488,6 +488,7 @@ img {
 .books-page-wrapper {
   width: 100%;
   transition: all ease-in-out 0.3s;
+  opacity: 0;
     /*.back {
         position: absolute;
         top: 20px;
@@ -826,8 +827,7 @@ img {
 
 .cart-page-wrapper {
   transition: all ease-in-out 0.3s;
-  transform: scale(0);
-  width: 100%;
+  opacity: 0;
   padding: 20px 20px 330px; }
   .cart-page-wrapper .cart-map-btns {
     width: 100%;
@@ -927,7 +927,7 @@ img {
     background-color: #fff;
     border-radius: 20px 20px 0 0;
     position: fixed;
-    top: calc(100vh - 310px);
+    bottom: 80px;
     right: 0;
     height: 230px;
     padding: 15px 30px;
@@ -1183,7 +1183,7 @@ img {
     font-size: 24px;
     border-radius: 20px;
     height: 58px;
-    margin: 20px 0 0; }
+    margin: 20px 0 120px; }
 
 .wallet-wrapper-page {
   width: 100%;
@@ -1262,8 +1262,10 @@ img {
     box-shadow: 4px 4px 8px 1px rgba(0, 0, 0, 0.05); }
 
 .modal {
-  transform: scale(1) !important; }
+  opacity: 1;
+  position: relative; }
   .modal .cart-footer {
+    position: absolute;
     width: 100%;
     bottom: -30px; }
 

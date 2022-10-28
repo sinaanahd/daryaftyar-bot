@@ -458,6 +458,7 @@ img{
 .books-page-wrapper{
     width: 100%;
     transition: $transition;
+    opacity: 0;
     //transform: scale(0);
     .header {
         position: fixed;
@@ -788,8 +789,7 @@ img{
 }
 .cart-page-wrapper{
     transition: $transition;
-    transform: scale(0);
-    width: 100%;
+    opacity:0;
     padding: 20px 20px 330px;
     .cart-map-btns{
         width: 100%;
@@ -886,7 +886,7 @@ img{
         background-color: #fff;
         border-radius: 20px 20px 0 0;
         position: fixed;
-        top: calc(100vh - 310px);
+        bottom: 80px;
         right: 0;
         height:230px;
         padding: 15px 30px;
@@ -1133,7 +1133,7 @@ img{
         width: 100%;
         @include styler(#fff , $mainColor1 , 24px , 20px);
         height: 58px;
-        margin: 20px 0 0;
+        margin: 20px 0 120px;
     }
 }
 .wallet-wrapper-page{
@@ -1196,11 +1196,13 @@ img{
     }
 }
 .modal{
-    transform: scale(1)!important;
-        .cart-footer{
-            width: 100%;
-            bottom: -30px;
-        }
+    opacity: 1;
+    position: relative;
+    .cart-footer{
+        position: absolute;
+        width: 100%;
+        bottom: -30px;
+    }
 }
 footer{
     width: 100%;
