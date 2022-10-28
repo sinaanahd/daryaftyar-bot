@@ -355,9 +355,7 @@ footer_btn_checkout.addEventListener('click', () => {
     disactive_modals();
     render_coming_soon_page();
 });
-
 // ! functions
-
 // function for rendering the loading page
 function render_loading() {
     const loading_HTML = `
@@ -367,7 +365,6 @@ function render_loading() {
     `;
     main_area.innerHTML = loading_HTML;
 }
-
 // function which clears the main area 
 function clearPage() {
     if ([...body.classList].includes("welcome")) {
@@ -417,7 +414,6 @@ function render_welcome() {
     // });
     body.classList.add("welcome");
 }
-
 // render first page
 function render_first_page() {
     // using the address variable for having the map method
@@ -601,7 +597,6 @@ function render_first_page() {
         render_coming_soon_page();
     });
 }
-
 //render book page
 function render_books(books1) {
     clearPage();
@@ -794,6 +789,11 @@ function render_books(books1) {
     // having the books page main content html
     books_main_content = document.querySelector('.main-content')
 
+    // render wallet 
+    const wallet_icon = document.querySelector('.wallet-wrapper');
+    wallet_icon.addEventListener("click", () => {
+        render_wallet(user);
+    });
     // fill the pagination 
     pagination_HTML = document.querySelector('.page-count');
     if (filter_activated) {
@@ -992,9 +992,11 @@ function render_books(books1) {
                         <div class="prices-wrapper ${(book.discounted_price !== book.price) ? " has-discount" : " "}">
                             <span class="price">
                                 ${split_in_three(book.price)}
+                                 تومان
                             </span>
                             <span class="discounted">
                                 ${split_in_three(book.discounted_price)}
+                                تومان
                             </span>
                         </div>
                         <div class="btns-wrapper ${cart.cart_items_ids.includes(book.id) ? "quan-0" : " "}" id="add-${book.id}">
@@ -1126,7 +1128,6 @@ function render_books(books1) {
     const book_HTML = document.querySelector('.books-page-wrapper');
     //render_now(book_HTML);
 }
-
 // render publisher filter 
 function publisher_filter(publishers) {
     books_wrapper.classList.add("filters-are-activated");
@@ -1167,7 +1168,6 @@ function publisher_filter(publishers) {
         map_handler();
     });
 }
-
 // render book year filter 
 function grade_filter(grades) {
     books_wrapper.classList.add("filters-are-activated");
@@ -1200,7 +1200,6 @@ function grade_filter(grades) {
         map_handler();
     });
 }
-
 // render subjects filter 
 function subject_filter(subjects) {
     books_wrapper.classList.add("filters-are-activated");
@@ -1233,7 +1232,6 @@ function subject_filter(subjects) {
         map_handler();
     });
 }
-
 // render courses filter
 function course_filter(courses) {
     books_wrapper.classList.add("filters-are-activated");
@@ -1266,7 +1264,6 @@ function course_filter(courses) {
         map_handler();
     });
 }
-
 // funnction for storing clicked publishers
 // * function gets clicked event as an argument
 function clicked_publishers_identifier(e) {
@@ -1307,7 +1304,6 @@ function clicked_publishers_identifier(e) {
     // pass the value for the adjust books and fill the filtered book method
     adjust_books("pub");
 }
-
 // funnction for storing clicked subjects
 // * same as the clicked publishers identifier
 function clicked_subjects_identifier(e) {
@@ -1330,7 +1326,6 @@ function clicked_subjects_identifier(e) {
     //document.querySelector('.fil-2 .sub-filter').innerHTML = `( ${clicked_subjects.length} )`;
     adjust_books("sub");
 }
-
 // funnction for storing clicked book years
 // * same as the clicked publishers identifier
 function clicked_grades_identifier(e) {
@@ -1353,7 +1348,6 @@ function clicked_grades_identifier(e) {
     //document.querySelector('.fil-3 .sub-filter').innerHTML = `( ${clicked_grades.length} )`;
     adjust_books("year");
 }
-
 function clicked_courses_identifier(e) {
     if (![...e.target.classList].includes("disabled")) {
         e.target.classList.add('disabled');
@@ -1378,7 +1372,6 @@ function clicked_courses_identifier(e) {
 function clear_stage(element) {
     element.innerHTML = "";
 }
-
 // function to render shopping cart
 // ! the reason for the function value is cart1 is because of global variable with name of cart 
 function render_shopping_cart(cart1) {
@@ -1713,6 +1706,30 @@ function delete_item(id) {
             console.log(err);
         });
 }
+// function for delete in cart modal
+function delete_item_modal(id) {
+    cart.cart_items_ids = cart.cart_items_ids.filter(c => c !== id);
+    load_pause('active');
+    axios
+        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
+        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .then((res) => {
+            cart = res.data;
+            cart_items = cart.cart_details;
+            load_pause('disactive');
+            if (address_to_here.includes('cart-modal')) {
+                const total_price_HTML = document.querySelector('.total-price .total-price-amount');
+                const discounted_price_HTML = document.querySelector('.discounted-price');
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+            footer_cart_wrapper_HTML.innerHTML = cart_items.length;
+            modal_state();
+            render_cart_modal(cart_items);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
 //function to clear cart
 function clear_cart() {
     //console.log(cart);
@@ -1733,6 +1750,30 @@ function clear_cart() {
             footer_cart_wrapper_HTML.innerHTML = 0;
             modal_state();
             render_shopping_cart(cart_items);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+}
+// function to clear modal cart
+function clear_modal_cart() {
+    cart.cart_items_ids = [];
+    cart_items = [];
+    load_pause('active');
+    axios
+        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
+        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .then((res) => {
+            cart = res.data;
+            load_pause('disactive');
+            if (address_to_here.includes('cart/')) {
+                const total_price_HTML = document.querySelector('.total-price .total-price-amount');
+                const discounted_price_HTML = document.querySelector('.discounted-price');
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+            footer_cart_wrapper_HTML.innerHTML = 0;
+            modal_state();
+            render_cart_modal(cart_items);
         })
         .catch(err => {
             console.log(err);
@@ -1895,8 +1936,6 @@ function render_wallet(user) {
 
 }
 // function to render single book page
-// ? maybe it better to have this function as a modal instead of a complete page ( bea cause of action after a back btn )
-// ! reconsider maybe needed here
 function render_single_book(book) {
     const single_book_content = `
         <div class="single-prod-wrapper">
@@ -1991,9 +2030,11 @@ function render_single_book(book) {
                     <div class="price-wrapper ${(book.discounted_price !== book.price) ? " has-discount" : " "}">
                             <span class="normal-price">
                                 ${split_in_three(book.price)}
+                                تومان
                             </span>
                             <span class="discounted-price">
                                 ${split_in_three(book.discounted_price)}
+                                تومان
                             </span>
                     </div>
                 </div>
@@ -2038,7 +2079,7 @@ function render_single_book(book) {
                         </ul>
                     </div>
                 </div>
-                <div class="add-to-cart-text ${el_by_id(cart_items, book.id).count_in_user_cart ? " " : "not-in-cart"}">
+                <div class="add-to-cart-text ${el_by_id(cart_items, book.id).count_in_user_cart ? " " : "not-in-cart"}" id="single-id-${book.id}">
                     <span class="text q-0">
                         اضافه کردن به سبد خرید
                     </span>
@@ -2087,6 +2128,7 @@ function render_single_book(book) {
 
             const id = book.id;
             update_quantity('book', id, "+");
+            validate_quan(book.id);
         }
         else if (classes[classes.length - 1] === "more-img") {
             const quantity_wrapper = e.target.parentElement.nextElementSibling;
@@ -2094,6 +2136,7 @@ function render_single_book(book) {
 
             const id = book.id;
             update_quantity('book', id, "+");
+            validate_quan(book.id);
         }
     });
     const less_btn = document.querySelector('.less');
@@ -2110,6 +2153,7 @@ function render_single_book(book) {
                 quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                 // changing the array quantity
             }
+            validate_quan(book.id);
         }
         else if (classes[classes.length - 1] === "less-img") {
             const quantity_wrapper = e.target.parentElement.previousSibling;
@@ -2123,6 +2167,7 @@ function render_single_book(book) {
                 quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
                 // changing the array quantity
             }
+            validate_quan(book.id);
         }
     });
 
@@ -2135,6 +2180,17 @@ function render_single_book(book) {
         activate_modal_single_book("disactive");
         address_to_here = address_to_here.replace(("single-book/"), "");
     });
+}
+// function to validate book in single page
+function validate_quan(id) {
+    let target = document.querySelector(`#single-id-${id}`);
+    if (el_by_id(cart_items, id).count_in_user_cart) {
+        target.classList.remove("not-in-cart");
+        target.querySelector('.quan-count').innerHTML = el_by_id(cart_items, id).count_in_user_cart;
+    }
+    else {
+        target.classList.add("not-in-cart");
+    }
 }
 //function to render final stage of cart
 function render_final_stage_cart(cart_items, discount, url) {
@@ -2562,7 +2618,7 @@ function update_quantity(type, id, sign) {
             cart_items.push({ ...item, count_in_user_cart: 1 });
             // update ids
             cart.cart_items_ids.push(id);
-            //open_cart_modal("active");
+            open_cart_modal("active");
             let_the_cart = true;
 
             document.querySelector(`#book-${id} .btns-wrapper`).classList.remove("quan-0");
@@ -2812,14 +2868,14 @@ function update_cart(ids) {
         .then((res) => {
             cart = res.data;
             load_pause('disactive');
-            // if (let_the_cart) {
-            //     //open_cart_modal("active");
-            //     let_the_cart = false;
-            //     const total_price_HTML = document.querySelector('.total-price .total-price-amount');
-            //     const discounted_price_HTML = document.querySelector('.discounted-price');
-            //     update_total(total_price_HTML, discounted_price_HTML);
-            // }
-            if (address_to_here.includes('cart/')) {
+            if (address_to_here.includes('cart-modal')) {
+                //open_cart_modal("active");
+                let_the_cart = false;
+                const total_price_HTML = document.querySelector('.total-price .total-price-amount');
+                const discounted_price_HTML = document.querySelector('.discounted-price');
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+            else if (address_to_here.includes('cart/')) {
                 const total_price_HTML = document.querySelector('.total-price .total-price-amount');
                 const discounted_price_HTML = document.querySelector('.discounted-price');
                 update_total(total_price_HTML, discounted_price_HTML);
@@ -2997,246 +3053,300 @@ function render_needed_pagination() {
 
 }
 // function for having modal box be open for cart as a popup
-// function open_cart_modal(state) {
-//     if (state === "active") {
-//         if (![...modal_wrapper.classList].includes("single-modal")) {
-//             modal_wrapper.classList.add("cart-pop-up");
-//             modal_wrapper.classList.remove("single-modal");
-//             modal_wrapper.style.zIndex = "999";
-//             modal_wrapper.style.top = "15vh";
-//             render_cart_modal(cart_items);
-//             document.querySelector('body').style.overflowY = "hidden";
-//         }
-//     }
-//     else {
-//         address_to_here = address_to_here.replace(("cart-modal/"), "");
-//         document.querySelector('body').style.overflowY = "unset";
-//         modal_wrapper.classList.remove("cart-pop-up");
-//         modal_wrapper.classList.remove("single-modal");
-//         modal_wrapper.style.top = "-100vh";
-//         setTimeout(() => {
-//             modal_wrapper.style.zIndex = "-1";
-//             modal_wrapper.innerHTML = " ";
-//         }, 700);
-//     }
-// }
-// function render_cart_modal(cart1) {
-//     address_to_here = stop_repeatation_in_addres("cart-modal", address_to_here) ? address_to_here + "cart-modal/" : address_to_here;
-//     //console.log(cart);
-//     const shopping_cart_HTML = `
-//         <div class="cart-wrapper">
-//             <div class="cart-header">
-//                 <div class="back">
-//                     <i class="fa fa-caret-right"></i>
-//                 </div>
-//                 <div class="cart-page-title">
-//                     سبد خرید
-//                 </div>
-//             </div>
-//             <div class="cart-main-content">
-//                 <div class="cart-is-empty">
-//                     <div class="empty-text">
-//                         سبد خرید شما خالی است!!!
-//                     </div>
-//                     <div class="go-to-book-page">
-//                         رفتن به صفحه فروشگاه
-//                     </div>
-//                 </div>
-//                 <div class="cart-items">
-//                 </div>
-//                 <div class="totalprice-wrapper">
-//                     <div class="label">
-//                         مجموع :
-//                     </div>
-//                     <div class="total-price ${cart.cart_summary.total_discount_of_items === 0 ? " " : "has-discount"}">
-//                         <span class="price">
-//                         </span>
-//                         <span class="discounted-price">
-//                         ${split_in_three(cart.cart_summary.final_price)}
-//                         </span>
-//                         تومان
-//                     </div>
-//                 </div>
-//             </div>
-//             <div class="cart-next-step ${cart1.length === 0 ? "disabled" : " "}">
-//                 <span class="label">
-//                     مرحله بعد
-//                 </span>
-//                 <i class="fa fa-caret-left"></i>
-//             </div>
-//         </div>
-//     `;
-//     modal_wrapper.innerHTML = shopping_cart_HTML;
-//     //activating next step btn
-//     const next_step_btn = document.querySelector('.cart-next-step');
-//     // click action for cart next step
-//     next_step_btn.addEventListener('click', () => {
-//         // render final stage with cart items and dicount amount
-//         // check if the cart isn't empty ro render final stage cart
-//         if (cart1.length !== 0) {
-//             // fill the discount value from api
-//             let discount = split_in_three(cart.cart_summary.total_discount_of_items);
-//             // get the pay url for the final step btn
-//             open_cart_modal("disactive");
-//             load_pause("active");
-//             axios
-//                 .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
-//                 //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
-//                 .then((res) => {
-//                     const url = res.data;
-//                     // render final stage cart with given parameters
-//                     render_final_stage_cart(cart_items, discount, url.url_to_pay);
-//                     load_pause('disactive');
-//                 })
-//                 .catch(err => {
-//                     // ? we need a better way to handle the errors :)
-//                     render_errors(err)
-//                 })
-//         }
-//     });
+function open_cart_modal(state) {
+    if (state === "active") {
+        if (![...modal_wrapper.classList].includes("single-modal")) {
+            modal_wrapper.classList.add("cart-pop-up");
+            modal_wrapper.classList.remove("single-modal");
+            modal_wrapper.style.zIndex = "999";
+            modal_wrapper.style.top = "15vh";
+            render_cart_modal(cart_items);
+            document.querySelector('body').style.overflowY = "hidden";
+        }
+    }
+    else {
+        address_to_here = address_to_here.replace(("cart-modal/"), "");
+        document.querySelector('body').style.overflowY = "unset";
+        modal_wrapper.classList.remove("cart-pop-up");
+        modal_wrapper.classList.remove("single-modal");
+        modal_wrapper.style.top = "-100vh";
+        setTimeout(() => {
+            modal_wrapper.style.zIndex = "-1";
+            modal_wrapper.innerHTML = " ";
+        }, 700);
+    }
+}
+function render_cart_modal(cart1) {
+    address_to_here = stop_repeatation_in_addres("cart-modal", address_to_here) ? address_to_here + "cart-modal/" : address_to_here;
+    //console.log(cart);
+    const date = setDate();
+    const shopping_cart_content = `
+        <div class="cart-page-wrapper modal">
+            <div class="cart-map-btns">
+                <div class="clear-cart">
+                    <img src="./assets/images/trash-icon-btn.png" class="clear-cart-img" alt="پاک کردن">
+                </div>
+                <div class="back">
+                    <img src="./assets/images/back-forward-btn.png" class="back-btn-img" alt="بازگشت">
+                </div>
+            </div>
+            <div class="page-title">
+                سبد خرید
+            </div>
+            ${cart1.length === 0 ? "<div class=\"cart-is-empty\">سبد خرید شما خالی است!!!</div>" : " "}
+            <div class="cart-items-wrapper">
+            </div>
+            <div class="cart-footer">
+                <div class="date">
+                    <span class="year">
+                        ${date[2]}
+                    </span>
+                    /
+                    <span class="month">
+                    ${month_declare(date[1])}
+                    </span>
+                    /
+                    <span class="day">
+                        ${date[0]}
+                    </span>
+                </div>
+                <div class="total-price ${cart.cart_summary.total_discount_of_items === 0 ? " " : "has-discount"}">
+                    <span class="title">
+                        مجموع :
+                    </span>
+                    <div class="prices">
+                        <span class="total-price-amount">
+                        ${split_in_three(cart.cart_summary.total_price_of_items)}
+                        </span>
+                        <span class="discounted-price">
+                        ${split_in_three(cart.cart_summary.final_price)}
+                        </span>
+                        <span class="toman">
+                        تومان
+                        </span>
+                    </div>
+                </div>
+                <div class="checkout-btn">
+                    ادامه فرآیند خرید
+                </div>
+            </div>
+        </div>
+    `;
+    //appending the main text to the dom
+    modal_wrapper.innerHTML = shopping_cart_content;
 
-//     // activating go to book page btn 
-//     const back_to_shop_btn = document.querySelector('.go-to-book-page');
-//     back_to_shop_btn.addEventListener("click", () => {
-//         // have the filter's results saved as an out come
-//         // if (filtered_book.length === 0) {
-//         //     render_books(needed_books);
-//         // }
-//         // else {
-//         //     render_books(filtered_book);
-//         // }
-//         map_handler();
-//         open_cart_modal("disactive")
-//         // if (filter_activated) {
-//         //     render_books(needed_books.slice(0, 30));
-//         // }
-//         // else {
-//         //     render_books(needed_books);
-//         // }
-//         // have the address updated
-//         //address_to_here += "books/";
-//     });
+    //activating next step btn
+    const next_step_btn = document.querySelector('.checkout-btn');
+    // click action for cart next step
+    next_step_btn.addEventListener('click', () => {
+        open_cart_modal("disactive");
+        // render final stage with cart items and dicount amount
+        // check if the cart isn't empty ro render final stage cart
+        if (cart1.length !== 0) {
+            // fill the discount value from api
+            let discount = cart.cart_summary.total_discount_of_items;
+            // get the pay url for the final step btn
+            load_pause('active');
+            axios
+                .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                .then((res) => {
+                    const url = res.data;
+                    // render final stage cart with given parameters
+                    render_final_stage_cart(cart_items, discount, url.url_to_pay);
+                    load_pause("disactive");
+                })
+                .catch(err => {
+                    // ? we need a better way to handle the errors :)
+                    console.log(err)
+                })
+        }
+    });
 
-
-//     const cart_item_wrapper = document.querySelector('.cart-items');
-//     // to get total price wrapper
-//     const total_price_HTML = document.querySelector('.total-price .total-price-amount');
-//     const discounted_price_HTML = document.querySelector('.discounted-price');
-//     // adding items in cart
-//     cart1.forEach(item => {
-//         const cart_item_content = `
-//         <div class="cart-item" id="cart-item-${item.id}">
-//             <img src="${item.img_url}" alt="">
-//             <div class="details">
-//                 <div class="cart-item-name">
-//                     ${item.name}
-//                 </div>
-//                 <div class="cart-item-price">
-//                     <span class="price">
-//                         ${split_in_three(item.price)}
-//                     </span>
-//                     تومان
-//                 </div>
-//             </div>
-//             <div class="cart-item-actions">
-//                 <span class="more">
-//                     <i class="fa fa-plus"></i>
-//                 </span><span class="quantity">
-//                     ${item.count_in_user_cart}
-//                 </span><span class="less">
-//                     <i class="fa fa-minus"></i>
-//                 </span>
-//             </div>
-//         </div>
-//         `;
-//         // calculate total pirce with the items in cart
-//         //total_price_amount += item.count_in_user_cart * item.price;
-//         cart_item_wrapper.innerHTML += cart_item_content;
-//     });
-//     total_price_HTML.innerHTML = split_in_three(cart.cart_summary.total_price_of_items);;
+    // activating go to book page btn 
+    // const back_to_shop_btn = document.querySelector('.go-to-book-page');
+    // back_to_shop_btn.addEventListener("click", () => {
+    //     // have the filter's results saved as an out come
+    //     // if (filtered_book.length === 0) {
+    //     //     render_books(needed_books);
+    //     // }
+    //     // else {
+    //     //     render_books(filtered_book);
+    //     // }
+    //     map_handler();
+    //     open_cart_modal("disactive")
+    //     // if (filter_activated) {
+    //     //     render_books(needed_books.slice(0, 30));
+    //     // }
+    //     // else {
+    //     //     render_books(needed_books);
+    //     // }
+    //     // have the address updated
+    //     //address_to_here += "books/";
+    // });
 
 
-//     // get all the items in the cart for making events in the more or less
-//     const all_cart_items = [...document.querySelectorAll('.cart-item')];
-//     all_cart_items.forEach(item => {
-//         // handling more btn in cart
-//         // * same as more and less in the book page
-//         const more_btn = item.querySelector('.more');
-//         more_btn.addEventListener('click', (e) => {
-//             const classes = [...e.target.classList];
-//             if (classes[classes.length - 1] === "more") {
-//                 const quantity_wrapper = e.target.nextElementSibling;
-//                 quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+    const cart_item_wrapper = document.querySelector('.cart-items-wrapper');
+    // to get total price wrapper
+    const total_price_HTML = document.querySelector('.total-price .total-price-amount');
+    const discounted_price_HTML = document.querySelector('.discounted-price');
+    // adding items in cart
+    cart1.forEach(item => {
+        const cart_item_content = `
+        <div class="cart-item" id="cart-item-${item.id}">
+            <img src="${item.img_url}" alt="">
+            <div class="details">
+                <div class="cart-item-name">
+                    ${item.name}
+                </div>
+                <div class="cart-item-price">
+                    <span class="price">
+                        ${split_in_three(item.price)}
+                    </span>
+                    تومان
+                </div>
+            </div>
+            <div class="cart-item-actions">
+                <span class="more">
+                    <i class="fa fa-plus"></i>
+                </span><span class="quantity">
+                    ${item.count_in_user_cart}
+                </span><span class="less">
+                    <i class="fa fa-minus"></i>
+                </span>
+            </div>
+        </div>
+        `;
+        const cart_content = `
+            <div class="cart-item" id="cart-item-${item.id}">
+                    <div class="img-wrapper">
+                        <img src="${item.img_url}"
+                            alt="${item.name}">
+                    </div>
+                    <div class="prod-details">
+                        <div class="prod-name">
+                            ${item.name}
+                        </div>
+                        <div class="prod-price">
+                            ${split_in_three(item.price)}
+                        </div>
+                        <div class="prod-btn-action">
+                            <div class="add-btn">
+                                <img src="./assets/images/plus-icon-orange.png" class="m more" alt="">
+                            </div><div class="quantity">
+                                ${item.count_in_user_cart}
+                            </div><div class="decrement-btn quan-1">
+                                <img src="./assets/images/trash-icon-btn-black.png" class="trash less" alt="">
+                                <img src="./assets/images/minus-icon.png" class="line less" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="remove-btn">
+                        <img src="./assets/images/delete-icon-orange.png" alt="" id="${item.id}">
+                    </div>
+                </div>
+        `;
+        // calculate total pirce with the items in cart
+        //total_price_amount += item.count_in_user_cart * item.price;
+        cart_item_wrapper.innerHTML += cart_content;
+    });
+    total_price_HTML.innerHTML = split_in_three(cart.cart_summary.total_price_of_items);
 
-//                 // changing the array quantity
-//                 const id_string = e.target.parentElement.parentElement.id;
-//                 const id = parseInt(id_string.split("-")[2]);
-//                 update_quantity('cart', id, "+");
-//                 update_total(total_price_HTML, discounted_price_HTML);
-//             }
-//             else if (classes[classes.length - 1] === "fa-plus") {
-//                 const quantity_wrapper = e.target.parentElement.nextElementSibling;
-//                 quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
 
-//                 // changing the array quantity
-//                 const id_string = e.target.parentElement.parentElement.parentElement.id;
-//                 const id = parseInt(id_string.split("-")[2]);
-//                 update_quantity('cart', id, "+");
-//                 update_total(total_price_HTML, discounted_price_HTML);
-//             }
-//         });
-//         // decreament items in cart
-//         const less_btn = item.querySelector('.less');
-//         less_btn.addEventListener('click', (e) => {
-//             const classes = [...e.target.classList];
-//             if (classes[classes.length - 1] === "less") {
-//                 const quantity_wrapper = e.target.previousSibling;
-//                 const id_string = e.target.parentElement.parentElement.id;
-//                 const id = parseInt(id_string.split("-")[2]);
-//                 update_quantity('cart', id, "-");
-//                 if (parseInt(quantity_wrapper.innerHTML) === 1) {
-//                     // remove the item from cart after quantity becomes 0
-//                     e.target.parentElement.parentElement.remove();
-//                 }
-//                 else {
-//                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
-//                     // changing the array quantity
-//                 }
-//                 update_total(total_price_HTML, discounted_price_HTML);
-//             }
-//             else if (classes[classes.length - 1] === "fa-minus") {
-//                 const quantity_wrapper = e.target.parentElement.previousSibling;
-//                 const id_string = e.target.parentElement.parentElement.parentElement.id;
-//                 const id = parseInt(id_string.split("-")[2]);
-//                 update_quantity('cart', id, "-");
-//                 if (parseInt(quantity_wrapper.innerHTML) === 1) {
-//                     e.target.parentElement.parentElement.parentElement.remove();
-//                 }
-//                 else {
-//                     quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
-//                     // changing the array quantity
-//                 }
-//                 update_total(total_price_HTML, discounted_price_HTML);
-//             }
-//         });
+    // get all the items in the cart for making events in the more or less
+    // get all remove btns in cart
+    const all_remove_btns = [...document.querySelectorAll('.remove-btn')];
+    all_remove_btns.forEach(r_btn => {
+        r_btn.addEventListener('click', (e) => {
+            let d_id = parseInt(e.target.id);
+            //delete_item(d_id);
+            delete_item_modal(d_id);
+        });
+    });
+    // get all the items in the cart for making events in the more or less
+    const all_cart_items = [...document.querySelectorAll('.cart-item')];
+    all_cart_items.forEach(item => {
+        // handling more btn in cart
+        // * same as more and less in the book page
+        const more_btn = item.querySelector('.add-btn');
+        more_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "add-btn") {
+                const quantity_wrapper = e.target.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+                console.log(e)
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "+");
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "more") {
+                const quantity_wrapper = e.target.parentElement.nextElementSibling;
+                quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) + 1;
+                // changing the array quantity
+                const id_string = e.target.parentElement.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "+");
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+        });
+        // decreament items in cart
+        const less_btn = item.querySelector('.decrement-btn');
+        less_btn.addEventListener('click', (e) => {
+            const classes = [...e.target.classList];
+            if (classes[classes.length - 1] === "decrement-btn") {
+                const quantity_wrapper = e.target.previousSibling;
+                const id_string = e.target.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 1) {
+                    // remove the item from cart after quantity becomes 0
+                    e.target.parentElement.parentElement.parentElement.remove();
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+            else if (classes[classes.length - 1] === "less") {
+                const quantity_wrapper = e.target.parentElement.previousSibling;
+                const id_string = e.target.parentElement.parentElement.parentElement.parentElement.id;
+                const id = parseInt(id_string.split("-")[2]);
+                update_quantity('cart', id, "-");
+                if (parseInt(quantity_wrapper.innerHTML) === 1) {
+                    e.target.parentElement.parentElement.parentElement.parentElement.remove();
+                }
+                else {
+                    quantity_wrapper.innerHTML = parseInt(quantity_wrapper.innerHTML) - 1;
+                    // changing the array quantity
+                }
+                update_total(total_price_HTML, discounted_price_HTML);
+            }
+        });
 
-//     });
+    });
 
-//     // updating curent place for map_handler method
-//     /* 
-//         ?  cause the cart item is accessible from all part of web app it needs to be stopped after 
-//         ? one add in the address to here so I used the stop repatation function
-//     */
-//     //stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
+    // updating curent place for map_handler method
+    /* 
+        ?  cause the cart item is accessible from all part of web app it needs to be stopped after 
+        ? one add in the address to here so I used the stop repatation function
+    */
+    //stop_repeatation_in_addres("cart", address_to_here) ? address_to_here += "cart/" : address_to_here = address_to_here;
 
-//     // activating the back button
-//     const back_btn = document.querySelector('.cart-wrapper .back');
-//     back_btn.addEventListener('click', () => {
-//         open_cart_modal("disactive");
-//         // map_handler();
-//         address_to_here = address_to_here.replace(("cart-modal/"), "");
-//     });
-// }
+    // activating the back button
+    const back_btn = document.querySelector('.modal .back');
+    back_btn.addEventListener('click', () => {
+        open_cart_modal("disactive");
+        // map_handler();
+        address_to_here = address_to_here.replace(("cart-modal/"), "");
+    });
+    const clear_cart_btn = document.querySelector('.clear-cart');
+    clear_cart_btn.addEventListener('click', () => {
+        clear_modal_cart();
+    });
+}
 // a function to disactive all modals 
 function disactive_modals() {
     //open_cart_modal('disactive');
