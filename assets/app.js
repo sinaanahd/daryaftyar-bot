@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
         .then((res) => {
             user = res.data;
-            console.log(user)
+            //console.log(user)
             render_welcome();
         })
         .catch((err) => console.log(err));
@@ -1434,8 +1434,16 @@ function render_shopping_cart(cart1) {
             <div class="page-title">
                 سبد خرید
             </div>
-            ${cart1.length === 0 ? "<div class=\"cart-is-empty\">سبد خرید شما خالی است!!!</div>" : " "}
-            <div class="cart-items-wrapper">
+            <div class="cart-items-wrapper ${cart1.length !== 0 ? "has-item" : " "}">
+                    <div class="cart-is-empty">
+                        <img src="./assets/images/empty-cart-vector.png" alt="سبد خرید خالی است">
+                            <div class="empty-text">
+                         سبد خرید شما خالی است
+                            </div>
+                        <div class="return-home">
+                    بازگشت به خانه
+                        </div>
+            </div>
             </div>
             <div class="cart-footer">
                 <div class="date">
@@ -2880,6 +2888,11 @@ function update_cart(ids) {
                 const discounted_price_HTML = document.querySelector('.discounted-price');
                 update_total(total_price_HTML, discounted_price_HTML);
             }
+            if (address_to_here.includes('cart-modal') || address_to_here.includes('cart/')) {
+                if (cart.cart_items_ids.length === 0) {
+                    document.querySelector('.cart-items-wrapper').classList.remove('has-item');
+                }
+            }
             modal_state();
         })
         .catch(err => {
@@ -3093,8 +3106,15 @@ function render_cart_modal(cart1) {
             <div class="page-title">
                 سبد خرید
             </div>
-            ${cart1.length === 0 ? "<div class=\"cart-is-empty\">سبد خرید شما خالی است!!!</div>" : " "}
-            <div class="cart-items-wrapper">
+            <div class="cart-items-wrapper ${cart1.length !== 0 ? "has-item" : " "}">
+                    <div class="cart-is-empty">
+                        <img src="./assets/images/empty-cart-vector.png" alt="سبد خرید خالی است">
+                            <div class="empty-text">
+                         سبد خرید شما خالی است
+                            </div>
+                        <div class="return-home">
+                    بازگشت به خانه
+                        </div>
             </div>
             <div class="cart-footer">
                 <div class="date">
