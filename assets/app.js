@@ -34,6 +34,8 @@ const grades = [
         name: "فارغ التحصیل"
     }
 ];
+// for form
+let data_user = [];
 // cart varibale 
 var cart = [];
 // cart items variables
@@ -309,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
-            //console.log(cart);
+            // console.log(cart);
         })
         .catch((err) => render_errors(err.message));
     axios
@@ -319,6 +321,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 publishers.push({ ...p, clicked: false });
                 //clicked_publishers_ids.push(p.id)
             });
+        })
+        .catch((err) => render_errors(err.message));
+    axios
+        .get(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`)
+        .then((res) => {
+            data_user = res.data;
+            //render_user_data_form();
         })
         .catch((err) => render_errors(err.message));
 });
@@ -2457,6 +2466,10 @@ function map_handler() {
             render_shopping_cart(cart_items);
             address_to_here = address_to_here.replace((address[len] + "/"), "");
             break;
+        case "userData":
+            render_shopping_cart(cart_items);
+            address_to_here = address_to_here.replace((address[len] + "/"), "");
+            break;
         case "single-book":
             //if (filtered_book.length === 0) {
             if (filter_activated) {
@@ -2465,11 +2478,6 @@ function map_handler() {
             else {
                 render_books(needed_books);
             }
-            //render_books(needed_books);
-            //}
-            //else {
-            //  render_books(filtered_book);
-            //}
             address_to_here = address_to_here.replace((address[len] + "/"), "");
             break;
         case "home":
@@ -3567,4 +3575,313 @@ function render_width(el) {
     setTimeout(() => {
         el.style.opacity = "1";
     }, 100);
+}
+
+// ! form functions
+const illigal_chars = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!",
+    "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
+    "[", "]", "{", "}", "|", " \ ", "/", "?", ".", ",", "۱", "۲", "۳",
+    "۴", "۵", "۶", "۷", "۸", "۹", "۰", ":"];
+
+function render_user_data_form() {
+    clearPage();
+    address_to_here = stop_repeatation_in_addres("userData", address_to_here) ? address_to_here + "userData/" : address_to_here;
+    const user_data_content = `
+    <div class="user-data-page">
+        <div class="header">
+            <div class="back">
+                <img src="./assets/images/back-forward-btn.png" class="back-img" alt="">
+            </div>
+            <div class="page-title">
+                تکمیل اطلاعات شخصی
+            </div>
+            <div class="text">
+                برای ادامه دادن فرایند خرید لطفا اطلاعات زیر را کامل کنید.
+            </div>
+        </div>
+        <div class="inputs-wrapper">
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <img src="./assets/images/user-data-icon.png" alt="">
+                    <input name="user-name" type="text" id="user-name" placeholder="نام و نام خانوداگی" />
+                </div>
+                <div class="error-loader err-name">
+                    ارور پیش آمده
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <img src="./assets/images/phone-data-icon.png" alt="">
+                    <input name="user-phone" type="number" id="user-phone" placeholder="شماره منزل" />
+                </div>
+                <div class="error-loader err-phone">
+                    ارور پیش آمده
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <img src="./assets/images/post-data-icon.png" alt="">
+                    <input name="user-postal-code" type="number" id="user-postal-code" placeholder="کدپستی" />
+                </div>
+                <div class="error-loader err-post">
+                    ارور پیش آمده
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <div class="label-and-input">
+                    <img src="./assets/images/address-data-icon.png" alt="">
+                    <textarea name="user-address" id="user-address" cols="30" rows="5" placeholder="آدرس"></textarea>
+                </div>
+                <div class="error-loader err-address">
+                    ارور پیش آمده
+                </div>
+            </div>
+        </div>
+        <div class="btns-wrapper">
+            <button class="submit-user-data">
+                ثبت اطلاعات
+            </button>
+        </div>
+    </div>
+                        `;
+    main_area.innerHTML = user_data_content;
+
+    const error_modal = document.querySelector(".error-modal");
+
+    const name_input = document.querySelector("#user-name");
+
+    const phone_input = document.querySelector("#user-phone");
+
+    const postal_code_input = document.querySelector("#user-postal-code");
+
+    const address_input = document.querySelector("#user-address");
+
+    const submit_btn = document.querySelector(".submit-user-data");
+
+    name_input.addEventListener("input", ({ target }) => {
+        validate_name_input(target);
+    });
+    phone_input.addEventListener("input", ({ target }) => {
+        validate_phone_input(target);
+    });
+    postal_code_input.addEventListener("input", ({ target }) => {
+        validate_post_input(target);
+    });
+    address_input.addEventListener("input", ({ target }) => {
+        validate_address_input(target);
+    });
+    submit_btn.addEventListener("click", () => {
+        update_user();
+    });
+    if (data_user.real_name) {
+        name_input.value = data_user.real_name;
+    }
+    if (data_user.real_home_number) {
+        phone_input.value = data_user.real_home_number;
+    }
+    if (data_user.real_postal_code) {
+        postal_code_input.value = data_user.real_postal_code;
+    }
+    if (data_user.real_address) {
+        address_input.value = data_user.real_address;
+    }
+    check_situtation(submit_btn);
+    const back_btn = document.querySelector('.back')
+    back_btn.addEventListener("click", () => {
+        map_handler();
+    });
+    const user_data_wrapper = document.querySelector('.user-data-page');
+    render_now(user_data_wrapper);
+}
+function check_situtation() {
+    const submit_btn = document.querySelector(".submit-user-data");
+    const errored_item = document.querySelector('.has-error');
+    if (errored_item !== null) {
+        submit_btn.classList.add("dis")
+        submit_btn.disabled = true;
+    }
+    else {
+        submit_btn.classList.remove("dis")
+        submit_btn.disabled = false;
+    }
+}
+function validate_name_input(target) {
+    let content = target.value;
+    let invalid_char = false;
+    illigal_chars.forEach(char => {
+        if (content.includes(char)) {
+            invalid_char = true;
+        }
+    })
+    if (content.length > 50) {
+        render_name_error("len", "active", target);
+    }
+    else if (content.length < 3) {
+        render_name_error("short-len", "active", target);
+    }
+    else if (invalid_char) {
+        render_name_error("num", "active", target);
+    }
+    else {
+        render_name_error("len", "disactive", target);
+        data_user.real_name = content;
+    }
+    check_situtation();
+}
+function validate_phone_input(target) {
+    let content = target.value;
+    if (content.length > 15) {
+        render_phone_error("len", "active", target);
+    }
+    else if (content.length < 10) {
+        render_phone_error("short-len", "active", target);
+    }
+    else {
+        render_phone_error("len", "disactive", target);
+        data_user.real_home_number = content;
+    }
+    check_situtation();
+}
+function validate_post_input(target) {
+    let content = target.value;
+    if (content.length !== 10) {
+        render_post_error("len", "active", target);
+    }
+    else {
+        render_post_error("len", "disactive", target);
+        data_user.real_postal_code = content;
+    }
+    check_situtation();
+}
+function validate_address_input(target) {
+    let content = target.value;
+    if (content.length > 250) {
+        render_address_error("len", "active", target);
+    }
+    else if (content.length === 0) {
+        render_address_error("zero", "active", target);
+    }
+    else {
+        render_address_error("len", "disactive", target);
+        data_user.real_address = content;
+    }
+    check_situtation();
+}
+function render_name_error(kind, state, target) {
+    let error_for_name = document.querySelector(".err-name");
+    if ((kind === "len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_name.style.opacity = "1";
+        error_for_name.style.height = "40px";
+        error_for_name.innerHTML = "طول مجاز برای این فیلد حداکثر ۵۰ کاراکتر است";
+    }
+    else if ((kind === "short-len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_name.style.opacity = "1";
+        error_for_name.style.height = "40px";
+        error_for_name.innerHTML = "طول مجاز برای این فیلد حداقل ۳ کاراکتر است";
+    }
+    else if ((kind === "num") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_name.style.opacity = "1";
+        error_for_name.style.height = "40px";
+        error_for_name.innerHTML = "کاراکتر غیر مجاز";
+    }
+    else if (state === "disactive") {
+        target.classList.remove('has-error');
+        error_for_name.style.opacity = "0";
+        error_for_name.style.height = "0px";
+        error_for_name.innerHTML = " ";
+        //check_situtation()
+    }
+
+}
+function render_phone_error(kind, state, target) {
+    let error_for_phone = document.querySelector(".err-phone");
+    if ((kind === "len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_phone.style.opacity = "1";
+        error_for_phone.style.height = "40px";
+        error_for_phone.innerHTML = "طول مجاز برای این فیلد حداکثر ۱۵ کاراکتر است";
+    }
+    else if ((kind === "short-len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_phone.style.opacity = "1";
+        error_for_phone.style.height = "40px";
+        error_for_phone.innerHTML = "طول مجاز برای این فیلد حداقل ۱۰ کاراکتر است";
+    }
+    else if (state === "disactive") {
+        target.classList.remove('has-error');
+        error_for_phone.style.opacity = "0";
+        error_for_phone.style.height = "0px";
+        error_for_phone.innerHTML = " ";
+        //check_situtation()
+    }
+
+}
+function render_post_error(kind, state, target) {
+    let error_for_post = document.querySelector(".err-post");
+    if ((kind === "len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_post.style.opacity = "1";
+        error_for_post.style.height = "40px";
+        error_for_post.innerHTML = "طول مجاز برای این فیلد ۱۰ کاراکتر است";
+    }
+    else if (state === "disactive") {
+        target.classList.remove('has-error');
+        error_for_post.style.opacity = "0";
+        error_for_post.style.height = "0px";
+        error_for_post.innerHTML = " ";
+        //check_situtation()
+    }
+
+}
+function render_address_error(kind, state, target) {
+    let error_for_address = document.querySelector(".err-address");
+    if ((kind === "len") && (state === "active")) {
+        target.classList.add('has-error');
+        error_for_address.style.opacity = "1";
+        error_for_address.style.height = "80px";
+        error_for_address.innerHTML = "طول مجاز برای این فیلد حداکثر ۲۵۰ کاراکتر است";
+    }
+    else if ((kind === "zero") && (state === "active")) {
+        console.log(cart)
+        target.classList.add('has-error');
+        error_for_address.style.opacity = "1";
+        error_for_address.style.height = "80px";
+        error_for_address.innerHTML = "این فیلد نمی تواند خالی باشد";
+    }
+    else if (state === "disactive") {
+        target.classList.remove('has-error');
+        error_for_address.style.opacity = "0";
+        error_for_address.style.height = "0px";
+        error_for_address.innerHTML = " ";
+        //check_situtation()
+    }
+}
+function update_user() {
+    load_pause("active");
+    axios
+        .patch(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`, user)
+        .then((res) => {
+            data_user = res.data;
+            axios
+                .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                .then((res) => {
+                    const url = res.data;
+                    console.log(url)
+                    // render final stage cart with given parameters
+                    render_final_stage_cart(cart_items, cart.cart_summary.total_discount_of_items, url.url_to_pay);
+                    load_pause("disactive");
+                })
+                .catch(err => {
+                    // ? we need a better way to handle the errors :)
+                    render_errors(err.message)
+                })
+        })
+        .catch((err) => {
+            render_errors(err.message);
+            //console.log(err);
+        });
 }
