@@ -758,8 +758,8 @@ img {
       transition: all ease-in-out 0.3s; }
       .books-page-wrapper .book .btns-wrapper img {
         width: 14px; }
-    .books-page-wrapper .book .quan-0 {
-      display: none !important; }
+  .books-page-wrapper .quan-0 .btns-wrapper {
+    transform: scale(0); }
   .books-page-wrapper .page-count {
     display: grid;
     grid-template-columns: repeat(10, 1fr);

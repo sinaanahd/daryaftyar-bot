@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
             first_rendered_books = res.data;
             //needed_books = books.slice(0, 30);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     axios
         .get("https://daryaftyar.ir/storeV2/books")
         .then((res) => {
@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 render_books(needed_books);
             }, 200);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     axios
         .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
         //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
             //console.log(user)
             render_welcome();
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     axios
         .get(`https://daryaftyar.ir/storeV2/cart/${final_id}`)
         //.get("https://daryaftyar.ir/storeV2/cart/341393410")
@@ -311,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
             //console.log(cart);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
     axios
         .get("https://daryaftyar.ir/storeV2/pubs")
         .then((res) => {
@@ -320,7 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 //clicked_publishers_ids.push(p.id)
             });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => render_errors(err.message));
 });
 // rendring first page via menu btn
 footer_btn_home.addEventListener('click', () => {
@@ -979,7 +979,7 @@ function render_books(books1) {
             //         </div>
             // `;
             const book_content = `
-                <div class="book" id="book-${book.id}">
+                <div class="book  ${cart.cart_items_ids.includes(book.id) ? "quan-0" : " "}" id="book-${book.id}">
                         <div class="img-wrapper" id="book-imgWrapper-${book.id}">
                             <img src="${book.img_url}" alt="${book.name}" id="book-img-${book.id}">
                         </div>
@@ -999,7 +999,7 @@ function render_books(books1) {
                                 تومان
                             </span>
                         </div>
-                        <div class="btns-wrapper ${cart.cart_items_ids.includes(book.id) ? "quan-0" : " "}" id="add-${book.id}">
+                        <div class="btns-wrapper" id="add-${book.id}">
                             <img src="./assets/images/plus-white.png" alt="" id="img-${book.id}">
                         </div>
                     </div>
@@ -1017,13 +1017,16 @@ function render_books(books1) {
             // handling more btn in book page
             const add_book_btn = item.querySelector('.btns-wrapper');
             add_book_btn.addEventListener('click', ({ target }) => {
-                if (target.id.split('-')[0] === "img") {
-                    target.parentElement.style.transform = "scale(0)";
-                }
-                else if (target.id.split('-')[0] === "add") {
-                    target.style.transform = "scale(0)";
-                }
+                // if (target.id.split('-')[0] === "img") {
+                //     console.log("img");
+                //     target.parentElement.classList.add('quan-0');
+                // }
+                // else if (target.id.split('-')[0] === "add") {
+                //     console.log("item")
+                //     target.classList.add('quan-0');
+                // }
                 let id = parseInt(target.id.split('-')[1]);
+                document.querySelector(`#book-${id}`).classList.add('quan-0');
                 update_quantity('book', id, "+");
                 //reading the clicked class
                 // const classes = [...e.target.classList];
@@ -1506,7 +1509,7 @@ function render_shopping_cart(cart1) {
                 })
                 .catch(err => {
                     // ? we need a better way to handle the errors :)
-                    console.log(err)
+                    render_errors(err.message)
                 })
         }
     });
@@ -1712,7 +1715,7 @@ function delete_item(id) {
             render_shopping_cart(cart_items);
         })
         .catch(err => {
-            console.log(err);
+            render_errors(err.message);
         });
 }
 // function for delete in cart modal
@@ -1736,7 +1739,7 @@ function delete_item_modal(id) {
             render_cart_modal(cart_items);
         })
         .catch(err => {
-            console.log(err);
+            render_errors(err.message);
         });
 }
 //function to clear cart
@@ -1761,7 +1764,7 @@ function clear_cart() {
             render_shopping_cart(cart_items);
         })
         .catch(err => {
-            console.log(err);
+            render_errors(err.message);
         });
 }
 // function to clear modal cart
@@ -1785,7 +1788,7 @@ function clear_modal_cart() {
             render_cart_modal(cart_items);
         })
         .catch(err => {
-            console.log(err);
+            render_errors(err.message);
         });
 }
 // function for having the date
@@ -2897,7 +2900,7 @@ function update_cart(ids) {
             modal_state();
         })
         .catch(err => {
-            console.log(err);
+            render_errors(err.message);
         })
 }
 // a function to disable webapp untill the datas return from backend
@@ -3179,7 +3182,7 @@ function render_cart_modal(cart1) {
                 })
                 .catch(err => {
                     // ? we need a better way to handle the errors :)
-                    console.log(err)
+                    render_errors(err.message)
                 })
         }
     });
@@ -3498,7 +3501,7 @@ function order_book(status) {
                 needed_books = books.slice(0, 30);
                 load_pause("disactive");
             })
-            .catch((err) => console.log(err));
+            .catch((err) => render_errors(err.message));
     }
     else {
         axios
@@ -3508,7 +3511,7 @@ function order_book(status) {
                 needed_books = books.slice(0, 30);
                 load_pause("disactive");
             })
-            .catch((err) => console.log(err))
+            .catch((err) => render_errors(err.message))
     }
 }
 // function to render errors
@@ -3528,12 +3531,24 @@ function render_errors(error) {
 }
 // function for modal state updates
 function modal_state() {
-    cart.cart_details.forEach(ci => {
-        let changed_book = document.querySelector(`#book-${ci.id} .book-quantity`);
-        if (changed_book !== null) {
-            changed_book.innerHTML = ci.count_in_user_cart;
-        }
-    });
+    // cart.cart_details.forEach(ci => {
+    //     let changed_book = document.querySelector(`#book-${ci.id}`);
+    //     if (changed_book !== null) {
+    //         if(cart.cart_items_ids.includes)
+    //     }
+    // });
+    if (address_to_here.includes("cart-modal") || address_to_here.includes("single-book")) {
+        let all_rendered_books = [...document.querySelectorAll('.book')]
+        all_rendered_books.forEach(b => {
+            let id = parseInt(b.id.split("-")[1]);
+            if (!cart.cart_items_ids.includes(id)) {
+                b.classList.remove("quan-0");
+            }
+            else {
+                b.classList.add("quan-0");
+            }
+        });
+    }
 }
 // a function to seprate numbers bt 3 digits
 function split_in_three(number) {
