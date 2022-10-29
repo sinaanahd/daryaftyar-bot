@@ -804,6 +804,10 @@ function render_books(books1) {
         render_wallet(user);
     });
     // fill the pagination 
+    const coin_icon = document.querySelector('.coin-wrapper');
+    coin_icon.addEventListener("click", () => {
+        render_coin();
+    });
     pagination_HTML = document.querySelector('.page-count');
     if (filter_activated) {
         render_pagination(needed_books);
@@ -3884,4 +3888,51 @@ function update_user() {
             render_errors(err.message);
             //console.log(err);
         });
+}
+// function for coins render
+function render_coin() {
+    clearPage();
+    address_to_here = stop_repeatation_in_addres("coinPage", address_to_here) ? address_to_here + "coinPage/" : address_to_here;
+    const coin_page_content = `
+        <div class="coin-page-wrapper">
+            <div class="header">
+                <div class="page-title">
+                    افزایش سکه‌ها
+                </div>
+                <div class="back">
+                    <img src="./assets/images/back-forward-btn.png" class="back-img" alt="back image">
+                </div>
+            </div>
+            <div class="coin-image-wrapper">
+                <img src="./assets/images/coin-page-image.png" class="coin image" alt="">
+            </div>
+            <div class="expalin-text">
+                توضیحات
+            </div>
+            <div class="ways-to-add-coin-wrapper">
+                <div class="title">
+                    راه های افزایش اعتبار کیف پول
+                </div>
+                <div class="text">
+
+                </div>
+            </div>
+            <div class="coin-count-wrapper">
+                <div class="coin-count-title">
+                    تعداد سکه های حسابت
+                </div>
+                <div class="coin-count">
+                    140
+                </div>
+            </div>
+        </div>
+    `;
+    main_area.innerHTML = coin_page_content;
+
+    const back_btn = document.querySelector(".back");
+    back_btn.addEventListener("click", () => {
+        map_handler();
+    });
+    const coin_page = document.querySelector('.coin-page-wrapper');
+    render_now(coin_page);
 }
