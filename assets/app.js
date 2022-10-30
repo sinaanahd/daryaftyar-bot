@@ -3172,10 +3172,12 @@ function render_cart_modal(cart1) {
     modal_wrapper.innerHTML = shopping_cart_content;
 
     //activating next step btn
-    const next_step_btn = document.querySelector('.modal .checkout-btn');
+    const next_step_btn = document.querySelector('.checkout-btn');
+    console.log(next_step_btn);
     // click action for cart next step
-    next_step_btn.addEventListener('click', () => {
-        open_cart_modal("disactive");
+    next_step_btn.addEventListener('click', (e) => {
+        console.log("clicked", e)
+        //open_cart_modal("disactive");
         // render final stage with cart items and dicount amount
         // check if the cart isn't empty ro render final stage cart
         if (cart1.length !== 0) {
@@ -3936,3 +3938,6 @@ function render_coin() {
     const coin_page = document.querySelector('.coin-page-wrapper');
     render_now(coin_page);
 }
+// document.querySelector("body").addEventListener("click", (e) => {
+//     console.log(e.target)
+// });

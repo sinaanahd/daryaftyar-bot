@@ -982,7 +982,7 @@ img{
         background-color: #fff;
         border-radius: 20px 20px 0 0;
         padding: 30px;
-        height: 100vh;
+        height: 120vh;
         .book-img-price-wrapper{
             @include flexMixin(row-reverse,flex-end,center);
             width: 100%;
@@ -1195,6 +1195,7 @@ img{
         @include styler(#000 , #fff , 16px , 16px);
         padding: 25px 20px;
         box-shadow: $boxShadow;
+        margin: 0 0 300px;
     }
 }
 .modal{
@@ -1204,6 +1205,9 @@ img{
         position: absolute;
         width: 100%;
         bottom: -30px;
+    }
+    .total-price{
+        font-size: 20px;
     }
 }
 .user-data-page{
