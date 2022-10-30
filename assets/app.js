@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     render_loading();
     //clearPage();
     // getting the user from api
-    axios
+    /*axios
         .get("https://daryaftyar.ir/storeV2/books30")
         .then((res) => {
             // filling the main books varibale
@@ -278,12 +278,14 @@ document.addEventListener("DOMContentLoaded", () => {
             first_rendered_books = res.data;
             //needed_books = books.slice(0, 30);
         })
-        .catch((err) => render_errors(err.message));
+        .catch((err) => render_errors(err.message));*/
     axios
         .get("https://daryaftyar.ir/storeV2/books")
         .then((res) => {
             // filling the main books varibale
             books = res.data;
+            needed_books = books.slice(0, 30);
+            first_rendered_books = books.slice(0, 30);
             clearPage();
             setTimeout(() => {
                 render_books(needed_books);
@@ -562,18 +564,107 @@ function render_first_page() {
                 </div>
             </div>
     `;
+    const first_page_new = `
+        <div class="main-page-new-wrapper">
+            <div class="header">
+                <div class="coin-wrapper">
+                    <img src="./assets/images/coin-icon.png" alt="coin-img" class="coin-img" loading="lazy">
+                    <span class="coin-count">
+                        32
+                    </span>
+                </div>
+                <div class="wallet-wrapper">
+                    <img src="./assets/images/wallet-icon.png" alt="wallet-img" class="wallet-img" loading="lazy">
+                    <span class="wallet-count">
+                        T
+                        &nbsp;
+                        <bdi>
+                            ${user.amount}
+                        </bdi>
+                    </span>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="main-btn-wrapper">
+                    <div class="item item-book">
+                        <div class="title">
+                            کتاب ها
+                        </div>
+                        <img src="./assets/images/main-page-book-icon.png" alt="">
+                    </div>
+                    <div class="item item-week-sale">
+                        <div class="title">
+                            پرفروش های هفته
+                        </div>
+                        <img src="./assets/images/main-page-other-icon.png" alt="">
+                    </div>
+                    <div class="item item-sale-1">
+                        <div class="title">
+                            پرفروش های شیمی
+                        </div>
+                        <img src="./assets/images/main-page-other-icon.png" alt="">
+                    </div>
+                    <div class="item item-sale-2">
+                        <div class="title">
+                            پرفروش های شیمی
+                        </div>
+                        <img src="./assets/images/main-page-other-icon.png" alt="">
+                    </div>
+                </div>
+                <div class="special-offer-wrapper">
+                    <div class="title">
+                        پیشنهاد های ویژه
+                    </div>
+                    <div class="special-offer-btns-wrapper">
+                        <div class="special-offer-box">
+                            <div class="item-down item-1">
+                                <div class="title-item">
+                                    پرفروش های شیمی
+                                </div>
+                                <img src="./assets/images/main-page-other-icon.png" alt="">
+                            </div>
+                            <div class="item-down item-1">
+                                <div class="title-item">
+                                    پرفروش های شیمی
+                                </div>
+                                <img src="./assets/images/main-page-other-icon.png" alt="">
+                            </div>
+                            <div class="item-down item-1">
+                                <div class="title-item">
+                                    پرفروش های شیمی
+                                </div>
+                                <img src="./assets/images/main-page-other-icon.png" alt="">
+                            </div>
+                            <div class="item-down item-1">
+                                <div class="title-item">
+                                    پرفروش های شیمی
+                                </div>
+                                <img src="./assets/images/main-page-other-icon.png" alt="">
+                            </div>
+                            <div class="item-down item-1">
+                                <div class="title-item">
+                                    پرفروش های شیمی
+                                </div>
+                                <img src="./assets/images/main-page-other-icon.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
     // appending content of first page to the main area
-    main_area.innerHTML = first_page_content;
-    const main_page = document.querySelector('.main-page');
+    main_area.innerHTML = first_page_new;
+    const main_page = document.querySelector('.main-page-new-wrapper');
     render_now(main_page);
     // fill the amount btn
-    increase_amount = document.querySelector('.more-credit-wrapper');
+    increase_amount = document.querySelector('.wallet-count');
     // adding event listener to increase btn
     increase_amount.addEventListener('click', () => {
         render_wallet(user);
     });
     // fill the books btn
-    books_btn = document.querySelector('.books-wrapper');
+    books_btn = document.querySelector('.item-book');
     // adding event listener to books btn
     books_btn.addEventListener('click', () => {
         // if filters are active the main page should be loaded with filtered books
@@ -584,27 +675,31 @@ function render_first_page() {
             render_books(needed_books);
         }
     });
+    const coin_icon = document.querySelector('.coin-wrapper');
+    coin_icon.addEventListener("click", () => {
+        render_coin();
+    })
 
     // fill the classes btn
-    classes_btn = document.querySelector('.class-wrapper');
-    // adding event listener to classes btn
-    classes_btn.addEventListener('click', () => {
-        // some function 
-        render_coming_soon_page();
-    });
+    // classes_btn = document.querySelector('.class-wrapper');
+    // // adding event listener to classes btn
+    // classes_btn.addEventListener('click', () => {
+    //     // some function 
+    //     render_coming_soon_page();
+    // });
 
-    const best_of_1 = document.querySelector(".best-of-1");
-    best_of_1.addEventListener("click", () => {
-        render_coming_soon_page();
-    });
-    const best_of_2 = document.querySelector(".best-of-2");
-    best_of_2.addEventListener("click", () => {
-        render_coming_soon_page();
-    });
-    const best_of_3 = document.querySelector(".best-of-3");
-    best_of_3.addEventListener("click", () => {
-        render_coming_soon_page();
-    });
+    // const best_of_1 = document.querySelector(".best-of-1");
+    // best_of_1.addEventListener("click", () => {
+    //     render_coming_soon_page();
+    // });
+    // const best_of_2 = document.querySelector(".best-of-2");
+    // best_of_2.addEventListener("click", () => {
+    //     render_coming_soon_page();
+    // });
+    // const best_of_3 = document.querySelector(".best-of-3");
+    // best_of_3.addEventListener("click", () => {
+    //     render_coming_soon_page();
+    // });
 }
 //render book page
 function render_books(books1) {

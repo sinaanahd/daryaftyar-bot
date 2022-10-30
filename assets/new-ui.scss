@@ -1367,6 +1367,110 @@ img{
         }
     }
 }
+.main-page-new-wrapper{
+    transition: $transition;
+    transform: scale(0);
+    padding: 30px 0 0;
+    width: 100%;
+    @include flexMixin(column,flex-start,center);
+    .header {
+        padding: 0 30px;
+        width: 100%;
+        background-color: $background1;
+        z-index: 14;
+        border-radius: 20px;
+        @include flexMixin(row, space-between, center);
+        .coin-wrapper,
+        .wallet-wrapper {
+            position: relative;
+            top: -15px;
+
+            img {
+                width: 30px;
+            }
+        }
+
+        .coin-count {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            @include styler(#fff, $mainColor1 , 8px, 50%);
+            top: 15px;
+            right: 12px;
+            @include flexMixin(row, center, center);
+        }
+
+        .wallet-count {
+            min-width: 60px;
+            @include flexMixin(row, center, center);
+            position: absolute;
+            top: 17px;
+            left: 15px;
+            @include styler(#fff, $mainColor1 , 8px, 8px);
+        }
+    }
+    .main-content{
+        width: 100%;
+        margin: 70px 0;
+        @include flexMixin(column,flex-start,center);
+    }
+    .main-btn-wrapper{
+        padding: 0 30px;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2 , 1fr);
+        grid-template-rows: repeat(2,1fr);
+        grid-row-gap: 15px;
+        margin: 0 0 50px;
+        .item{
+            width: 150px;
+            height: 150px;
+            @include styler($mainBlack , #fff , 16px , 20px);
+            @include flexMixin(column,center,center);
+            box-shadow: $boxShadow;
+        }
+        .item-book{
+            color: #fff;
+            background-color: $mainColor1;
+        }
+        img{
+            width: 25px;
+        }
+        .title{
+            margin: 0 0 10px;
+        }
+    }
+    .special-offer-wrapper{
+        width: 100%;
+        .title{
+            padding: 0 30px;
+            font-size: 16px;
+            margin: 0 0 15px;
+        }
+    }
+    .special-offer-btns-wrapper{
+        width: 100%;
+        padding: 30px 0 50px 30px;
+        background-color: $secondaryColor1;
+        overflow-x: scroll;
+        direction: ltr;
+    }
+    .special-offer-box{
+        width: 905px;
+        display: grid;
+        grid-template-columns: repeat(5,175px);
+        //@include flexMixin(row,space-evenly,center);
+    }
+    .item-down{
+        width: 160px;
+        height: 160px;
+        @include styler($mainBlack , #fff , 16px , 20px);
+        @include flexMixin(column,center,center);
+        .title-item{
+            margin: 0 0 10px;
+        }
+    }
+}
 footer{
     width: 100%;
     position: fixed;
