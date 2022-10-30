@@ -982,7 +982,7 @@ img{
         background-color: #fff;
         border-radius: 20px 20px 0 0;
         padding: 30px;
-        height: 120vh;
+        //height: 120vh;
         .book-img-price-wrapper{
             @include flexMixin(row-reverse,flex-end,center);
             width: 100%;
@@ -1042,7 +1042,7 @@ img{
     }
     .single-prod-footer{
         width: 50%;
-        margin: 20px 0 0;
+        margin: 20px 0 200px;
         @include flexMixin(row,center,center);
         .more,.quantity,.less{
             width: 40px;

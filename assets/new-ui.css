@@ -1026,8 +1026,7 @@ img {
     width: 100%;
     background-color: #fff;
     border-radius: 20px 20px 0 0;
-    padding: 30px;
-    height: 120vh; }
+    padding: 30px; }
     .single-prod-page-wrapper .main-content .book-img-price-wrapper {
       display: flex;
       flex-direction: row-reverse;
@@ -1075,7 +1074,7 @@ img {
     display: none; }
   .single-prod-page-wrapper .single-prod-footer {
     width: 50%;
-    margin: 20px 0 0;
+    margin: 20px 0 200px;
     display: flex;
     flex-direction: row;
     justify-content: center;
