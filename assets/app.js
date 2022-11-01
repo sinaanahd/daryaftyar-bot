@@ -198,7 +198,7 @@ const modal_wrapper = document.querySelector('.modal-pacle-holder');
 // the error wrapper place 
 const error_modal = document.querySelector(".error-modal");
 // variable to know where where you lastly
-let address_to_here = "home/";
+let address_to_here = "book/";
 // the variable for accssesing the wallet amount increasing
 let increase_amount = [];
 // home page btn which leads to the books page
@@ -260,6 +260,8 @@ let pagination_HTML = [];
 let sorted_by = "هیچ کدام";
 // the array of the first books un touched
 let first_rendered_books = [];
+// a variable for send request to buy
+let chosen_coin_amount = 1;
 // ! notice this method 
 let let_the_cart = false;
 // ! events
@@ -269,6 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //RENDER LOADING till the main pages be loaded
     render_loading();
     //clearPage();
+    //render_welcome()
     // getting the user from api
     /*axios
         .get("https://daryaftyar.ir/storeV2/books30")
@@ -286,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
             books = res.data;
             needed_books = books.slice(0, 30);
             first_rendered_books = books.slice(0, 30);
-            clearPage();
+            //clearPage();
             setTimeout(() => {
                 render_books(needed_books);
             }, 200);
@@ -313,7 +316,7 @@ document.addEventListener("DOMContentLoaded", () => {
             footer_cart_wrapper_HTML.innerHTML = cart_items.length;
             // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
-            // console.log(cart);
+            //console.log(cart);
         })
         .catch((err) => render_errors(err.message));
     axios
@@ -329,6 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .get(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`)
         .then((res) => {
             data_user = res.data;
+            //console.log(data_user)
             //render_user_data_form();
         })
         .catch((err) => render_errors(err.message));
@@ -340,7 +344,8 @@ footer_btn_home.addEventListener('click', () => {
     }
     // activate_modal_single_book("disactive");
     disactive_modals();
-    render_first_page();
+    //render_first_page();
+    render_books(needed_books);
 });
 //rendering cart via menu btn
 footer_btn_cart.addEventListener('click', () => {
@@ -365,6 +370,7 @@ footer_btn_checkout.addEventListener('click', () => {
     // page is not ready so we have to render coming soon page
     disactive_modals();
     render_coming_soon_page();
+    render_wallet(user);
 });
 // ! functions
 // function for rendering the loading page
@@ -407,7 +413,7 @@ function render_welcome() {
                </div>
             </div>
             <div class="gif-wrapper">
-                <img src="./assets/images/welcome-photo.png" alt="به ربات دریافت یار خوش آمدید" class="welcome-img">
+                <img src="./assets/images/welcome-photo.gif" alt="به ربات دریافت یار خوش آمدید" class="welcome-img">
             </div>
             <!--<div class="start-btn">
                 <div class="content">
@@ -570,7 +576,7 @@ function render_first_page() {
                 <div class="coin-wrapper">
                     <img src="./assets/images/coin-icon.png" alt="coin-img" class="coin-img" loading="lazy">
                     <span class="coin-count">
-                        32
+                        ${user.coin}
                     </span>
                 </div>
                 <div class="wallet-wrapper">
@@ -822,7 +828,7 @@ function render_books(books1) {
                 <div class="coin-wrapper">
                     <img src="./assets/images/coin-icon.png" alt="coin-img" class="coin-img" loading="lazy">
                     <span class="coin-count">
-                        32
+                         ${user.coin}
                     </span>
                 </div>
                 <div class="books-page-title">
@@ -1602,23 +1608,28 @@ function render_shopping_cart(cart1) {
         // render final stage with cart items and dicount amount
         // check if the cart isn't empty ro render final stage cart
         if (cart1.length !== 0) {
-            // fill the discount value from api
-            let discount = cart.cart_summary.total_discount_of_items;
-            // get the pay url for the final step btn
-            load_pause('active');
-            axios
-                .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
-                //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
-                .then((res) => {
-                    const url = res.data;
-                    // render final stage cart with given parameters
-                    render_final_stage_cart(cart_items, discount, url.url_to_pay);
-                    load_pause("disactive");
-                })
-                .catch(err => {
-                    // ? we need a better way to handle the errors :)
-                    render_errors(err.message)
-                })
+            if (cart.cart_summary.pay_permission) {
+                // fill the discount value from api
+                let discount = cart.cart_summary.total_discount_of_items;
+                // get the pay url for the final step btn
+                load_pause('active');
+                axios
+                    .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                    //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                    .then((res) => {
+                        const url = res.data;
+                        // render final stage cart with given parameters
+                        render_final_stage_cart(cart_items, discount, url.url_to_pay);
+                        load_pause("disactive");
+                    })
+                    .catch(err => {
+                        // ? we need a better way to handle the errors :)
+                        render_errors(err.message)
+                    })
+            }
+            else {
+                render_user_data_form();
+            }
         }
     });
 
@@ -2569,6 +2580,10 @@ function map_handler() {
             render_shopping_cart(cart_items);
             address_to_here = address_to_here.replace((address[len] + "/"), "");
             break;
+        case "coinPage":
+            render_coin();
+            address_to_here = address_to_here.replace((address[len] + "/"), "");
+            break;
         case "single-book":
             //if (filtered_book.length === 0) {
             if (filter_activated) {
@@ -3217,82 +3232,87 @@ function render_cart_modal(cart1) {
             <div class="page-title">
                 سبد خرید
             </div>
-            <div class="cart-items-wrapper ${cart1.length !== 0 ? "has-item" : " "}">
-                    <div class="cart-is-empty">
-                        <img src="./assets/images/empty-cart-vector.png" alt="سبد خرید خالی است">
-                            <div class="empty-text">
-                         سبد خرید شما خالی است
-                            </div>
-                        <div class="return-home">
-                    بازگشت به خانه
-                        </div>
-            </div>
-            <div class="cart-footer">
-                <div class="date">
-                    <span class="year">
-                        ${date[2]}
-                    </span>
-                    /
-                    <span class="month">
-                    ${month_declare(date[1])}
-                    </span>
-                    /
-                    <span class="day">
-                        ${date[0]}
-                    </span>
-                </div>
-                <div class="total-price ${cart.cart_summary.total_discount_of_items === 0 ? " " : "has-discount"}">
-                    <span class="title">
-                        مجموع :
-                    </span>
-                    <div class="prices">
-                        <span class="total-price-amount">
-                        ${split_in_three(cart.cart_summary.total_price_of_items)}
-                        </span>
-                        <span class="discounted-price">
-                        ${split_in_three(cart.cart_summary.final_price)}
-                        </span>
-                        <span class="toman">
-                        تومان
-                        </span>
+            <div class="cart-items-wrapper ${cart1.length !== 0 ? " has-item" : " "}">
+                <div class="cart-is-empty">
+                    <img src="./assets/images/empty-cart-vector.png" alt="سبد خرید خالی است">
+                    <div class="empty-text">
+                        سبد خرید شما خالی است
+                    </div>
+                    <div class="return-home">
+                        بازگشت به خانه
                     </div>
                 </div>
-                <div class="checkout-btn">
-                    ادامه فرآیند خرید
+                </div>
+                <div class="cart-footer">
+                    <div class="date">
+                        <span class="year">
+                            ${date[2]}
+                        </span>
+                        /
+                        <span class="month">
+                            ${month_declare(date[1])}
+                        </span>
+                        /
+                        <span class="day">
+                            ${date[0]}
+                        </span>
+                    </div>
+                    <div class="total-price ${cart.cart_summary.total_discount_of_items === 0 ? " " : " has-discount"}">
+                        <span class="title">
+                            مجموع :
+                        </span>
+                        <div class="prices">
+                            <span class="total-price-amount">
+                                ${split_in_three(cart.cart_summary.total_price_of_items)}
+                            </span>
+                            <span class="discounted-price">
+                                ${split_in_three(cart.cart_summary.final_price)}
+                            </span>
+                            <span class="toman">
+                                تومان
+                            </span>
+                        </div>
+                    </div>
+                    <div class="checkout-btn sina">
+                        ادامه فرآیند خرید
+                    </div>
                 </div>
             </div>
-        </div>
     `;
     //appending the main text to the dom
     modal_wrapper.innerHTML = shopping_cart_content;
 
     //activating next step btn
-    const next_step_btn = document.querySelector('.checkout-btn');
-    console.log(next_step_btn);
+    const sina_btn = document.querySelector('.checkout-btn');
+    // next_step_btn.addEventListener("click", (e) => {
+    // })
     // click action for cart next step
-    next_step_btn.addEventListener('click', (e) => {
-        console.log("clicked", e)
-        //open_cart_modal("disactive");
-        // render final stage with cart items and dicount amount
-        // check if the cart isn't empty ro render final stage cart
+    sina_btn.addEventListener('click', (e) => {
+        open_cart_modal("disactive");
+        address_to_here = address_to_here.replace(("cart-modal/"), "");
         if (cart1.length !== 0) {
-            // fill the discount value from api
-            let discount = cart.cart_summary.total_discount_of_items;
-            // get the pay url for the final step btn
-            load_pause('active');
-            axios
-                .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
-                //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
-                .then((res) => {
-                    const url = res.data;
-                    // render final stage cart with given parameters
-                    render_final_stage_cart(cart_items, discount, url.url_to_pay);
-                    load_pause("disactive");
-                })
-                .catch(err => {
-                    // ? we need a better way to handle the errors :)
-                    render_errors(err.message)
-                })
+            if (cart.cart_summary.pay_permission) {
+                // fill the discount value from api
+                let discount = cart.cart_summary.total_discount_of_items;
+                // get the pay url for the final step btn
+                load_pause('active');
+                axios
+                    .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                    //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                    .then((res) => {
+                        const url = res.data;
+                        // render final stage cart with given parameters
+                        render_final_stage_cart(cart_items, discount, url.url_to_pay);
+                        load_pause("disactive");
+                    })
+                    .catch(err => {
+                        // ? we need a better way to handle the errors :)
+                        render_errors(err.message)
+                    })
+            }
+            else {
+                render_user_data_form();
+            }
         }
     });
 
@@ -3677,7 +3697,6 @@ function render_width(el) {
         el.style.opacity = "1";
     }, 100);
 }
-
 // ! form functions
 const illigal_chars = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!",
     "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+",
@@ -3704,7 +3723,7 @@ function render_user_data_form() {
             <div class="input-wrapper">
                 <div class="label-and-input">
                     <img src="./assets/images/user-data-icon.png" alt="">
-                    <input name="user-name" type="text" id="user-name" placeholder="نام و نام خانوداگی" />
+                    <input name="user-name" type="text" id="user-name" placeholder="نام و نام خانوداگی" class="user-data-inp"/>
                 </div>
                 <div class="error-loader err-name">
                     ارور پیش آمده
@@ -3713,7 +3732,7 @@ function render_user_data_form() {
             <div class="input-wrapper">
                 <div class="label-and-input">
                     <img src="./assets/images/phone-data-icon.png" alt="">
-                    <input name="user-phone" type="number" id="user-phone" placeholder="شماره منزل" />
+                    <input name="user-phone" type="number" id="user-phone" placeholder="شماره منزل" class="user-data-inp"/>
                 </div>
                 <div class="error-loader err-phone">
                     ارور پیش آمده
@@ -3722,7 +3741,7 @@ function render_user_data_form() {
             <div class="input-wrapper">
                 <div class="label-and-input">
                     <img src="./assets/images/post-data-icon.png" alt="">
-                    <input name="user-postal-code" type="number" id="user-postal-code" placeholder="کدپستی" />
+                    <input name="user-postal-code" type="number" id="user-postal-code" placeholder="کدپستی" class="user-data-inp"/>
                 </div>
                 <div class="error-loader err-post">
                     ارور پیش آمده
@@ -3731,7 +3750,7 @@ function render_user_data_form() {
             <div class="input-wrapper">
                 <div class="label-and-input">
                     <img src="./assets/images/address-data-icon.png" alt="">
-                    <textarea name="user-address" id="user-address" cols="30" rows="5" placeholder="آدرس"></textarea>
+                    <textarea name="user-address" id="user-address" cols="30" rows="5" placeholder="آدرس" class="user-data-inp"></textarea>
                 </div>
                 <div class="error-loader err-address">
                     ارور پیش آمده
@@ -3774,20 +3793,41 @@ function render_user_data_form() {
     submit_btn.addEventListener("click", () => {
         update_user();
     });
+    let check_data = false;
+
     if (data_user.real_name) {
         name_input.value = data_user.real_name;
     }
+    else {
+        check_data = true;
+    }
+
     if (data_user.real_home_number) {
         phone_input.value = data_user.real_home_number;
     }
+    else {
+        check_data = true;
+    }
+
     if (data_user.real_postal_code) {
         postal_code_input.value = data_user.real_postal_code;
     }
+    else {
+        check_data = true;
+    }
+
     if (data_user.real_address) {
         address_input.value = data_user.real_address;
     }
-    check_situtation(submit_btn);
-    const back_btn = document.querySelector('.back')
+    else {
+        check_data = true;
+    }
+
+    if (check_data) {
+        submit_btn.disabled = true;
+        submit_btn.classList.add("dis");
+    }
+    const back_btn = document.querySelector('.back');
     back_btn.addEventListener("click", () => {
         map_handler();
     });
@@ -3797,14 +3837,26 @@ function render_user_data_form() {
 function check_situtation() {
     const submit_btn = document.querySelector(".submit-user-data");
     const errored_item = document.querySelector('.has-error');
-    if (errored_item !== null) {
-        submit_btn.classList.add("dis")
-        submit_btn.disabled = true;
+    const all_inputs = [...document.querySelectorAll(".user-data-inp")];
+    let action = true;
+    all_inputs.forEach(input => {
+        if (!input.value) {
+            submit_btn.classList.add("dis")
+            submit_btn.disabled = true;
+            action = false;
+        }
+    });
+    if (action) {
+        if (errored_item !== null) {
+            submit_btn.classList.add("dis")
+            submit_btn.disabled = true;
+        }
+        else {
+            submit_btn.classList.remove("dis")
+            submit_btn.disabled = false;
+        }
     }
-    else {
-        submit_btn.classList.remove("dis")
-        submit_btn.disabled = false;
-    }
+
 }
 function validate_name_input(target) {
     let content = target.value;
@@ -3966,12 +4018,13 @@ function update_user() {
         .patch(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`, user)
         .then((res) => {
             data_user = res.data;
+            console.log(data_user)
             axios
                 .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
                 //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
                 .then((res) => {
                     const url = res.data;
-                    console.log(url)
+                    //console.log(url)
                     // render final stage cart with given parameters
                     render_final_stage_cart(cart_items, cart.cart_summary.total_discount_of_items, url.url_to_pay);
                     load_pause("disactive");
@@ -4019,12 +4072,20 @@ function render_coin() {
                     تعداد سکه های حسابت
                 </div>
                 <div class="coin-count">
-                    140
+                    ${user.coin}
                 </div>
+            </div>
+            <div class="add-more-coin">
+            افزایش سکه‌ها
             </div>
         </div>
     `;
     main_area.innerHTML = coin_page_content;
+
+    const add_more_coin = document.querySelector('.add-more-coin');
+    add_more_coin.addEventListener("click", () => {
+        render_buy_coin();
+    });
 
     const back_btn = document.querySelector(".back");
     back_btn.addEventListener("click", () => {
@@ -4032,6 +4093,86 @@ function render_coin() {
     });
     const coin_page = document.querySelector('.coin-page-wrapper');
     render_now(coin_page);
+}
+// function to render buy more coin 
+function render_buy_coin() {
+    clearPage();
+    address_to_here = stop_repeatation_in_addres("buyCoinPage", address_to_here) ? address_to_here + "buyCoinPage/" : address_to_here;
+    const page_content = `
+        <div class="buy-coin-page-wrapper">
+            <div class="header">
+                <div class="page-title">
+                خرید سکه
+                </div>
+                <div class="back">
+                    <img src="./assets/images/back-forward-btn.png" class="back-img" alt="back image">
+                </div>
+            </div>
+            <div class="coin-choose-wrapper">
+                <div class="options-wrapper">
+                    <div class="option option-1">
+                        <span class="status active">
+
+                        </span>
+                        <span class="text">
+                            ۵۰ سکه - ۵۰۰۰تومان (ارزانترین)
+                        </span>
+                    </div>
+                    <div class="option option-2">
+                        <span class="status">
+                    
+                        </span>
+                        <span class="text">
+                            ۱۵۰سکه - ۹۰۰۰تومان (محبوب‌ترین)
+                        </span>
+                    </div>
+                    <div class="option option-3">
+                        <span class="status">
+                    
+                        </span>
+                        <span class="text">
+                        ۵۰۰سکه - ۱۹۰۰۰ (به صرفه‌ترین)
+                        </span>
+                    </div>
+                </div>
+                <div class="image-wrapper">
+                    <img src="./assets/images/coin-more.jpeg" loading="lazy" alt="">
+                </div>
+            </div>
+            <div class="coin-footer">
+                <div class="buy-coin-btn">
+                    خرید سکه
+                </div>
+            </div>
+        </div>
+    `;
+    main_area.innerHTML = page_content;
+    const back_btn = document.querySelector(".back");
+    back_btn.addEventListener("click", () => {
+        map_handler();
+    });
+
+    const buy_coin = document.querySelector('.buy-coin-btn');
+    buy_coin.addEventListener("click", () => {
+        console.log(chosen_coin_amount);
+    });
+
+    const all_coin_choices = [...document.querySelectorAll(".option")];
+    all_coin_choices.forEach(choice => {
+        choice.addEventListener("click", (e) => {
+            active_coin(choice, e.target, all_coin_choices);
+        });
+    });
+    const buy_coin_page = document.querySelector('.buy-coin-page-wrapper');
+    render_now(buy_coin_page);
+}
+// function for validating active choice of coin amount
+function active_coin(el, event, arr) {
+    arr.forEach(item => {
+        item.querySelector(".status").classList.remove("active");
+    })
+    el.querySelector(".status").classList.add("active");
+    chosen_coin_amount = parseInt([...el.classList][1].split("-")[1]);
 }
 // document.querySelector("body").addEventListener("click", (e) => {
 //     console.log(e.target)
