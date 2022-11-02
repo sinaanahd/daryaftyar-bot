@@ -66,12 +66,13 @@ body {
         display: none; }
       body .search-modal .book-details .has-discount .normal-price {
         text-decoration: line-through;
-        font-size: 13px; }
+        font-size: 13px;
+        color: #05a986; }
       body .search-modal .book-details .has-discount .discounted-price {
+        color: #ec5d63;
         display: unset; }
-
-a {
-  text-decoration: none !important; }
+  body a {
+    text-decoration: none !important; }
 
 img {
   max-width: 100%;
@@ -737,9 +738,14 @@ img {
       justify-content: center;
       align-items: center;
       margin-bottom: 10px; }
+      .books-page-wrapper .book .prices-wrapper .discounted {
+        display: none; }
     .books-page-wrapper .book .has-discount .price {
-      color: #393F45;
+      color: #05a986;
       text-decoration: line-through; }
+    .books-page-wrapper .book .has-discount .discounted {
+      color: #ec5d63;
+      display: flex; }
     .books-page-wrapper .book .btns-wrapper {
       position: absolute;
       background-color: #3f51b5;
@@ -1047,9 +1053,15 @@ img {
       text-align: left;
       color: #000;
       font-size: 17px; }
+      .single-prod-page-wrapper .main-content .price-wrapper .discounted-price {
+        display: none; }
     .single-prod-page-wrapper .main-content .has-discount .normal-price {
       text-decoration: line-through;
-      font-size: 14px; }
+      font-size: 14px;
+      color: #05a986; }
+    .single-prod-page-wrapper .main-content .has-discount .discounted-price {
+      display: unset;
+      color: #ec5d63; }
   .single-prod-page-wrapper .details {
     margin: 30px 0 0;
     font-size: 16px;

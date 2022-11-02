@@ -66,16 +66,18 @@ body {
                 .normal-price{
                     text-decoration: line-through;
                     font-size: 13px;
+                    color: $greenColor;
                 }
                 .discounted-price {
+                    color: $redColor;
                     display: unset;
                 }
             }
         }
     }
-}
-a {
-    text-decoration: none !important;
+    a {
+        text-decoration: none !important;
+    }
 }
 img{
     max-width: 100%;
@@ -226,7 +228,6 @@ img{
             margin-right: 20px;
             font-size: 15px;
         }
-
     }
 }
 .modal-pacle-holder {
@@ -341,8 +342,7 @@ img{
         overflow: hidden;
         background-color: #fffbff;
         padding: 35px;
-        img{
-        }
+        //img{}
     }
     .start-btn{
         @include flexMixin(row,center,center);
@@ -658,11 +658,18 @@ img{
             font-size: 16px;
             @include flexMixin(column,center,center);
             margin-bottom: 10px;
+            .discounted {
+                    display: none;
+            }
         }
         .has-discount{
             .price{
-                color: $grayColor;
+                color: $greenColor;
                 text-decoration: line-through;
+            }
+            .discounted{
+                color: $redColor;
+                display: flex;
             }
         }
         .btns-wrapper{
@@ -1001,11 +1008,19 @@ img{
             text-align: left;
             color: $mainBlack;
             font-size: 17px;
+            .discounted-price{
+                display: none;
+            }
         }
         .has-discount{
             .normal-price{
                 text-decoration: line-through;
                 font-size: 14px;
+                color: $greenColor;
+            }
+            .discounted-price {
+                display: unset;
+                color: $redColor;
             }
         }
     }

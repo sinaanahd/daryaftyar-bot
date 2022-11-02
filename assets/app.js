@@ -4015,7 +4015,7 @@ function render_address_error(kind, state, target) {
 function update_user() {
     load_pause("active");
     axios
-        .patch(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`, user)
+        .patch(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`, data_user)
         .then((res) => {
             data_user = res.data;
             console.log(data_user)
