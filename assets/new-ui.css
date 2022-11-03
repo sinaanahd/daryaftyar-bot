@@ -487,38 +487,7 @@ img {
 .books-page-wrapper {
   width: 100%;
   transition: all ease-in-out 0.3s;
-  opacity: 0;
-    /*.back {
-        position: absolute;
-        top: 20px;
-        right: 10px;
-        @include styler($mainColor, $secondaryColor1, 40px, 10px);
-        width: 40px;
-        height: 40px;
-        @include flexMixin (row, center, center);
-        img {
-            width: 20px;
-            transform: rotateY(180deg);
-            left: 1px;
-            position: relative;
-        }
-    }
-
-    .search-icon {
-        position: absolute;
-        top: 20px;
-        left: 10px;
-        @include styler($background1, $secondaryColor1, 17px, 10px);
-        border: 2px solid;
-        width: 40px;
-        height: 40px;
-        @include flexMixin (row, center, center);
-        i {
-            position: relative;
-            right: 0px;
-        }
-    }
-*/ }
+  opacity: 0; }
   .books-page-wrapper .header {
     position: fixed;
     width: 100vw;
@@ -606,6 +575,23 @@ img {
       flex: 0 0 40px; }
       .books-page-wrapper .search-back-wrapper .back img {
         width: 20px; }
+  .books-page-wrapper .discount-label {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    background-color: #F5A623;
+    font-size: 12px;
+    border-radius: 50%;
+    position: absolute;
+    left: 18px;
+    top: 150px;
+    padding: 2px 0 0; }
+  .books-page-wrapper .dis-none {
+    display: none; }
   .books-page-wrapper .books-page-title {
     font-size: 24px;
     text-align: center;

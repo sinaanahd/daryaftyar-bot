@@ -1116,6 +1116,9 @@ function render_books(books1) {
                         <div class="btns-wrapper" id="add-${book.id}">
                             <img src="./assets/images/plus-white.png" alt="" id="img-${book.id}">
                         </div>
+                        <span class="discount-label ${(book.discounted_price === book.price) ? "dis-none" : ""}">
+                            ${calculate_discount(book.price, book.discounted_price)}%
+                        </span>
                     </div>
             `;
             books_wrapper.innerHTML += book_content;
@@ -4174,6 +4177,7 @@ function active_coin(el, event, arr) {
     el.querySelector(".status").classList.add("active");
     chosen_coin_amount = parseInt([...el.classList][1].split("-")[1]);
 }
-// document.querySelector("body").addEventListener("click", (e) => {
-//     console.log(e.target)
-// });
+function calculate_discount(num, dis_num) {
+    const discount = ((num - dis_num) / num) * 100;
+    return Math.ceil(discount);
+}
