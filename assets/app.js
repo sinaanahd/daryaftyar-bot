@@ -29,6 +29,10 @@ const grades = [
         name: "دوازدهم"
     },
     {
+        id: 18,
+        name: "کنکور"
+    },
+    {
         id: 0,
         clicked: false,
         name: "فارغ التحصیل"
