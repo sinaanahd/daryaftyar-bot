@@ -276,6 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
     render_loading();
     //clearPage();
     //render_welcome()
+    //render_buy_coin();
     // getting the user from api
     /*axios
         .get("https://daryaftyar.ir/storeV2/books30")
@@ -4122,7 +4123,10 @@ function render_buy_coin() {
 
                         </span>
                         <span class="text">
-                            ۵۰ سکه - ۵۰۰۰تومان (ارزانترین)
+                            ۵۰ سکه -
+                             ${split_in_three("۵۰۰۰")}
+                             تومان 
+                             (ارزانترین)
                         </span>
                     </div>
                     <div class="option option-2">
@@ -4130,7 +4134,10 @@ function render_buy_coin() {
                     
                         </span>
                         <span class="text">
-                            ۱۵۰سکه - ۹۰۰۰تومان (محبوب‌ترین)
+                            ۱۵۰سکه -
+                            ${split_in_three("۹۰۰۰")}
+                            تومان 
+                            (محبوب‌ترین)
                         </span>
                     </div>
                     <div class="option option-3">
@@ -4138,7 +4145,10 @@ function render_buy_coin() {
                     
                         </span>
                         <span class="text">
-                        ۵۰۰سکه - ۱۹۰۰۰ (به صرفه‌ترین)
+                        ۵۰۰سکه -
+                         ${split_in_three("۱۹۰۰۰")}
+                            تومان
+                          (به صرفه‌ترین)
                         </span>
                     </div>
                 </div>
@@ -4147,9 +4157,9 @@ function render_buy_coin() {
                 </div>
             </div>
             <div class="coin-footer">
-                <div class="buy-coin-btn">
+                <a href="https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:50" class="buy-coin-btn" target="_blank">
                     خرید سکه
-                </div>
+                </a>
             </div>
         </div>
     `;
@@ -4161,7 +4171,7 @@ function render_buy_coin() {
 
     const buy_coin = document.querySelector('.buy-coin-btn');
     buy_coin.addEventListener("click", () => {
-        console.log(chosen_coin_amount);
+        close_webapp();
     });
 
     const all_coin_choices = [...document.querySelectorAll(".option")];
@@ -4180,6 +4190,18 @@ function active_coin(el, event, arr) {
     })
     el.querySelector(".status").classList.add("active");
     chosen_coin_amount = parseInt([...el.classList][1].split("-")[1]);
+    const buy_coin = document.querySelector(".buy-coin-btn");
+    switch (chosen_coin_amount) {
+        case 1:
+            buy_coin.setAttribute("href", "https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:50");
+            break;
+        case 2:
+            buy_coin.setAttribute("href", "https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:150");
+            break;
+        case 3:
+            buy_coin.setAttribute("href", "https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:500");
+            break;
+    }
 }
 function calculate_discount(num, dis_num) {
     const discount = ((num - dis_num) / num) * 100;

@@ -1526,7 +1526,7 @@ img{
             width: 100%;
             @include flexMixin(row,flex-start,center);
             height: 65px;
-            @include styler($mainBlack ,#fff , 16px ,8px);
+            @include styler($mainBlack ,#fff , 15px ,8px);
             margin: 0 0 15px;
             padding: 0 20px;
         }
@@ -1554,12 +1554,12 @@ img{
         z-index: 12;
     }
     .buy-coin-btn{
+        color: #fff;
         width: 100%;
         @include flexMixin(row,center,center);
         height: 100px;
         background-color: $secondaryColor1;
         border-radius: 16px;
-        
     }
 }
 footer{

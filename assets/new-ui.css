@@ -1633,7 +1633,7 @@ img {
       height: 65px;
       color: #000;
       background-color: #fff;
-      font-size: 16px;
+      font-size: 15px;
       border-radius: 8px;
       margin: 0 0 15px;
       padding: 0 20px; }
@@ -1659,6 +1659,7 @@ img {
     top: -20px;
     z-index: 12; }
   .buy-coin-page-wrapper .buy-coin-btn {
+    color: #fff;
     width: 100%;
     display: flex;
     flex-direction: row;
