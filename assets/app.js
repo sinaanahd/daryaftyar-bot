@@ -4182,6 +4182,8 @@ function render_buy_coin() {
     });
     const buy_coin_page = document.querySelector('.buy-coin-page-wrapper');
     render_now(buy_coin_page);
+
+    buy_coin_func(50);
 }
 // function for validating active choice of coin amount
 function active_coin(el, event, arr) {
@@ -4190,18 +4192,32 @@ function active_coin(el, event, arr) {
     })
     el.querySelector(".status").classList.add("active");
     chosen_coin_amount = parseInt([...el.classList][1].split("-")[1]);
-    const buy_coin = document.querySelector(".buy-coin-btn");
+
+    let url = "#";
     switch (chosen_coin_amount) {
         case 1:
-            buy_coin.setAttribute("href", "https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:50");
+            buy_coin_func(50);
             break;
         case 2:
-            buy_coin.setAttribute("href", "https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:150");
+            buy_coin_func(150);
             break;
         case 3:
-            buy_coin.setAttribute("href", "https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:500");
+            buy_coin_func(500);
             break;
     }
+}
+function buy_coin_func(amount) {
+    let url = "#";
+    const buy_coin = document.querySelector(".buy-coin-btn");
+    load_pause("active");
+    axios
+        .get(`https://daryaftyar.ir/storeV2/buy_coin/id:${final_id}-amount:${amount}`)
+        .then(res => {
+            url = res.data.url_to_pay;
+            load_pause("disactive");
+            buy_coin.setAttribute("href", url);
+        })
+        .catch(err => render_errors(err.message))
 }
 function calculate_discount(num, dis_num) {
     const discount = ((num - dis_num) / num) * 100;
