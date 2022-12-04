@@ -322,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // unnessecary value update (back end ids where not correcr)
             cart.cart_items_ids = cart.cart_items_ids.map(id => parseInt(id));
             //console.log(cart);
+            //render_final_stage_cart(cart_items, 0, "#");
         })
         .catch((err) => render_errors(err.message));
     axios
@@ -2509,6 +2510,17 @@ function render_final_stage_cart(cart_items, discount, url) {
         
                         </span>
                     </div>
+                    <div class="${cart.cart_summary.dis_code_details.status ? "cart-wallet" : "cart-wallet dis-none"}">
+                        <span class="label">
+                            مقدار کد تخفیف :
+                        </span>
+                        <span class="total-price">
+                            <span class="price">
+                                ${split_in_three(cart.cart_summary.dis_code_details.amount)}
+                            </span>
+                            تومان
+                        </span>
+                    </div>
                     <div class="cart-final-pay">
                         <span class="label">
                             قابل پرداخت :
@@ -2521,6 +2533,12 @@ function render_final_stage_cart(cart_items, discount, url) {
                         </span>
                     </div>
                 </div>
+            </div>
+            <div class="discount-code">
+                <span class="d-text">
+                    کد تخفیف دارید ؟
+                </span>
+                <span class="d-btn">وارد کنید</span>
             </div>
             <div class="cart-details">
                 <div class="prods-incart-text">
@@ -2556,7 +2574,76 @@ function render_final_stage_cart(cart_items, discount, url) {
     const view_btn = document.querySelector('.view-btn');
     view_btn.addEventListener("click", () => {
         map_handler();
-    })
+    });
+    const enter_discount_code_btn = document.querySelector('.discount-code');
+    enter_discount_code_btn.addEventListener("click", () => {
+        open_discount_wrapper();
+    });
+}
+// function to open discount code input
+function open_discount_wrapper() {
+    const discount_wrapper = document.createElement("div");
+    discount_wrapper.classList.add('discount-wrapper');
+    const static_content = `
+        <div class="contet-wrapper">
+            <span class="close-pop-up">
+                <i class="fa fa-close">
+                </i>
+            </span>
+            <div class="text">
+                کد تخفیف خود را وارد کنید
+            </div>
+            <input type="text" class="discount-code-input" placeholder="مثال : OFF-123"/>
+            <span class="error-text s-1 s-2 s-3">
+                کد وارد شده صحیح نیست
+            </span>
+            <span class="submit-discount-btn">
+                ثبت کد تخفیف
+            </span>
+        </div>`;
+    discount_wrapper.innerHTML = static_content;
+    body.appendChild(discount_wrapper);
+    discount_wrapper.addEventListener("click", (e) => {
+        const class_name = [...e.target.classList];
+        if (
+            (class_name[0] === "discount-wrapper") ||
+            (class_name[0] === "close-pop-up") ||
+            (class_name[1] === "fa-close")
+        ) {
+            discount_wrapper.remove();
+        }
+    });
+    const code_input = document.querySelector('.discount-code-input');
+    const submit_code_btn = document.querySelector(".submit-discount-btn");
+    submit_code_btn.addEventListener("click", () => {
+        const code_text = code_input.value;
+        // ! get is wrong
+        load_pause("active");
+        //cart.cart_summary.dis_code = "F5h8i";
+        axios
+            .patch(`https://daryaftyar.ir/storeV2/cart_summary/${final_id}`, { "dis_code": code_text })
+            .then(res => {
+                //, { dis_code: "F5h8i" } cart.cart_summary { cart_summary: cart.cart_summary, send }
+                //console.log(res.data);
+                const err_message = document.querySelector('.discount-wrapper .error-text');
+                err_message.innerHTML = res.data.dis_code_details.status_message;
+                err_message.style.display = "flex";
+                cart.cart_summary = { ...res.data };
+                //console.log(cart.cart_summary)
+                axios
+                    .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                    .then((res) => {
+                        const url = res.data;
+                        // render final stage cart with given parameters
+                        render_final_stage_cart(cart_items, 0, url.url_to_pay);
+                        load_pause("disactive");
+                    })
+                    .catch(err => {
+                        render_errors(err.message)
+                    })
+            })
+            .catch(err => render_errors(err.message));
+    });
 }
 // function for redirecting the user to the required page
 function map_handler() {
@@ -3618,11 +3705,11 @@ function active_sort() {
             break;
         case "ارزان ترین":
             document.querySelector(".sorted-by-leastPrice").classList.remove("disabled");
-            order_by_status = "price"
+            order_by_status = "price";
             break;
         case "محبوب ترین":
             document.querySelector(".sorted-by-popularity").classList.remove("disabled");
-            order_by_status = "-buys_count"
+            order_by_status = "-buys_count";
             break;
     }
     order_book(order_by_status);

@@ -1122,7 +1122,7 @@ img{
             color: $mainColor1;
         }
         .view-btn{
-            width: 114px;
+            flex: 0 0 100px !important;
             height: 32px;
             @include flexMixin(row,center,center);
             @include styler(#fff , $secondaryColor1 , 16px , 20px);
@@ -1134,6 +1134,84 @@ img{
         @include styler(#fff , $mainColor1 , 24px , 20px);
         height: 58px;
         margin: 20px 0 120px;
+    }
+    .discount-code {
+        width: 100%;
+        @include flexMixin(row,space-between,center);
+        margin: 0 0 20px;
+        .d-btn{
+            @include styler(#fff, $mainColor1 , 16px, 20px);
+            width: 100px;
+            height: 32px;
+            @include flexMixin(row, center, center);
+        }
+    }
+    .dis-none{
+        display: none!important;
+    }
+}
+.discount-wrapper {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top:0;
+    left: 0;
+    background-color: rgba(0,0,0,0.2);
+    @include flexMixin(row,center,center);
+    z-index: 99999;
+    .contet-wrapper{
+        position: relative;
+        top: -100px;
+        width: 90%;
+        @include styler($mainColor1,#fff , 20px , 20px);
+        box-shadow: $boxShadow;
+        @include flexMixin(column,flex-start,center);
+        padding: 50px 20px;
+    }
+    .close-pop-up{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        @include styler(#fff , $secondaryColor1 , 20px , 50%);
+        @include flexMixin(row,center,center);
+        width: 40px;
+        height: 40px;
+        box-shadow: $boxShadow;
+    }
+    .text{
+        width: 100%;
+        text-align: right;
+        margin: 40px 0 20px;
+    }
+    .discount-code-input{
+        width: 100%;
+        border: 2px solid $mainColor1;
+        outline: none;
+        height: 40px;
+        border-radius: 10px;
+        padding: 0 10px;
+        font-family: "main-font";
+        margin: 0 0 40px;
+    }
+    .error-text{
+        color: $redColor;
+        margin: 0 0 40px;
+        display: none;
+    }
+    .s-1{
+        color :$redColor;
+    } 
+    .s-2 {
+        color: $greenColor;
+    }
+    .s-3{
+        color: $mainColor1;
+    }
+    .submit-discount-btn{
+        @include flexMixin(row,center,center);
+        @include styler(#fff , $secondaryColor1 , 20px , 20px);
+        width: 150px;
+        height: 40px;
     }
 }
 .wallet-wrapper-page{
