@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //render_buy_coin();
     // getting the user from api
     /*axios
-        .get("https://daryaftyar.ir/storeV2/books30")
+        .get("https://daryaftyar.ir/backend/api/books30")
         .then((res) => {
             // filling the main books varibale
             needed_books = res.data;
@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => render_errors(err.message));*/
     axios
-        .get("https://daryaftyar.ir/storeV2/books")
+        .get("https://daryaftyar.ir/backend/api/books")
         .then((res) => {
             // filling the main books varibale
             books = res.data;
@@ -301,8 +301,8 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => render_errors(err.message));
     axios
-        .get(`https://daryaftyar.ir/storeV2/user/${final_id}`)
-        //.get(`https://daryaftyar.ir/storeV2/user/341393410`)
+        .get(`https://daryaftyar.ir/backend/api/user/${final_id}`)
+        //.get(`https://daryaftyar.ir/backend/api/user/341393410`)
         .then((res) => {
             user = res.data;
             //console.log(user)
@@ -310,8 +310,8 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => render_errors(err.message));
     axios
-        .get(`https://daryaftyar.ir/storeV2/cart/${final_id}`)
-        //.get("https://daryaftyar.ir/storeV2/cart/341393410")
+        .get(`https://daryaftyar.ir/backend/api/cart/${final_id}`)
+        //.get("https://daryaftyar.ir/backend/api/cart/341393410")
         .then((res) => {
             //filling the cart with the main object from back end
             cart = res.data;
@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => render_errors(err.message));
     axios
-        .get("https://daryaftyar.ir/storeV2/pubs")
+        .get("https://daryaftyar.ir/backend/api/pubs")
         .then((res) => {
             res.data.forEach(p => {
                 publishers.push({ ...p, clicked: false });
@@ -335,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch((err) => render_errors(err.message));
     axios
-        .get(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`)
+        .get(`https://daryaftyar.ir/backend/api/user_real_data/${final_id}`)
         .then((res) => {
             data_user = res.data;
             //console.log(data_user)
@@ -1623,8 +1623,8 @@ function render_shopping_cart(cart1) {
                 // get the pay url for the final step btn
                 load_pause('active');
                 axios
-                    .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
-                    //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                    .get(`https://daryaftyar.ir/backend/api/payrequest/${final_id}`)
+                    //.get(`https://daryaftyar.ir/backend/api/payrequest/341393410`)
                     .then((res) => {
                         const url = res.data;
                         // render final stage cart with given parameters
@@ -1827,8 +1827,8 @@ function delete_item(id) {
     cart.cart_items_ids = cart.cart_items_ids.filter(c => c !== id);
     load_pause('active');
     axios
-        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
-        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .patch(`https://daryaftyar.ir/backend/api/cart/${final_id}`, cart.cart_items_ids)
+        //.patch(`https://daryaftyar.ir/backend/api/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
             cart_items = cart.cart_details;
@@ -1851,8 +1851,8 @@ function delete_item_modal(id) {
     cart.cart_items_ids = cart.cart_items_ids.filter(c => c !== id);
     load_pause('active');
     axios
-        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
-        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .patch(`https://daryaftyar.ir/backend/api/cart/${final_id}`, cart.cart_items_ids)
+        //.patch(`https://daryaftyar.ir/backend/api/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
             cart_items = cart.cart_details;
@@ -1877,8 +1877,8 @@ function clear_cart() {
     cart_items = [];
     load_pause('active');
     axios
-        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
-        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .patch(`https://daryaftyar.ir/backend/api/cart/${final_id}`, cart.cart_items_ids)
+        //.patch(`https://daryaftyar.ir/backend/api/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
             load_pause('disactive');
@@ -1901,8 +1901,8 @@ function clear_modal_cart() {
     cart_items = [];
     load_pause('active');
     axios
-        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, cart.cart_items_ids)
-        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .patch(`https://daryaftyar.ir/backend/api/cart/${final_id}`, cart.cart_items_ids)
+        //.patch(`https://daryaftyar.ir/backend/api/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
             load_pause('disactive');
@@ -2621,7 +2621,7 @@ function open_discount_wrapper() {
         load_pause("active");
         //cart.cart_summary.dis_code = "F5h8i";
         axios
-            .patch(`https://daryaftyar.ir/storeV2/cart_summary/${final_id}`, { "dis_code": code_text })
+            .patch(`https://daryaftyar.ir/backend/api/cart_summary/${final_id}`, { "dis_code": code_text })
             .then(res => {
                 //, { dis_code: "F5h8i" } cart.cart_summary { cart_summary: cart.cart_summary, send }
                 //console.log(res.data);
@@ -2631,7 +2631,7 @@ function open_discount_wrapper() {
                 cart.cart_summary = { ...res.data };
                 //console.log(cart.cart_summary)
                 axios
-                    .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
+                    .get(`https://daryaftyar.ir/backend/api/payrequest/${final_id}`)
                     .then((res) => {
                         const url = res.data;
                         // render final stage cart with given parameters
@@ -3092,8 +3092,8 @@ function el_by_id(arr, id) {
 function update_cart(ids) {
     load_pause('active');
     axios
-        .patch(`https://daryaftyar.ir/storeV2/cart/${final_id}`, ids)
-        //.patch(`https://daryaftyar.ir/storeV2/cart/341393410`, ids)
+        .patch(`https://daryaftyar.ir/backend/api/cart/${final_id}`, ids)
+        //.patch(`https://daryaftyar.ir/backend/api/cart/341393410`, ids)
         .then((res) => {
             cart = res.data;
             load_pause('disactive');
@@ -3392,8 +3392,8 @@ function render_cart_modal(cart1) {
                 // get the pay url for the final step btn
                 load_pause('active');
                 axios
-                    .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
-                    //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                    .get(`https://daryaftyar.ir/backend/api/payrequest/${final_id}`)
+                    //.get(`https://daryaftyar.ir/backend/api/payrequest/341393410`)
                     .then((res) => {
                         const url = res.data;
                         // render final stage cart with given parameters
@@ -3719,7 +3719,7 @@ function order_book(status) {
     load_pause("active");
     if (status === "none") {
         axios
-            .get("https://daryaftyar.ir/storeV2/books")
+            .get("https://daryaftyar.ir/backend/api/books")
             .then((res) => {
                 books = res.data;
                 needed_books = books.slice(0, 30);
@@ -3729,7 +3729,7 @@ function order_book(status) {
     }
     else {
         axios
-            .get(`https://daryaftyar.ir/storeV2/sortbooks/${status}`)
+            .get(`https://daryaftyar.ir/backend/api/sortbooks/${status}`)
             .then((res) => {
                 books = res.data.books;
                 needed_books = books.slice(0, 30);
@@ -4110,13 +4110,13 @@ function render_address_error(kind, state, target) {
 function update_user() {
     load_pause("active");
     axios
-        .patch(`https://daryaftyar.ir/storeV2/user_real_data/${final_id}`, data_user)
+        .patch(`https://daryaftyar.ir/backend/api/user_real_data/${final_id}`, data_user)
         .then((res) => {
             data_user = res.data;
             console.log(data_user)
             axios
-                .get(`https://daryaftyar.ir/storeV2/payrequest/${final_id}`)
-                //.get(`https://daryaftyar.ir/storeV2/payrequest/341393410`)
+                .get(`https://daryaftyar.ir/backend/api/payrequest/${final_id}`)
+                //.get(`https://daryaftyar.ir/backend/api/payrequest/341393410`)
                 .then((res) => {
                     const url = res.data;
                     //console.log(url)
@@ -4244,7 +4244,7 @@ function render_buy_coin() {
                 </div>
             </div>
             <div class="coin-footer">
-                <a href="https://daryaftyar.ir/storeV2/buy_coin/id:<str:id>-amount:50" class="buy-coin-btn" target="_blank">
+                <a href="https://daryaftyar.ir/backend/api/buy_coin/id:<str:id>-amount:50" class="buy-coin-btn" target="_blank">
                     خرید سکه
                 </a>
             </div>
@@ -4298,7 +4298,7 @@ function buy_coin_func(amount) {
     const buy_coin = document.querySelector(".buy-coin-btn");
     load_pause("active");
     axios
-        .get(`https://daryaftyar.ir/storeV2/buy_coin/id:${final_id}-amount:${amount}`)
+        .get(`https://daryaftyar.ir/backend/api/buy_coin/id:${final_id}-amount:${amount}`)
         .then(res => {
             url = res.data.url_to_pay;
             load_pause("disactive");
